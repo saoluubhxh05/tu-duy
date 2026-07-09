@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem Solving Lab - Đấu Trường Giải Quyết Vấn Đề</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#070a13',
+                            card: '#0f172a',
+                            border: '#1e293b',
+                            accent: '#6366f1',
+                            green: '#10b981',
+                            amber: '#f59e0b',
+                            red: '#ef4444',
+                            textMuted: '#94a3b8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        heading: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #070a13;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+        }
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070a13;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+        /* Soft transition effects */
+        .grid-item-transition {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white overflow-x-hidden">
+
+    <!-- Sound Generator Engine -->
+    <script>
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playSound(type) {
+            if (isMuted) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+
+                if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.1); // A5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'click') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'remove') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.linearRampToValueAtTime(150, now + 0.2);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'fanfare') {
+                    const notes = [329.63, 392.00, 523.25, 659.25]; // E4, G4, C5, E5
+                    notes.forEach((freq, idx) => {
+                        const o = audioCtx.createOscillator();
+                        const g = audioCtx.createGain();
+                        o.connect(g);
+                        g.connect(audioCtx.destination);
+                        o.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        g.gain.setValueAtTime(0.08, now + idx * 0.08);
+                        g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+                        o.start(now + idx * 0.08);
+                        o.stop(now + idx * 0.08 + 0.35);
+                    });
+                }
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('mute-btn');
+            if (isMuted) {
+                btn.innerHTML = `<i data-lucide="volume-x" class="w-4 h-4 text-rose-400"></i>`;
+            } else {
+                btn.innerHTML = `<i data-lucide="volume-2" class="w-4 h-4 text-slate-300"></i>`;
+            }
+            lucide.createIcons();
+        }
+    </script>
+
+    <!-- Header -->
+    <header class="border-b border-cyber-border bg-cyber-bg/95 sticky top-0 z-40 backdrop-blur-md shrink-0">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3">
+                <a href="main.html" class="p-2 bg-slate-800/80 hover:bg-slate-700/80 border border-cyber-border rounded-xl transition-all" title="Quay lại trang chủ">
+                    <i data-lucide="arrow-left" class="w-5 h-5 text-indigo-400"></i>
+                </a>
+                <div>
+                    <h1 class="text-base md:text-lg font-bold heading-font tracking-tight text-white flex items-center gap-2">
+                        LAB LUYỆN GIẢI QUYẾT VẤN ĐỀ <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-mono">Dynamic Mode</span>
+                    </h1>
+                    <p class="text-[11px] text-cyber-textMuted">Rèn luyện phản xạ xây dựng giải pháp đa mô hình đồng bộ</p>
+                </div>
+            </div>
+            
+            <!-- Header Widgets -->
+            <div class="flex items-center gap-3">
+                <div class="bg-slate-900/90 border border-cyber-border rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs">
+                    <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i>
+                    <span>Tiến trình giải quyết: <strong id="progress-indicator" class="text-emerald-400">0/5</strong></span>
+                </div>
+                <button id="mute-btn" onclick="toggleMute()" class="p-2 bg-slate-900 hover:bg-slate-800 border border-cyber-border rounded-lg transition-all" title="Bật/Tắt âm thanh">
+                    <i data-lucide="volume-2" class="w-4 h-4 text-slate-300"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="max-w-7xl w-full mx-auto p-4 md:p-6 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- LEFT COLUMN: Methods Manager & Selection -->
+        <section class="lg:col-span-4 flex flex-col gap-4">
+            
+            <!-- PROBLEM DEFINITION BOARD -->
+            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-4 shadow-xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 opacity-5">
+                    <i data-lucide="target" class="w-28 h-28 text-white"></i>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[10px] font-mono tracking-wider text-indigo-400 uppercase font-bold">Thách Thức Hiện Tại</span>
+                    <button onclick="openProblemModal()" class="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-bold underline">
+                        <i data-lucide="edit-2" class="w-3 h-3"></i> Đổi kịch bản
+                    </button>
+                </div>
+                <h3 id="current-problem-title" class="text-sm font-extrabold text-white heading-font">Đang tải thách thức...</h3>
+                <p id="current-problem-desc" class="text-xs text-cyber-textMuted mt-1.5 leading-relaxed italic bg-slate-950/40 p-2.5 rounded border border-cyber-border/60">
+                    --
+                </p>
+            </div>
+
+            <!-- METHODS MENU -->
+            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-4 shadow-xl">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-mono tracking-wider text-cyber-amber uppercase font-bold">Chọn Khung Phân Tích</span>
+                    <button onclick="openAddMethodModal()" class="px-2 py-1 bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-500/30 text-[10px] font-bold rounded text-indigo-400 flex items-center gap-1 transition-all">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm mô hình
+                    </button>
+                </div>
+
+                <!-- Methods List -->
+                <div id="methods-list" class="space-y-2 max-h-[350px] overflow-y-auto pr-1">
+                    <!-- Loaded dynamically from JS -->
+                </div>
+                
+                <!-- Info Footer inside sidebar -->
+                <p class="text-[10px] text-cyber-textMuted mt-4 leading-normal text-center">
+                    * Nhấp chọn phương pháp để thực hiện phân tích chi tiết. Nhấp dấu rác (<i data-lucide="trash-2" class="w-3 h-3 inline"></i>) để gỡ bỏ mô hình khỏi bộ tư duy.
+                </p>
+            </div>
+
+            <!-- GLOBAL WORKPIECE PROGRESS -->
+            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-4">
+                <h4 class="text-xs font-bold text-white mb-2">Trạng thái hoàn thành chiến dịch</h4>
+                <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden mb-3">
+                    <div id="overall-progress-bar" class="bg-gradient-to-r from-indigo-500 to-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <div class="flex justify-between text-[11px] text-cyber-textMuted">
+                    <span>Mô hình hoàn thiện: <strong id="progress-fraction" class="text-white">0/5</strong></span>
+                    <button onclick="triggerResetAll()" class="text-rose-400 hover:text-rose-300 hover:underline">Xóa hết & Làm lại</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: Active Method Worksheet & Summation Reports -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+            
+            <!-- WORK SHEET (Dynamic rendering based on selection) -->
+            <div id="worksheet-card" class="bg-slate-900/80 border border-cyber-border rounded-2xl p-5 md:p-6 shadow-xl min-h-[400px] flex flex-col justify-between">
+                <div id="empty-worksheet-state" class="text-center py-20 my-auto flex flex-col items-center justify-center gap-3">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-slate-500">
+                        <i data-lucide="layout-template" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-base font-bold text-slate-300">Chưa Chọn Phương Pháp Phân Tích</h3>
+                    <p class="text-xs text-cyber-textMuted max-w-sm">Chọn một phương pháp ở danh mục bên trái hoặc bổ sung phương pháp mới để bắt đầu thiết lập giải pháp chiến lược.</p>
+                </div>
+
+                <div id="active-worksheet-content" class="hidden space-y-5">
+                    <!-- Method Header -->
+                    <div class="flex justify-between items-start border-b border-cyber-border pb-4 flex-wrap gap-2">
+                        <div>
+                            <span id="active-method-type" class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">5WHY</span>
+                            <h2 id="active-method-name" class="text-xl font-bold text-white heading-font mt-1">Phân Tích Nguyên Nhân Gốc Rễ (5Why)</h2>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[11px] text-cyber-textMuted">Trạng thái: </span>
+                            <span id="active-method-status-badge" class="text-[11px] font-bold text-rose-400">Chưa lưu phân tích</span>
+                        </div>
+                    </div>
+
+                    <!-- Theory reference -->
+                    <div class="bg-indigo-950/20 border border-indigo-500/10 p-3 rounded-xl">
+                        <span class="text-[10px] font-bold text-indigo-400 block uppercase tracking-wider">Cốt lõi lý thuyết:</span>
+                        <p id="active-method-theory" class="text-xs text-slate-300 mt-1 leading-relaxed">
+                            Liên tục đào sâu nguyên nhân bằng cách đặt câu hỏi "Tại sao" 5 lần liên tiếp để đi qua bề nổi vấn đề, tiếp cận chân tướng cốt lõi.
+                        </p>
+                    </div>
+
+                    <!-- CUSTOM/SPECIAL SUB-INPUTS CONTAINER (E.g. 5 Why inputs, or SWOT Grid) -->
+                    <div id="specialized-inputs-container" class="space-y-3">
+                        <!-- Populated dynamically if method is 5Why, SWOT, SCAMPER etc. -->
+                    </div>
+
+                    <!-- GENERIC INPUTS: Observations & Solutions -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">1. Nhận xét / Điều kiện áp dụng thực tế:</label>
+                            <textarea id="input-observation" rows="3" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all placeholder-slate-600" placeholder="Môi trường kích hoạt của vấn đề này là gì? Có điểm gì đáng lưu ý về bối cảnh?"></textarea>
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">2. Giải pháp hành động đề xuất:</label>
+                            <textarea id="input-solution" rows="3" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all placeholder-slate-600" placeholder="Mô tả cụ thể hành động cần triển khai theo mô hình tư duy này..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Save Action -->
+                    <div class="flex justify-end pt-3 border-t border-cyber-border">
+                        <button onclick="saveActiveMethodAnalysis()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/10">
+                            <i data-lucide="save" class="w-4 h-4"></i> Lưu Phân Tích
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GLOBAL CAMPAIGN SUMMARY REPORT (Unlocked as user works) -->
+            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-5 md:p-6 shadow-xl space-y-4">
+                <div class="flex justify-between items-center border-b border-cyber-border pb-3 flex-wrap gap-2">
+                    <div>
+                        <h3 class="text-base font-bold text-white heading-font">Chiến dịch giải quyết tổng thể</h3>
+                        <p class="text-[11px] text-cyber-textMuted">Tổng hợp phân tích của tất cả mô hình đã hoàn thành</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="copyReportToClipboard()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-medium rounded-lg text-slate-200 flex items-center gap-1.5 transition-all">
+                            <i data-lucide="copy" class="w-3.5 h-3.5 text-indigo-400"></i> Sao chép báo cáo
+                        </button>
+                    </div>
+                </div>
+
+                <div id="summary-report-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-1">
+                    <!-- Filled dynamically with filled models. Default placeholder below. -->
+                    <div class="text-center py-8 text-cyber-textMuted text-xs italic">
+                        Hãy bắt đầu lưu phân tích ở các mô hình tư duy để tổng hợp nên bản báo cáo chiến lược hoàn chỉnh.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-cyber-border bg-cyber-bg/95 py-4 text-center text-xs text-cyber-textMuted shrink-0">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
+            <p>&copy; 2026 Đấu Trường Tư Duy. Toàn bộ cơ sở dữ liệu hoạt động trực tiếp trên trình duyệt.</p>
+            <p>Hỗ trợ học sâu ngoại tuyến, tối ưu hóa khả năng phản xạ hành vi thực tế.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: ADD NEW METHOD MODAL -->
+    <div id="add-method-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-slate-900 border border-cyber-border rounded-2xl w-full max-w-md p-6 relative shadow-2xl animate-fade-in">
+            <button onclick="closeAddMethodModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h3 class="text-lg font-bold text-white heading-font mb-4 flex items-center gap-2">
+                <i data-lucide="plus-circle" class="text-indigo-400"></i> Thêm Phương Pháp Lập Luận Mới
+            </h3>
+            
+            <form id="new-method-form" onsubmit="handleNewMethodSubmit(event)" class="space-y-4">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-300 uppercase">Mã / Tên viết tắt (ví dụ: PDCA, 5S):</label>
+                    <input required id="new-method-code" type="text" maxlength="8" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 placeholder-slate-600" placeholder="PDCA">
+                </div>
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-300 uppercase">Tên đầy đủ phương pháp:</label>
+                    <input required id="new-method-name-input" type="text" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:borde
