@@ -1,993 +1,500 @@
 <!DOCTYPE html>
-<html lang="vi" class="dark">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Problem Solving Lab - Đấu Trường Giải Quyết Vấn Đề</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Problem Solving Lab - Không Gian Luyện Tập</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        cyber: {
-                            bg: '#070a13',
-                            card: '#0f172a',
-                            border: '#1e293b',
-                            accent: '#6366f1',
-                            green: '#10b981',
-                            amber: '#f59e0b',
-                            red: '#ef4444',
-                            textMuted: '#94a3b8'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        heading: ['Space Grotesk', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #070a13;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+            background: radial-gradient(circle at 50% 50%, #0d1527 0%, #070a13 100%);
         }
-        .heading-font {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #070a13;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1;
-        }
-        /* Soft transition effects */
-        .grid-item-transition {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+        .cyber-title { font-family: 'Space Grotesk', sans-serif; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
+        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.5); }
     </style>
 </head>
-<body class="text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white overflow-x-hidden">
+<body class="text-slate-200 h-screen overflow-hidden flex flex-col p-4">
 
-    <!-- Sound Generator Engine -->
-    <script>
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx = null;
-        let isMuted = false;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-            }
-        }
-
-        function playSound(type) {
-            if (isMuted) return;
-            try {
-                initAudio();
-                if (!audioCtx) return;
-                
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                const now = audioCtx.currentTime;
-
-                if (type === 'success') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(523.25, now); // C5
-                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.1); // A5
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-                    osc.start(now);
-                    osc.stop(now + 0.3);
-                } else if (type === 'click') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(400, now);
-                    gain.gain.setValueAtTime(0.06, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-                    osc.start(now);
-                    osc.stop(now + 0.08);
-                } else if (type === 'remove') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(300, now);
-                    osc.frequency.linearRampToValueAtTime(150, now + 0.2);
-                    gain.gain.setValueAtTime(0.08, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-                    osc.start(now);
-                    osc.stop(now + 0.2);
-                } else if (type === 'fanfare') {
-                    const notes = [329.63, 392.00, 523.25, 659.25]; // E4, G4, C5, E5
-                    notes.forEach((freq, idx) => {
-                        const o = audioCtx.createOscillator();
-                        const g = audioCtx.createGain();
-                        o.connect(g);
-                        g.connect(audioCtx.destination);
-                        o.frequency.setValueAtTime(freq, now + idx * 0.08);
-                        g.gain.setValueAtTime(0.08, now + idx * 0.08);
-                        g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
-                        o.start(now + idx * 0.08);
-                        o.stop(now + idx * 0.08 + 0.35);
-                    });
-                }
-            } catch (e) {
-                console.log('Audio error:', e);
-            }
-        }
-
-        function toggleMute() {
-            isMuted = !isMuted;
-            const btn = document.getElementById('mute-btn');
-            if (isMuted) {
-                btn.innerHTML = `<i data-lucide="volume-x" class="w-4 h-4 text-rose-400"></i>`;
-            } else {
-                btn.innerHTML = `<i data-lucide="volume-2" class="w-4 h-4 text-slate-300"></i>`;
-            }
-            lucide.createIcons();
-        }
-    </script>
-
-    <!-- Header -->
-    <header class="border-b border-cyber-border bg-cyber-bg/95 sticky top-0 z-40 backdrop-blur-md shrink-0">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3">
-                <a href="main.html" class="p-2 bg-slate-800/80 hover:bg-slate-700/80 border border-cyber-border rounded-xl transition-all" title="Quay lại trang chủ">
-                    <i data-lucide="arrow-left" class="w-5 h-5 text-indigo-400"></i>
-                </a>
-                <div>
-                    <h1 class="text-base md:text-lg font-bold heading-font tracking-tight text-white flex items-center gap-2">
-                        LAB LUYỆN GIẢI QUYẾT VẤN ĐỀ <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-mono">Dynamic Mode</span>
-                    </h1>
-                    <p class="text-[11px] text-cyber-textMuted">Rèn luyện phản xạ xây dựng giải pháp đa mô hình đồng bộ</p>
-                </div>
-            </div>
-            
-            <!-- Header Widgets -->
-            <div class="flex items-center gap-3">
-                <div class="bg-slate-900/90 border border-cyber-border rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs">
-                    <i data-lucide="check-square" class="w-4 h-4 text-emerald-400"></i>
-                    <span>Tiến trình giải quyết: <strong id="progress-indicator" class="text-emerald-400">0/5</strong></span>
-                </div>
-                <button id="mute-btn" onclick="toggleMute()" class="p-2 bg-slate-900 hover:bg-slate-800 border border-cyber-border rounded-lg transition-all" title="Bật/Tắt âm thanh">
-                    <i data-lucide="volume-2" class="w-4 h-4 text-slate-300"></i>
-                </button>
-            </div>
+    <header class="flex-none grid grid-cols-3 items-center border-b border-slate-800 pb-3 mb-3">
+        <div>
+            <a href="main.html" class="inline-flex items-center text-xs text-blue-400 hover:text-blue-300 transition-all">
+                ← Quay lại trang chủ
+            </a>
+            <h1 class="cyber-title text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-amber-400 uppercase tracking-wider">
+                Problem Solving Lab
+            </h1>
+        </div>
+        <div class="col-span-2 flex flex-col gap-1">
+            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">Nêu vấn đề cần giải quyết:</label>
+            <input type="text" id="problemInput" placeholder="Nhập bài toán hoặc thách thức cốt lõi bạn đang gặp phải tại đây..." 
+                   class="w-full bg-slate-900/80 border border-slate-700 rounded px-3 py-1.5 text-sm text-amber-300 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
         </div>
     </header>
 
-    <!-- Main Workspace Container -->
-    <main class="max-w-7xl w-full mx-auto p-4 md:p-6 flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <main class="flex-1 grid grid-cols-12 gap-4 min-h-0">
         
-        <!-- LEFT COLUMN: Methods Manager & Selection -->
-        <section class="lg:col-span-4 flex flex-col gap-4">
+        <section class="col-span-3 flex flex-col bg-slate-900/40 border border-slate-800 rounded p-3 min-h-0">
+            <div class="flex justify-between items-center mb-2 flex-none">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Bộ Khung Tư Duy</h2>
+                <button onclick="openAddMethodModal()" class="text-[10px] bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 text-blue-300 hover:text-white px-2 py-0.5 rounded transition-all">
+                    + Thêm mới
+                </button>
+            </div>
             
-            <!-- PROBLEM DEFINITION BOARD -->
-            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-4 shadow-xl relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 opacity-5">
-                    <i data-lucide="target" class="w-28 h-28 text-white"></i>
+            <div id="methodList" class="flex-1 overflow-y-auto space-y-1.5 pr-1">
                 </div>
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[10px] font-mono tracking-wider text-indigo-400 uppercase font-bold">Thách Thức Hiện Tại</span>
-                    <button onclick="openProblemModal()" class="text-[10px] text-indigo-400 hover:text-indigo-300 flex items-center gap-1 font-bold underline">
-                        <i data-lucide="edit-2" class="w-3 h-3"></i> Đổi kịch bản
-                    </button>
+        </section>
+
+        <section id="workspaceSection" class="col-span-5 flex flex-col bg-slate-900/40 border border-slate-800 rounded p-3 min-h-0 hidden">
+            <div class="flex-none border-b border-slate-800/80 pb-2 mb-2">
+                <div class="flex justify-between items-start">
+                    <h2 id="activeMethodName" class="cyber-title text-base font-bold text-blue-400">Tên Phương Pháp</h2>
+                    <span id="activeMethodBadge" class="text-[10px] px-2 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-400">Loại</span>
                 </div>
-                <h3 id="current-problem-title" class="text-sm font-extrabold text-white heading-font">Đang tải thách thức...</h3>
-                <p id="current-problem-desc" class="text-xs text-cyber-textMuted mt-1.5 leading-relaxed italic bg-slate-950/40 p-2.5 rounded border border-cyber-border/60">
-                    --
-                </p>
+                <div id="subSelectContainer" class="mt-2 hidden">
+                    <label id="subSelectLabel" class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Chọn khía cạnh phân tích:</label>
+                    <select id="subSelect" onchange="loadSubConceptDetails()" class="w-full text-xs bg-slate-950 border border-slate-700 rounded px-2 py-1 text-slate-300 focus:outline-none focus:border-purple-500"></select>
+                </div>
             </div>
 
-            <!-- METHODS MENU -->
-            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-4 shadow-xl">
-                <div class="flex justify-between items-center mb-3">
-                    <span class="text-[10px] font-mono tracking-wider text-cyber-amber uppercase font-bold">Chọn Khung Phân Tích</span>
-                    <button onclick="openAddMethodModal()" class="px-2 py-1 bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-500/30 text-[10px] font-bold rounded text-indigo-400 flex items-center gap-1 transition-all">
-                        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm mô hình
-                    </button>
-                </div>
-
-                <!-- Methods List -->
-                <div id="methods-list" class="space-y-2 max-h-[350px] overflow-y-auto pr-1">
-                    <!-- Loaded dynamically from JS -->
-                </div>
-                
-                <!-- Info Footer inside sidebar -->
-                <p class="text-[10px] text-cyber-textMuted mt-4 leading-normal text-center">
-                    * Nhấp chọn phương pháp để thực hiện phân tích chi tiết. Nhấp dấu rác (<i data-lucide="trash-2" class="w-3 h-3 inline"></i>) để gỡ bỏ mô hình khỏi bộ tư duy.
-                </p>
+            <div class="flex-none bg-slate-950/60 border border-slate-800 rounded p-2.5 mb-3 text-xs text-slate-300 max-h-[35%] overflow-y-auto">
+                <p id="methodCore" class="font-medium text-slate-200 mb-1"></p>
+                <div id="methodSuggestions" class="space-y-1 text-slate-400 pl-2 border-l border-slate-700"></div>
             </div>
 
-            <!-- GLOBAL WORKPIECE PROGRESS -->
-            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-4">
-                <h4 class="text-xs font-bold text-white mb-2">Trạng thái hoàn thành chiến dịch</h4>
-                <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden mb-3">
-                    <div id="overall-progress-bar" class="bg-gradient-to-r from-indigo-500 to-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+            <div class="flex-1 flex flex-col gap-2.5 min-h-0">
+                <div class="flex-1 flex flex-col">
+                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1">1. Nhận xét / Điều kiện thực tế:</label>
+                    <textarea id="workspaceNote" oninput="saveCurrentWork()" placeholder="Ghi lại các dữ kiện, ràng buộc thực tế, hoặc nhận định liên quan đến khía cạnh này..." 
+                              class="w-full flex-1 bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 resize-none"></textarea>
                 </div>
-                <div class="flex justify-between text-[11px] text-cyber-textMuted">
-                    <span>Mô hình hoàn thiện: <strong id="progress-fraction" class="text-white">0/5</strong></span>
-                    <button onclick="triggerResetAll()" class="text-rose-400 hover:text-rose-300 hover:underline">Xóa hết & Làm lại</button>
+                <div class="flex-1 flex flex-col">
+                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1">2. Giải pháp đề xuất:</label>
+                    <textarea id="workspaceSolution" oninput="saveCurrentWork()" placeholder="Đề xuất các hành động thực tế, phương án xử lý dựa trên gợi mở ở trên..." 
+                              class="w-full flex-1 bg-slate-950 border border-slate-800 rounded p-2 text-xs text-emerald-400 placeholder-slate-600 focus:outline-none focus:border-emerald-500 resize-none"></textarea>
                 </div>
             </div>
         </section>
 
-        <!-- RIGHT COLUMN: Active Method Worksheet & Summation Reports -->
-        <section class="lg:col-span-8 flex flex-col gap-6">
-            
-            <!-- WORK SHEET (Dynamic rendering based on selection) -->
-            <div id="worksheet-card" class="bg-slate-900/80 border border-cyber-border rounded-2xl p-5 md:p-6 shadow-xl min-h-[400px] flex flex-col justify-between">
-                <div id="empty-worksheet-state" class="text-center py-20 my-auto flex flex-col items-center justify-center gap-3">
-                    <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center text-slate-500">
-                        <i data-lucide="layout-template" class="w-8 h-8"></i>
-                    </div>
-                    <h3 class="text-base font-bold text-slate-300">Chưa Chọn Phương Pháp Phân Tích</h3>
-                    <p class="text-xs text-cyber-textMuted max-w-sm">Chọn một phương pháp ở danh mục bên trái hoặc bổ sung phương pháp mới để bắt đầu thiết lập giải pháp chiến lược.</p>
-                </div>
-
-                <div id="active-worksheet-content" class="hidden space-y-5">
-                    <!-- Method Header -->
-                    <div class="flex justify-between items-start border-b border-cyber-border pb-4 flex-wrap gap-2">
-                        <div>
-                            <span id="active-method-type" class="text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">5WHY</span>
-                            <h2 id="active-method-name" class="text-xl font-bold text-white heading-font mt-1">Phân Tích Nguyên Nhân Gốc Rễ (5Why)</h2>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-[11px] text-cyber-textMuted">Trạng thái: </span>
-                            <span id="active-method-status-badge" class="text-[11px] font-bold text-rose-400">Chưa lưu phân tích</span>
-                        </div>
-                    </div>
-
-                    <!-- Theory reference -->
-                    <div class="bg-indigo-950/20 border border-indigo-500/10 p-3 rounded-xl">
-                        <span class="text-[10px] font-bold text-indigo-400 block uppercase tracking-wider">Cốt lõi lý thuyết:</span>
-                        <p id="active-method-theory" class="text-xs text-slate-300 mt-1 leading-relaxed">
-                            Liên tục đào sâu nguyên nhân bằng cách đặt câu hỏi "Tại sao" 5 lần liên tiếp để đi qua bề nổi vấn đề, tiếp cận chân tướng cốt lõi.
-                        </p>
-                    </div>
-
-                    <!-- CUSTOM/SPECIAL SUB-INPUTS CONTAINER (E.g. 5 Why inputs, or SWOT Grid) -->
-                    <div id="specialized-inputs-container" class="space-y-3">
-                        <!-- Populated dynamically if method is 5Why, SWOT, SCAMPER etc. -->
-                    </div>
-
-                    <!-- GENERIC INPUTS: Observations & Solutions -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-1.5">
-                            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">1. Nhận xét / Điều kiện áp dụng thực tế:</label>
-                            <textarea id="input-observation" rows="3" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all placeholder-slate-600" placeholder="Môi trường kích hoạt của vấn đề này là gì? Có điểm gì đáng lưu ý về bối cảnh?"></textarea>
-                        </div>
-                        <div class="space-y-1.5">
-                            <label class="block text-xs font-bold text-slate-300 uppercase tracking-wide">2. Giải pháp hành động đề xuất:</label>
-                            <textarea id="input-solution" rows="3" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all placeholder-slate-600" placeholder="Mô tả cụ thể hành động cần triển khai theo mô hình tư duy này..."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Save Action -->
-                    <div class="flex justify-end pt-3 border-t border-cyber-border">
-                        <button onclick="saveActiveMethodAnalysis()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-indigo-600/10">
-                            <i data-lucide="save" class="w-4 h-4"></i> Lưu Phân Tích
-                        </button>
-                    </div>
-                </div>
+        <section class="col-span-4 flex flex-col bg-slate-900/40 border border-slate-800 rounded p-3 min-h-0">
+            <div class="flex justify-between items-center mb-2 flex-none">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Bản Báo Cáo Chiến Lược</h2>
+                <button onclick="exportToMarkdown()" class="text-[10px] bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/30 text-emerald-300 hover:text-white px-2 py-0.5 rounded transition-all">
+                    Sao chép MD
+                </button>
             </div>
 
-            <!-- GLOBAL CAMPAIGN SUMMARY REPORT (Unlocked as user works) -->
-            <div class="bg-slate-900/80 border border-cyber-border rounded-2xl p-5 md:p-6 shadow-xl space-y-4">
-                <div class="flex justify-between items-center border-b border-cyber-border pb-3 flex-wrap gap-2">
-                    <div>
-                        <h3 class="text-base font-bold text-white heading-font">Chiến dịch giải quyết tổng thể</h3>
-                        <p class="text-[11px] text-cyber-textMuted">Tổng hợp phân tích của tất cả mô hình đã hoàn thành</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="copyReportToClipboard()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-medium rounded-lg text-slate-200 flex items-center gap-1.5 transition-all">
-                            <i data-lucide="copy" class="w-3.5 h-3.5 text-indigo-400"></i> Sao chép báo cáo
-                        </button>
-                    </div>
-                </div>
+            <div id="summaryContainer" class="flex-1 overflow-y-auto border border-slate-800/60 bg-slate-950/40 rounded p-2 space-y-3 text-xs">
+                <div class="text-slate-600 text-center py-8">Vui lòng điền nội dung phân tích để kích hoạt báo cáo tổng hợp...</div>
+            </div>
 
-                <div id="summary-report-container" class="space-y-4 max-h-[400px] overflow-y-auto pr-1">
-                    <!-- Filled dynamically with filled models. Default placeholder below. -->
-                    <div class="text-center py-8 text-cyber-textMuted text-xs italic">
-                        Hãy bắt đầu lưu phân tích ở các mô hình tư duy để tổng hợp nên bản báo cáo chiến lược hoàn chỉnh.
-                    </div>
+            <div class="flex-none border-t border-slate-800 pt-2 mt-2">
+                <div class="flex justify-between text-[10px] text-slate-400 mb-1">
+                    <span>Mức độ hoàn thành hệ thống</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-1.5 rounded overflow-hidden">
+                    <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-emerald-500 h-full w-0 transition-all duration-300"></div>
                 </div>
             </div>
         </section>
+
     </main>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-cyber-border bg-cyber-bg/95 py-4 text-center text-xs text-cyber-textMuted shrink-0">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3">
-            <p>&copy; 2026 Đấu Trường Tư Duy. Toàn bộ cơ sở dữ liệu hoạt động trực tiếp trên trình duyệt.</p>
-            <p>Hỗ trợ học sâu ngoại tuyến, tối ưu hóa khả năng phản xạ hành vi thực tế.</p>
-        </div>
-    </footer>
-
-    <!-- MODAL 1: ADD NEW METHOD MODAL -->
-    <div id="add-method-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-slate-900 border border-cyber-border rounded-2xl w-full max-w-md p-6 relative shadow-2xl animate-fade-in">
-            <button onclick="closeAddMethodModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <h3 class="text-lg font-bold text-white heading-font mb-4 flex items-center gap-2">
-                <i data-lucide="plus-circle" class="text-indigo-400"></i> Thêm Phương Pháp Lập Luận Mới
-            </h3>
-            
-            <form id="new-method-form" onsubmit="handleNewMethodSubmit(event)" class="space-y-4">
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase">Mã / Tên viết tắt (ví dụ: PDCA, 5S):</label>
-                    <input required id="new-method-code" type="text" maxlength="8" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 placeholder-slate-600" placeholder="PDCA">
-                </div>
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase">Tên đầy đủ phương pháp:</label>
-                    <input required id="new-method-name-input" type="text" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 placeholder-slate-600" placeholder="Chu Trình Lập Kế Hoạch & Cải Tiến (PDCA)">
-                </div>
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-300 uppercase">Tóm tắt lý thuyết / Kim chỉ nam:</label>
-                    <textarea required id="new-method-theory-input" rows="3" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 placeholder-slate-600" placeholder="Plan (Lập kế hoạch), Do (Thực hiện), Check (Kiểm tra), Act (Cải tiến hành động)."></textarea>
-                </div>
-                
-                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition-all">
-                    Tạo Phương Pháp Tư Duy
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL 2: CHANGE PROBLEM/SCENARIO MODAL -->
-    <div id="problem-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-slate-900 border border-cyber-border rounded-2xl w-full max-w-lg p-6 relative shadow-2xl overflow-hidden">
-            <button onclick="closeProblemModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-            <h3 class="text-lg font-bold text-white heading-font mb-4 flex items-center gap-2">
-                <i data-lucide="settings" class="text-indigo-400"></i> Lựa Chọn Kịch Bản Thách Thức
-            </h3>
-            
-            <div class="space-y-3 max-h-[300px] overflow-y-auto pr-1 mb-4" id="scenarios-list-container">
-                <!-- Loaded dynamically -->
-            </div>
-
-            <div class="border-t border-cyber-border pt-4">
-                <h4 class="text-xs font-bold text-indigo-400 uppercase mb-2">Hoặc tự điền vấn đề tùy chọn của bạn:</h4>
-                <div class="space-y-3">
-                    <input id="custom-problem-title-input" type="text" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" placeholder="Tên vấn đề của riêng bạn...">
-                    <textarea id="custom-problem-desc-input" rows="2" class="w-full bg-slate-950 border border-cyber-border rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" placeholder="Mô tả bối cảnh chi tiết và điểm đau cốt lõi cần giải quyết..."></textarea>
-                    <button onclick="applyCustomProblem()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 border border-cyber-border text-xs font-bold rounded-xl transition-all">
-                        Áp Dụng Thách Thức Riêng
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- TOAST NOTIFICATION CONTAINER -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm w-full"></div>
-
-    <!-- Core Database JavaScript -->
-    <script>
-        // Sample Scenarios
-        const problemScenarios = [
-            {
-                id: "sc_tech",
-                title: "Doanh nghiệp Startup sụt giảm 40% doanh số khách hàng lặp lại",
-                desc: "Một ứng dụng cung cấp bữa ăn kiêng trực tuyến ghi nhận lượng người dùng đặt lại tháng thứ 2 giảm cực mạnh, dù chương trình tiếp thị chiêu dụ khách mới hoạt động rất thành công."
-            },
-            {
-                id: "sc_team",
-                title: "Phòng Marketing có biểu hiện rệu rã, nhân viên chậm tiến độ liên tục",
-                desc: "Các thành viên hay trốn tránh trách nhiệm, thường xuyên nộp muộn KPI và đổ lỗi cho sự thiếu đồng bộ của các phòng ban kỹ thuật liên quan."
-            },
-            {
-                id: "sc_retail",
-                title: "Hàng tá phế liệu bọc nhựa đóng gói bị thải bỏ vô tội vạ tại kho logistics",
-                desc: "Mật độ đóng gói đóng thùng tăng vọt đẩy chi phí mua bao bì nhựa lên gấp đôi, đồng thời rác thải từ nilon đang hủy hoại chứng chỉ xanh của siêu thị."
-            },
-            {
-                id: "sc_health",
-                title: "Bệnh nhân phàn nàn vì phải chờ đợi thủ tục thanh toán quá lâu lúc xuất viện",
-                desc: "Quy trình đối soát liên viện và duyệt bảo hiểm kéo dài từ 2 đến 4 tiếng đồng hồ khiến quầy lễ tân luôn rơi vào trạng thái ùn tắc, quá tải áp lực âm nhạc căng thẳng."
-            }
-        ];
-
-        // Default Built-in Methods Data
-        const defaultMethods = [
-            {
-                id: "m_5why",
-                code: "5WHY",
-                name: "Phân Tích Nguyên Nhân Gốc Rễ (5Why)",
-                theory: "Liên tục đào sâu nguyên nhân bằng cách đặt câu hỏi \"Tại sao\" 5 lần liên tiếp để đi qua bề nổi vấn đề, tiếp cận chân tướng sâu xa ẩn khuất.",
-                specialInputs: [
-                    "Tại sao thứ 1 (Biểu hiện bề mặt):",
-                    "Tại sao thứ 2 (Yếu tố kỹ thuật/Thao tác):",
-                    "Tại sao thứ 3 (Thói quen/Hành vi):",
-                    "Tại sao thứ 4 (Vấn đề quản trị/Quy trình):",
-                    "Tại sao thứ 5 (Nguyên nhân cốt lõi):"
-                ]
-            },
-            {
-                id: "m_swot",
-                code: "SWOT",
-                name: "Phân Tích Chiến Lược Điểm Mạnh - Yếu (SWOT)",
-                theory: "Định vị tư duy thông qua 4 chiều lực lượng: Strengths (Điểm mạnh), Weaknesses (Điểm yếu) của bản thân; kết hợp Opportunities (Cơ hội), Threats (Thách thức) từ bên ngoài.",
-                specialInputs: [
-                    "Strengths - Điểm mạnh của ta đối với vấn đề này:",
-                    "Weaknesses - Điểm yếu/Lỗ hổng nội tại của ta:",
-                    "Opportunities - Cơ hội, thời cơ tác động bên ngoài:",
-                    "Threats - Thách thức/Nguy cơ rủi ro rình rập:"
-                ]
-            },
-            {
-                id: "m_scamper",
-                code: "SCAMPER",
-                name: "Bộ Câu Hỏi Gợi Mở Sáng Tạo (SCAMPER)",
-                theory: "Vận dụng chuỗi câu hỏi: Thay thế (Substitute), Kết hợp (Combine), Thích nghi (Adapt), Bổ sung/Phóng đại (Modify/Magnify), Chuyển công năng (Put to other uses), Loại bỏ (Eliminate), Đảo ngược (Reverse) để tái cấu trúc giải pháp.",
-                specialInputs: [
-                    "Thay thế (S) hoặc Kết hợp (C) yếu tố nào để bớt cồng kềnh?",
-                    "Thích nghi (A) hay Phóng đại (M) cái gì để tạo đột phá nhanh?",
-                    "Chuyển đổi công năng (P) hay Loại bỏ hoàn toàn (E) khâu nào?",
-                    "Đảo ngược (R) quy trình hoặc thay đổi thứ tự thế nào?"
-                ]
-            },
-            {
-                id: "m_dongluc",
-                code: "ĐỘNG LỰC",
-                name: "Mô Hình Thiết Kế Hành Vi Fogg (Motivation-Ability-Trigger)",
-                theory: "Phân rã hành vi thông qua 6 điểm tác động cốt lõi để đảm bảo giải pháp được thực thi ổn định: Trigger (Tác động gợi nhắc), Ability (Khả năng/Chia nhỏ), Motivation (Đẩy cao động lực), Reinforcement (Củng cố/Thưởng phạt), Môi trường (Tối ưu hóa xúc tác), Duy trì (Thói quen lặp lại).",
-                specialInputs: [
-                    "Tác động (Trigger) & Khả năng (Ability) của người thực thi:",
-                    "Cách đẩy cao Động lực (Motivation) & Cơ chế Củng cố (Reinforcement):",
-                    "Thiết kế Môi trường & Giải pháp để Duy trì lâu dài:"
-                ]
-            },
-            {
-                id: "m_36ke",
-                code: "36 KẾ SÁCH",
-                name: "Mưu Lược Điều Phối Chiến Cuộc (36 Kế Sách)",
-                theory: "Sử dụng các kế sách khôn ngoan như: Dương đông kích tây, Mượn đao giết người, Rút củi đáy nồi, Dĩ dật đãi lao để xoay chuyển cán cân thế trận từ thế bất lợi sang chủ động hoàn toàn.",
-                specialInputs: [
-                    "Dụ dỗ đối thủ/ngoại lực phân tán tài nguyên ở đâu?",
-                    "Đánh thẳng vào huyết mạch cốt lõi nào (Rút củi đáy nồi / Bắt giặc bắt vua)?",
-                    "Phương án bảo toàn, rút lui chiến lược thế nào (Tẩu vi thượng sách)?"
-                ]
-            }
-        ];
-
-        // State variables
-        let methods = [...defaultMethods];
-        let currentProblem = problemScenarios[0];
-        let activeMethodId = null;
-        
-        // Structure to store completed worksheet analyses
-        // Format: { [methodId]: { obs, sol, specialValues: [] } }
-        let analyses = {};
-
-        // Notification Helper
-        function showToast(title, message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            let colorClasses = 'border-indigo-500/30 bg-slate-900/95 text-indigo-400';
-            let icon = 'info';
-
-            if (type === 'success') {
-                colorClasses = 'border-emerald-500/40 bg-slate-900/95 text-emerald-400';
-                icon = 'check-circle';
-            } else if (type === 'error') {
-                colorClasses = 'border-rose-500/40 bg-slate-900/95 text-rose-400';
-                icon = 'alert-triangle';
-            }
-
-            toast.className = `flex gap-3 p-4 rounded-xl border ${colorClasses} shadow-2xl backdrop-blur-md transform transition-all duration-300 translate-y-2 opacity-0 text-xs font-semibold`;
-            toast.innerHTML = `
-                <div class="flex-shrink-0"><i data-lucide="${icon}" class="w-4 h-4"></i></div>
+    <div id="addModal" class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center hidden z-50">
+        <div class="bg-slate-900 border border-slate-700 w-96 rounded p-4 shadow-xl">
+            <h3 class="cyber-title text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider border-b border-slate-800 pb-1.5">Thêm phương pháp tư duy</h3>
+            <div class="space-y-3 text-xs">
                 <div>
-                    <h5 class="font-bold text-slate-100">${title}</h5>
-                    <p class="text-slate-400 mt-0.5 font-normal leading-relaxed">${message}</p>
+                    <label class="block text-slate-400 mb-1">Tên phương pháp:</label>
+                    <input type="text" id="newMethodName" placeholder="Ví dụ: 6 Chiếc Nón Tư Duy, 5S..." class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-slate-200 focus:outline-none focus:border-blue-500">
                 </div>
-            `;
+                <div>
+                    <label class="block text-slate-400 mb-1">Ý nghĩa cốt lõi:</label>
+                    <textarea id="newMethodCore" placeholder="Mô tả ngắn gọn tư duy cốt lõi..." class="w-full bg-slate-950 border border-slate-700 rounded p-2 h-16 text-slate-200 focus:outline-none focus:border-blue-500 resize-none"></textarea>
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button onclick="closeAddMethodModal()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-400">Hủy</button>
+                    <button onclick="addNewMethod()" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            container.appendChild(toast);
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            }, 50);
+    <script>
+        const SCAMPER_DATA = [
+            { id: 'S', name: 'S - Thay thế (Substitute)', core: 'Thay thế nguyên liệu, nhân sự, hay bước nào trong quy trình bằng một giải pháp tốt hơn?', prompts: ['Thay thế ai, hay cái gì?', 'Thay thế vật liệu, công cụ hoặc năng lượng?', 'Thay thế bước nào trong quy trình?', 'Thay đổi địa điểm hoặc thời gian?'] },
+            { id: 'C', name: 'C - Kết hợp (Combine)', core: 'Tích hợp tính năng, sản phẩm, hay nguồn lực lại với nhau để tạo ra giá trị vượt trội?', prompts: ['Kết hợp sản phẩm này với một sản phẩm khác?', 'Tích hợp những tính năng để tăng tính đa năng?', 'Kết hợp mục tiêu, nguồn lực hoặc tài năng của nhiều bên?', 'Gộp các bước trong quy trình lại làm một?'] },
+            { id: 'A', name: 'A - Thích nghi (Adapt)', core: 'Điều chỉnh điều gì để phù hợp với ngữ cảnh hoặc mục đích mới từ ngành khác?', prompts: ['Ý tưởng này có thể áp dụng vào một bối cảnh mới?', 'Sản phẩm hoặc quy trình nào tương tự trong quá khứ hay ngành khác?', 'Điều chỉnh yếu tố nào để phù hợp hơn với đối tượng mục tiêu mới?', 'Thay đổi cách tiếp cận để thích nghi với xu hướng hiện tại?'] },
+            { id: 'M', name: 'M - Bổ sung / Phóng đại (Modify)', core: 'Thay đổi hình dáng, kích thước, hoặc nhấn mạnh yếu tố cốt lõi nào để tăng giá trị?', prompts: ['Phóng đại, kéo dài hoặc tăng cường yếu tố để tạo khác biệt?', 'Thêm thắt tính năng, giá trị gia tăng?', 'Chỉnh sửa thiết kế, cấu trúc, hoặc hình thức bên ngoài?', 'Yếu tố nào có thể được làm nổi bật nhất để thu hút người dùng?'] },
+            { id: 'P', name: 'P - Ứng dụng (Put to other uses)', core: 'Có thể tái sử dụng thứ này vào mục đích hoàn toàn mới cho đối tượng khác không?', prompts: ['Sản phẩm/dịch vụ này có thể dùng vào việc gì khác ngoài chức năng chính?', 'Đối tượng nào khác có thể hưởng lợi từ giải pháp này?', 'Rác thải hoặc phụ phẩm của quy trình này có thể tái chế hay ứng dụng vào đâu?', 'Nếu đưa vào một thị trường hoàn toàn khác, nó sẽ giải quyết bài toán gì?'] },
+            { id: 'E', name: 'E - Loại bỏ (Eliminate)', core: 'Cắt bớt bước nào, tính năng nào để tối giản hóa tối đa hệ thống vận hành?', prompts: ['Lược bỏ tính năng, bộ phận hoặc bước nào mà không làm giảm chất lượng?', 'Làm quy trình trở nên đơn giản, nhanh chóng và dễ dàng hơn?', 'Cắt giảm chi phí, thời gian hoặc nhân lực ở khâu nào?', 'Điều gì xảy ra nếu chúng ta bỏ qua hoàn toàn quy tắc truyền thống này?'] },
+            { id: 'R', name: 'R - Đảo ngược (Reverse)', core: 'Đảo trật tự quy trình hoặc lật ngược vấn đề ra sao để tìm góc nhìn đột phá?', prompts: ['Quy trình sẽ ra sao nếu thực hiện ngược từ cuối lên đầu?', 'Có thể thay đổi thứ tự, trình tự các bước thực hiện không?', 'Điều gì xảy ra nếu lật ngược hoàn toàn giả định hoặc mục tiêu ban đầu?', 'Có thể hoán đổi vị trí, vai trò của các nhân sự hoặc bộ phận liên quan không?'] }
+        ];
 
-            setTimeout(() => {
-                toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-        }
+        const DONG_LUC_DATA = [
+            { id: 'TG', name: 'I. Trigger (Tác động)', core: 'Tạo kích thích, gợi nhắc hoặc thông báo để hành vi bắt đầu.', prompts: ['Gợi nhắc / Thông báo (Dán giấy, Chuông báo, Điện thoại)', 'Hướng dẫn (Bài viết, Sơ đồ trực quan)', 'Kích thích động lực (Cài đặt deadline áp lực, Quan sát hành vi, Cam kết công khai, Làm gương)'] },
+            { id: 'AB', name: 'II. Ability (Khả năng)', core: 'Làm cho hành vi trở nên dễ thực hiện hơn bằng cách nâng cao năng lực hoặc giảm độ khó.', prompts: ['Chia nhỏ mục tiêu (Phiên Pomodoro 25 phút)', 'Công cụ hỗ trợ (Chuẩn bị sẵn tài nguyên đầy đủ)', 'Tăng năng lực (Checklist + Quy trình chuẩn 3-5 bước, Hướng dẫn trực quan, Thử nghiệm nhỏ)', 'Tương trợ nhóm (Phân công vai trò cụ thể, Tạo nhóm hỗ trợ xã hội)'] },
+            { id: 'MO', name: 'III. Motivation (Động lực)', core: 'Gia tăng khát khao hoặc năng lượng nội tại thúc đẩy hành động.', prompts: ['Mục tiêu & Thi đua (Bảng xếp hạng, Thử thách kích thích nỗ lực)', 'Áp lực xã hội (So sánh xã hội, Thông báo số đông 90% đã xong, Chuẩn mực chung)', 'Tạo cảm xúc (Tò mò đặt câu hỏi thú vị, Kể chuyện thuyết phục, Hình dung tương lai tích cực)', 'Phân tích lợi hại (Giải thích ý nghĩa lâu dài, Tránh mất mát bằng cách trừ điểm)'] },
+            { id: 'RE', name: 'IV. Reinforcement (Củng cố)', core: 'Thưởng phạt nhằm định hình và lặp lại hành vi tốt.', prompts: ['Phần thưởng (Tích điểm đổi quà, Thưởng bất ngờ, Thưởng nhóm)', 'Ghi nhận (Khen cụ thể chi tiết, Vinh danh công khai, Danh hiệu tự hào)', 'Hình phạt & Phản hồi (Quy định rõ ràng nhất quán, Hiển thị số liệu tiến độ, Nhận xét lẫn nhau)'] },
+            { id: 'EN', name: 'V. Môi trường (Environment)', core: 'Thiết kế không gian vật lý hoặc số để hành vi diễn ra thuận lợi tự nhiên.', prompts: ['Thiết kế tối ưu (Sắp xếp đồ vật thuận tiện, Giảm bước thực hiện, Loại bỏ rào cản thừa)', 'Tâm lý mặc định (Cài đặt hành vi tốt làm mặc định, Rút gọn chỉ giữ lại 2-3 lựa chọn để dễ quyết định)'] },
+            { id: 'SU', name: 'VI. Duy trì (Sustenance)', core: 'Giữ vững hành vi tạo thành thói quen lâu dài không đứt gãy.', prompts: ['Suy nghĩ tích cực (Cho phép tự quyết, Thay đổi góc nhìn tích cực, Tạo cảm giác tiến bộ)', 'Thói quen & Trò chơi hóa (Chọn giờ cố định lặp lại, Thói quen nối tiếp, Nghi thức hóa, Gamification)'] }
+        ];
 
-        // Initialize App
-        window.onload = function() {
-            loadLocalState(); // Attempt to load from memory
-            renderScenariosList();
-            renderMethodsList();
-            updateCurrentProblemUI();
-            updateGlobalCampaignUI();
-            lucide.createIcons();
-        };
+        const KESACH_DATA = [
+            { id: 'K1', name: 'Kế 1-6: Nhóm Mong Muốn / Thu Phục', core: 'Điều động đối phương thông qua lợi dụ, bẫy ngầm hoặc chinh phục nhân tâm.', prompts: ['Phao chuyên dẫn ngọc (Thả mồi nhỏ câu món hời lớn)', 'Mỹ nhân kế (Tác động cảm xúc/mối quan hệ gây nhiễu trí tuệ)', 'Không thành kế (Thế yếu tuyệt đối, cố tình bày hở để địch đa nghi rút lui)', 'Quan môn tróc tặc (Đóng cửa bắt giặc - Cắt đường thoát rồi mới xử lý)', 'Thượng ốc trừu thê (Rút thang - Đưa vào thế sâu không thể quay đầu)', 'Dục cầm cố túng (Muốn bắt nên thả - Nới lỏng kiểm soát để lộ mạng lưới ngầm)'] },
+            { id: 'K2', name: 'Kế 7-8: Nhóm Tính Cách', core: 'Tấn công trực tiếp vào điểm yếu tâm lý hoặc thể xác đối thủ.', prompts: ['Khổ nhục kế (Chủ động chịu tổn thất ngắn hạn để thâm nhập, xóa nghi ngờ)', 'Khích tướng kế (Đánh vào lòng tự trọng, sĩ diện khiến đối phương mất tự chủ)'] },
+            { id: 'K3', name: 'Kế 9-13: Đánh Vào Điểm Yếu Hệ Thống', core: 'Tác động trực tiếp vào bộ máy chỉ huy, nguồn hậu cần hoặc cấu trúc cốt lõi.', prompts: ['Mượn đao giết người (Lợi dụng mâu thuẫn bên thứ ba để xử lý đối thủ)', 'Viễn giao cận công (Kết giao xa đánh gần - Phân rã liên minh)', 'Cầm tặc cầm vương (Bắt giặc bắt vua - Đột kích thẳng mắt xích cốt lõi đứng đầu)', 'Phủ đề trừu tân (Rút củi đáy nồi - Triệt hạ dòng tiền, nguồn tài chính, hậu cần)', 'Thay lương hoán trụ (Thay rường đổi cột - Âm thầm đổi ruột bên trong giữ vỏ bên ngoài)'] },
+            { id: 'K4', name: 'Kế 14-18: Điều Động Nguồn Lực', core: 'Sử dụng thông tin giả và nghi binh khiến đối phương bố trí sai vị trí quân bài.', prompts: ['Vô trung sinh hữu (Không làm thành có - Dàn dựng thông tin giả biến thật)', 'Vây Ngụy cứu Triệu (Tránh chỗ mạnh, đánh thẳng vào đầu não buộc địch rút về cứu viện)', 'Điều hổ ly sơn (Dụ cọp rời núi - Kéo đối phương ra khỏi vùng an toàn kiên cố)', 'Thanh đông kích tây (Tiếng động phía đông đánh phía tây - Điều động phân tán địch)', 'Ám độ Trần Thương (Công khai làm thủ tục quy trình cũ, âm thầm đi đường bí mật)'] },
+            { id: 'K5', name: 'Kế 19-21: Che Giấu Bản Thân', core: 'Giấu mình tinh vi để tích lũy sức mạnh hoặc tiếp cận mục tiêu hợp pháp.', prompts: ['Giả đồ phạt Quắc (Mượn đường diệt Quắc - Dùng danh nghĩa bên trung gian hợp pháp)', 'Tiếu lý tàng đao (Cười nụ giấu dao - Ngoài mềm mỏng ngoại giao, trong chuẩn bị quyết liệt)', 'Giả si bất điên (Giả heo ăn hổ - Giả ngu ngơ tránh bị thanh trừng để tích lũy lực lượng)'] },
+            { id: 'K6', name: 'Kế 22-25: Nhóm Phòng Thủ Rút Lui', core: 'Bảo toàn đại cục khi đối mặt với khủng hoảng hoặc sức mạnh áp đảo của địch.', prompts: ['Dĩ dật đãi lao (Lấy khỏe nhẹ địch mệt mỏi - Chiếm lợi thế sân nhà, chờ địch hành quân xa tiêu hao)', 'Tẩu vi thượng sách (Chạy là kế hay nhất - Chủ động rút lui bảo toàn hạt giống phục thù)', 'Lý đại đào cương (Cây mận chết thay đào - Hy sinh bộ phận nhỏ/mảng biên để cứu đại cục)', 'Kim thiền thoát xác (Ve sầu lột xác - Giữ nguyên vỏ bọc báo cáo bề ngoài để âm thầm chuyển đổi ruột)'] },
+            { id: 'K7', name: 'Kế 26-32: Nhóm Thu Lợi & Tranh Chấp', core: 'Tận dụng khủng hoảng, sơ hở nhỏ hoặc mâu thuẫn đa phương để giành ưu thế.', prompts: ['Sấn hỏa đả kiếp (Theo lửa hoành hành - Trục lợi khi đối phương vướng scandal, chia rẽ nội bộ)', 'Thuận thủ khiên dương (Thuận tay dắt dê - Nhân cơ hội sơ hở nhỏ của hệ thống để thu vén)', 'Phản khách vi chủ (Đổi khách thành chủ - Từ vai trò phụ/cổ đông nhỏ vươn lên nắm quyền lõi)', 'Tá thi hoàn hồn (Mượn xác hoàn hồn - Hồi sinh thương hiệu/trào lưu cũ lỗi thời còn giá trị hoài niệm)', 'Hỗn thủy mạc ngư (Đục nước béo cò - Tung tin nhiễu khuấy động hỗn loạn đa phương)', 'Cách ngạn quan hỏa (Đứng nhìn lửa cháy - Trung lập chờ các đối thủ lớn triệt hạ kiệt quệ nhau)'] }
+        ];
+    </script>
 
-        // Render Sidebar Methods
-        function renderMethodsList() {
-            const list = document.getElementById('methods-list');
-            list.innerHTML = "";
+    <script>
+        // Khởi tạo state dữ liệu ứng dụng
+        let coreMethods = [
+            { code: '5WHY', type: 'STATIC', name: 'Chiến lược 5-WHY', core: 'Tìm nguyên nhân gốc rễ bằng cách đặt câu hỏi "Tại sao" liên tiếp 5 lần.', prompts: ['Hỏi liên tiếp để bóc tách các lớp bề mặt của vấn đề.', 'Mục tiêu: Tìm ra điểm nghẽn hệ thống thay vì lỗi cá nhân.'] },
+            { code: 'SWOT', type: 'STATIC', name: 'Ma Trận SWOT', core: 'Phân tích toàn diện bối cảnh nội bộ và các tác động khách quan bên ngoài.', prompts: ['Strengths: Điểm mạnh cốt lõi có sẵn là gì?', 'Weaknesses: Điểm yếu, lỗ hổng hiện tại cần bù đắp?', 'Opportunities: Thời cơ, xu hướng bên ngoài có thể tận dụng?', 'Threats: Thách thức, rủi ro ngoại cảnh nào đang rình rập?'] },
+            { code: 'SCAMPER', type: 'DYNAMIC_SELECT', name: 'SCAMPER Lab', data: SCAMPER_DATA },
+            { code: 'DONG_LUC', type: 'DYNAMIC_SELECT', name: 'Đấu Trường Động Lực', data: DONG_LUC_DATA },
+            { code: '36KE', type: 'DYNAMIC_SELECT', name: '36 Kế Sách Quân Sự', data: KESACH_DATA }
+        ];
 
-            methods.forEach(m => {
-                const isActive = activeMethodId === m.id;
-                const isCompleted = analyses[m.id] && analyses[m.id].obs && analyses[m.id].sol;
+        // Bộ lưu trữ câu trả lời người dùng
+        // Cấu trúc key: "METHODCODE" hoặc "METHODCODE_SUBID"
+        let userAnswers = {};
+        let activeKey = null;
+
+        // Render danh sách phương pháp cột trái
+        function renderMethodList() {
+            const listContainer = document.getElementById('methodList');
+            listContainer.innerHTML = '';
+
+            coreMethods.forEach((method, index) => {
+                const isSelected = activeKey && activeKey.startsWith(method.code);
                 
-                let completedBadge = "";
-                if (isCompleted) {
-                    completedBadge = `<span class="w-2 h-2 rounded-full bg-emerald-400" title="Đã hoàn thành phân tích"></span>`;
+                // Đếm số lượng tiểu mục đã điền của phương pháp này để tính hoàn thành
+                let totalSub = 1;
+                let doneSub = 0;
+
+                if (method.type === 'STATIC') {
+                    if (userAnswers[method.code] && (userAnswers[method.code].note || userAnswers[method.code].sol)) doneSub = 1;
                 } else {
-                    completedBadge = `<span class="w-2 h-2 rounded-full bg-rose-500/40" title="Chưa phân tích"></span>`;
+                    totalSub = method.data.length;
+                    method.data.forEach(sub => {
+                        const sKey = `${method.code}_${sub.id}`;
+                        if (userAnswers[sKey] && (userAnswers[sKey].note || userAnswers[sKey].sol)) doneSub++;
+                    });
                 }
 
-                const containerDiv = document.createElement('div');
-                containerDiv.className = `group w-full flex items-center justify-between p-2.5 rounded-xl border grid-item-transition cursor-pointer ${
-                    isActive 
-                        ? 'bg-indigo-600/10 border-indigo-500 text-indigo-300' 
-                        : 'bg-slate-950/60 border-cyber-border text-slate-300 hover:border-slate-700'
-                }`;
+                const pct = Math.round((doneSub / totalSub) * 100);
 
-                containerDiv.innerHTML = `
-                    <div class="flex items-center gap-2 flex-grow min-w-0" onclick="selectActiveMethod('${m.id}')">
-                        ${completedBadge}
-                        <div class="truncate">
-                            <span class="text-[10px] font-mono tracking-wider font-bold block ${isActive ? 'text-indigo-400' : 'text-cyber-textMuted'}">${m.code}</span>
-                            <span class="text-xs font-semibold truncate block">${m.name}</span>
+                const item = document.createElement('div');
+                item.className = `group flex flex-col p-2 rounded cursor-pointer transition-all border ${
+                    isSelected 
+                    ? 'bg-blue-950/60 border-blue-500/60 shadow-[0_0_8px_rgba(59,130,246,0.2)]' 
+                    : 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'
+                }`;
+                item.setAttribute('onclick', `selectMethod('${method.code}')`);
+
+                item.innerHTML = `
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-xs font-semibold ${isSelected ? 'text-blue-400' : 'text-slate-200'} group-hover:text-blue-300 transition-colors">
+                            ${method.name}
+                        </span>
+                        <div class="flex items-center gap-1.5 flex-none" onclick="event.stopPropagation();">
+                            <span class="text-[9px] font-mono text-slate-500">${doneSub}/${totalSub}</span>
+                            <button onclick="removeMethod(${index})" class="text-slate-600 hover:text-rose-400 text-[11px] font-bold px-1 transition-colors" title="Xóa phương pháp này">×</button>
                         </div>
                     </div>
-                    <button onclick="deleteMethod('${m.id}')" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 opacity-0 group-hover:opacity-100 transition-all duration-150 shrink-0" title="Xóa phương pháp này">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                    </button>
-                `;
-
-                list.appendChild(containerDiv);
-            });
-            lucide.createIcons();
-        }
-
-        // Delete Method from menu
-        function deleteMethod(id) {
-            playSound('remove');
-            methods = methods.filter(m => m.id !== id);
-            
-            // Clean up stored analysis if any
-            if (analyses[id]) {
-                delete analyses[id];
-            }
-
-            if (activeMethodId === id) {
-                activeMethodId = null;
-                resetWorksheetUI();
-            }
-
-            saveLocalState();
-            renderMethodsList();
-            updateGlobalCampaignUI();
-            showToast("Đã loại bỏ!", "Đã gỡ phương pháp này ra khỏi chiến dịch tư duy hiện tại.", "error");
-        }
-
-        // Set active worksheet method
-        function selectActiveMethod(id) {
-            playSound('click');
-            activeMethodId = id;
-            renderMethodsList();
-            renderActiveWorksheet();
-        }
-
-        // Render Active worksheet fields
-        function renderActiveWorksheet() {
-            const emptyState = document.getElementById('empty-worksheet-state');
-            const activeContent = document.getElementById('active-worksheet-content');
-            
-            if (!activeMethodId) {
-                emptyState.classList.remove('hidden');
-                activeContent.classList.add('hidden');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-            activeContent.classList.remove('hidden');
-
-            const m = methods.find(m => m.id === activeMethodId);
-            if (!m) return;
-
-            document.getElementById('active-method-type').innerText = m.code;
-            document.getElementById('active-method-name').innerText = m.name;
-            document.getElementById('active-method-theory').innerText = m.theory;
-
-            // Fetch stored analysis if exists
-            const stored = analyses[m.id] || { obs: "", sol: "", specialValues: [] };
-            document.getElementById('input-observation').value = stored.obs;
-            document.getElementById('input-solution').value = stored.sol;
-
-            // Update status text
-            const statusBadge = document.getElementById('active-method-status-badge');
-            if (stored.obs && stored.sol) {
-                statusBadge.innerText = "Đã lưu phân tích";
-                statusBadge.className = "text-[11px] font-bold text-emerald-400";
-            } else {
-                statusBadge.innerText = "Chưa lưu phân tích";
-                statusBadge.className = "text-[11px] font-bold text-rose-400";
-            }
-
-            // Populate specialized inner inputs
-            const specializedContainer = document.getElementById('specialized-inputs-container');
-            specializedContainer.innerHTML = "";
-
-            if (m.specialInputs && m.specialInputs.length > 0) {
-                const blockTitle = document.createElement('h4');
-                blockTitle.className = "text-[11px] font-mono tracking-wider font-bold text-indigo-400 uppercase border-b border-cyber-border pb-1";
-                blockTitle.innerText = "Chi Tiết Cấu Trúc Khung Lập Luận:";
-                specializedContainer.appendChild(blockTitle);
-
-                m.specialInputs.forEach((label, idx) => {
-                    const savedVal = (stored.specialValues && stored.specialValues[idx]) ? stored.specialValues[idx] : "";
-                    const wrapper = document.createElement('div');
-                    wrapper.className = "space-y-1";
-                    wrapper.innerHTML = `
-                        <label class="block text-[10px] font-semibold text-slate-300 leading-normal">${label}</label>
-                        <input type="text" id="special-input-${idx}" value="${savedVal}" class="w-full bg-slate-950/80 border border-cyber-border rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500/50 transition-all placeholder-slate-700" placeholder="Nhập câu trả lời phân tích tại đây...">
-                    `;
-                    specializedContainer.appendChild(wrapper);
-                });
-            }
-        }
-
-        // Reset worksheets UI when active is empty/deleted
-        function resetWorksheetUI() {
-            document.getElementById('empty-worksheet-state').classList.remove('hidden');
-            document.getElementById('active-worksheet-content').classList.add('hidden');
-        }
-
-        // Save Analysis Action
-        function saveActiveMethodAnalysis() {
-            const m = methods.find(m => m.id === activeMethodId);
-            if (!m) return;
-
-            const obs = document.getElementById('input-observation').value.trim();
-            const sol = document.getElementById('input-solution').value.trim();
-
-            if (!obs || !sol) {
-                playSound('remove');
-                showToast("Lỗi nhập liệu!", "Vui lòng hoàn thành cả 2 ô cốt lõi (Nhận xét) và (Giải pháp đề xuất)!", "error");
-                return;
-            }
-
-            // Collect specialized inner values
-            let specialValues = [];
-            if (m.specialInputs && m.specialInputs.length > 0) {
-                m.specialInputs.forEach((_, idx) => {
-                    const input = document.getElementById(`special-input-${idx}`);
-                    specialValues.push(input ? input.value.trim() : "");
-                });
-            }
-
-            // Store analysis
-            analyses[m.id] = {
-                obs: obs,
-                sol: sol,
-                specialValues: specialValues
-            };
-
-            playSound('success');
-            saveLocalState();
-            renderMethodsList();
-            renderActiveWorksheet();
-            updateGlobalCampaignUI();
-            showToast("Thành công!", `Đã lưu phân tích chiến lược cho mô hình ${m.code}.`, "success");
-        }
-
-        // Update overall metrics & reports
-        function updateGlobalCampaignUI() {
-            const total = methods.length;
-            let completed = 0;
-
-            methods.forEach(m => {
-                if (analyses[m.id] && analyses[m.id].obs && analyses[m.id].sol) {
-                    completed++;
-                }
-            });
-
-            document.getElementById('progress-indicator').innerText = `${completed}/${total}`;
-            document.getElementById('progress-fraction').innerText = `${completed}/${total}`;
-            
-            const pct = total > 0 ? (completed / total) * 100 : 0;
-            document.getElementById('overall-progress-bar').style.width = `${pct}%`;
-
-            // Render Final Summation Report
-            renderFinalSummaryReport();
-        }
-
-        // Render cumulative report cards dynamically
-        function renderFinalSummaryReport() {
-            const container = document.getElementById('summary-report-container');
-            container.innerHTML = "";
-
-            const completedMethodIds = Object.keys(analyses).filter(id => {
-                const item = analyses[id];
-                return item && item.obs && item.sol && methods.some(m => m.id === id);
-            });
-
-            if (completedMethodIds.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 text-cyber-textMuted text-xs italic bg-slate-950/25 border border-dashed border-cyber-border rounded-xl">
-                        Chưa có mô hình tư duy nào hoàn thành phân tích.
+                    <div class="w-full bg-slate-950 h-0.5 mt-1.5 rounded-full overflow-hidden">
+                        <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-full transition-all" style="width: ${pct}%"></div>
                     </div>
                 `;
-                return;
-            }
+                listContainer.appendChild(item);
+            });
 
-            completedMethodIds.forEach(id => {
-                const m = methods.find(m => m.id === id);
-                if (!m) return;
+            updateGlobalProgress();
+        }
 
-                const data = analyses[id];
-                const card = document.createElement('div');
-                card.className = "bg-slate-950/60 border border-cyber-border rounded-xl p-4 space-y-3 relative overflow-hidden";
+        // Chọn một phương pháp từ danh sách
+        function selectMethod(code) {
+            const method = coreMethods.find(m => m.code === code);
+            if (!method) return;
+
+            document.getElementById('workspaceSection').classList.remove('hidden');
+            document.getElementById('activeMethodName').innerText = method.name;
+
+            const subContainer = document.getElementById('subSelectContainer');
+            const subSelect = document.getElementById('subSelect');
+
+            if (method.type === 'STATIC') {
+                subContainer.classList.add('hidden');
+                document.getElementById('activeMethodBadge').innerText = "Cấu trúc Tĩnh";
+                activeKey = method.code;
                 
-                // Visual method badge tag
-                card.innerHTML = `
-                    <div class="flex justify-between items-center border-b border-cyber-border/40 pb-2">
-                        <span class="text-xs font-bold text-white uppercase tracking-wider font-heading">${m.name}</span>
-                        <span class="text-[9px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-md uppercase font-bold">Thành công</span>
-                    </div>
-                `;
+                // Load nội dung lý thuyết static
+                document.getElementById('methodCore').innerText = method.core;
+                const sugBox = document.getElementById('methodSuggestions');
+                sugBox.innerHTML = '';
+                method.prompts.forEach(p => {
+                    sugBox.innerHTML += `<div class="flex items-start gap-1"><span>•</span><span>${p}</span></div>`;
+                });
 
-                // Specialized inner values render if present
-                if (m.specialInputs && m.specialInputs.length > 0 && data.specialValues && data.specialValues.length > 0) {
-                    const specialList = document.createElement('div');
-                    specialList.className = "text-[11px] space-y-1 pl-2.5 border-l-2 border-indigo-500/40 py-1";
-                    m.specialInputs.forEach((label, idx) => {
-                        const val = data.specialValues[idx] || "N/A";
-                        const div = document.createElement('div');
-                        div.innerHTML = `<span class="text-cyber-textMuted font-bold">${label}</span> <strong class="text-slate-100">${val}</strong>`;
-                        specialList.appendChild(div);
-                    });
-                    card.appendChild(specialList);
-                }
+                loadWorkspaceInput();
+            } else {
+                subContainer.classList.remove('hidden');
+                document.getElementById('activeMethodBadge').innerText = "Cấu trúc Đa mục";
+                
+                // Build dropdown options
+                subSelect.innerHTML = '';
+                method.data.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub.id;
+                    opt.innerText = sub.name;
+                    subSelect.appendChild(opt);
+                });
 
-                // Core Observation & Solutions
-                const body = document.createElement('div');
-                body.className = "grid grid-cols-1 md:grid-cols-2 gap-3 text-xs pt-1";
-                body.innerHTML = `
-                    <div class="p-2.5 bg-slate-900/40 rounded border border-cyber-border/40">
-                        <span class="text-[9px] font-bold text-indigo-400 uppercase tracking-wider block mb-1">Môi Trường / Điều Kiện:</span>
-                        <p class="text-slate-300 leading-normal font-normal">${data.obs}</p>
-                    </div>
-                    <div class="p-2.5 bg-emerald-950/10 rounded border border-emerald-500/10">
-                        <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-wider block mb-1">Hành Động Giải Quyết:</span>
-                        <p class="text-emerald-300/90 leading-normal font-semibold">${data.sol}</p>
-                    </div>
-                `;
-
-                card.appendChild(body);
-                container.appendChild(card);
-            });
-        }
-
-        // COPY AS STRATEGIC REPORT TO CLIPBOARD
-        function copyReportToClipboard() {
-            playSound('click');
-            let txt = `=== BÁO CÁO CHIẾN DỊCH GIẢI QUYẾT VẤN ĐỀ ===\n`;
-            txt += `VẤN ĐỀ: ${currentProblem.title}\n`;
-            txt += `Bối cảnh: ${currentProblem.desc}\n`;
-            txt += `-------------------------------------------\n\n`;
-
-            let hasContent = false;
-            methods.forEach(m => {
-                const data = analyses[m.id];
-                if (data && data.obs && data.sol) {
-                    hasContent = true;
-                    txt += `[MÔ HÌNH: ${m.code}] - ${m.name}\n`;
-                    if (m.specialInputs && m.specialInputs.length > 0 && data.specialValues) {
-                        m.specialInputs.forEach((label, idx) => {
-                            txt += `  - ${label} ${data.specialValues[idx] || "N/A"}\n`;
-                        });
-                    }
-                    txt += `  * Nhận xét: ${data.obs}\n`;
-                    txt += `  * Giải pháp hành động: ${data.sol}\n`;
-                    txt += `\n`;
-                }
-            });
-
-            if (!hasContent) {
-                showToast("Báo cáo rỗng!", "Hãy lập giải pháp cho tối thiểu một mô hình trước khi sao chép!", "error");
-                return;
+                // Chọn tiểu mục đầu tiên mặc định
+                subSelect.selectedIndex = 0;
+                loadSubConceptDetails();
             }
 
-            // Copy utilizing fallback as requested by rules
-            const tempTextarea = document.createElement('textarea');
-            tempTextarea.value = txt;
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextarea);
-
-            playSound('fanfare');
-            showToast("Đã sao chép!", "Báo cáo tổng hợp mưu lược đã được lưu vào khay nhớ tạm (Clipboard)!", "success");
+            // Đồng bộ giao diện highlight list
+            renderMethodList();
         }
 
-        // Trigger reset
-        function triggerResetAll() {
-            playSound('remove');
-            if (confirm("Bạn có chắc chắn muốn xóa tất cả bài làm và làm lại từ đầu không?")) {
-                analyses = {};
-                activeMethodId = null;
-                methods = [...defaultMethods];
-                resetWorksheetUI();
-                saveLocalState();
-                renderMethodsList();
-                updateGlobalCampaignUI();
-                showToast("Làm mới thành công!", "Tất cả dữ liệu phân tích chiến dịch đã được khởi tạo lại.", "success");
+        // Tải thông tin chi tiết của tiểu mục (SCAMPER / Động lực / Kế sách)
+        function loadSubConceptDetails() {
+            const subSelect = document.getElementById('subSelect');
+            const subId = subSelect.value;
+            
+            // Tìm phương pháp lớn đang active thông qua cấu trúc activeKey cũ hoặc tìm trong mảng
+            const activeMethod = coreMethods.find(m => activeKey && activeKey.startsWith(m.code)) || coreMethods.find(m => m.code === document.getElementById('subSelect').parentNode.parentNode.parentNode.querySelector('h2').innerText || m.name === document.getElementById('activeMethodName').innerText);
+            if (!activeMethod || !activeMethod.data) return;
+
+            activeKey = `${activeMethod.code}_${subId}`;
+            const targetData = activeMethod.data.find(d => d.id === subId);
+
+            if (targetData) {
+                document.getElementById('methodCore').innerText = targetData.core;
+                const sugBox = document.getElementById('methodSuggestions');
+                sugBox.innerHTML = '';
+                targetData.prompts.forEach(p => {
+                    sugBox.innerHTML += `<div class="flex items-start gap-1"><span>•</span><span>${p}</span></div>`;
+                });
             }
+
+            loadWorkspaceInput();
         }
 
-        // Modal triggers: ADD NEW CUSTOM METHOD
-        function openAddMethodModal() {
-            playSound('click');
-            document.getElementById('add-method-modal').classList.remove('hidden');
+        // Đổ dữ liệu đã lưu từ userAnswers ra textareas
+        function loadWorkspaceInput() {
+            if (!activeKey) return;
+            const data = userAnswers[activeKey] || { note: '', sol: '' };
+            document.getElementById('workspaceNote').value = data.note;
+            document.getElementById('workspaceSolution').value = data.sol;
         }
-        function closeAddMethodModal() {
-            playSound('click');
-            document.getElementById('add-method-modal').classList.add('hidden');
+
+        // Lưu real-time khi người dùng gõ chữ
+        function saveCurrentWork() {
+            if (!activeKey) return;
+            const noteVal = document.getElementById('workspaceNote').value;
+            const solVal = document.getElementById('workspaceSolution').value;
+
+            if (noteVal.trim() === '' && solVal.trim() === '') {
+                delete userAnswers[activeKey];
+            } else {
+                userAnswers[activeKey] = {
+                    note: noteVal,
+                    sol: solVal
+                };
+            }
+            
+            // Cập nhật ngầm mà không gây giật lag giao diện list hoặc re-focus
+            updateGlobalProgress();
+            renderSummaryReport();
         }
-        function handleNewMethodSubmit(e) {
-            e.preventDefault();
-            const code = document.getElementById('new-method-code').value.toUpperCase().trim();
-            const name = document.getElementById('new-method-name-input').value.trim();
-            const theory = document.getElementById('new-method-theory-input').value.trim();
 
-            if (!code || !name || !theory) return;
+        // Xóa một phương pháp tư duy khỏi bộ khung (Tính năng thêm bớt động)
+        function removeMethod(index) {
+            const method = coreMethods[index];
+            // Xóa dữ liệu liên quan trong bộ nhớ trả lời
+            if (method.type === 'STATIC') {
+                delete userAnswers[method.code];
+            } else {
+                method.data.forEach(sub => delete userAnswers[`${method.code}_${sub.id}`]);
+            }
 
-            const newMethod = {
-                id: "custom_" + Date.now(),
-                code: code,
-                name: `${name} (${code})`,
-                theory: theory,
-                specialInputs: [
-                    "Câu hỏi định hình thứ nhất cho " + code + ":",
-                    "Câu hỏi định hình thứ hai cho " + code + ":"
-                ]
-            };
+            coreMethods.splice(index, 1);
+            
+            // Nếu phương pháp đang xóa khớp với màn hình hiện tại thì ẩn workspace đi
+            if (activeKey && activeKey.startsWith(method.code)) {
+                activeKey = null;
+                document.getElementById('workspaceSection').classList.add('hidden');
+            }
 
-            methods.push(newMethod);
-            playSound('success');
-            saveLocalState();
-            renderMethodsList();
+            renderMethodList();
+            renderSummaryReport();
+        }
+
+        // Điều khiển Modal Thêm phương pháp
+        function openAddMethodModal() { document.getElementById('addModal').classList.remove('hidden'); }
+        function closeAddMethodModal() { 
+            document.getElementById('addModal').classList.add('hidden');
+            document.getElementById('newMethodName').value = '';
+            document.getElementById('newMethodCore').value = '';
+        }
+
+        // Thêm phương pháp tùy biến mới vào hệ thống
+        function addNewMethod() {
+            const name = document.getElementById('newMethodName').value.trim();
+            const core = document.getElementById('newMethodCore').value.trim();
+
+            if (!name) { alert('Vui lòng nhập tên phương pháp tư duy!'); return; }
+
+            const generatedCode = 'CUSTOM_' + Date.now();
+            coreMethods.push({
+                code: generatedCode,
+                type: 'STATIC',
+                name: name,
+                core: core || 'Phương pháp tự định nghĩa bởi chuyên gia.',
+                prompts: ['Điền các khía cạnh phân tích thực tế phù hợp với đặc thù bài toán của bạn.']
+            });
+
             closeAddMethodModal();
-            
-            // Clean inputs
-            document.getElementById('new-method-form').reset();
-            showToast("Thành công!", `Phương pháp lập luận ${code} đã được đưa vào bộ sưu tập của bạn.`, "success");
+            renderMethodList();
+            selectMethod(generatedCode);
         }
 
-        // Modal triggers: CHANGE PROBLEM SCENARIO
-        function openProblemModal() {
-            playSound('click');
-            document.getElementById('problem-modal').classList.remove('hidden');
-            renderScenariosList();
-        }
-        function closeProblemModal() {
-            playSound('click');
-            document.getElementById('problem-modal').classList.add('hidden');
-        }
-        function renderScenariosList() {
-            const container = document.getElementById('scenarios-list-container');
-            container.innerHTML = "";
+        // Tính toán & hiển thị chỉ số tiến độ hoàn thành toàn cục
+        function updateGlobalProgress() {
+            let totalWeights = 0;
+            let currentWeights = 0;
 
-            problemScenarios.forEach(sc => {
-                const isActive = currentProblem.id === sc.id;
-                const button = document.createElement('button');
-                button.className = `w-full text-left p-3 rounded-xl border grid-item-transition ${
-                    isActive 
-                        ? 'bg-indigo-600/10 border-indigo-500 text-indigo-300' 
-                        : 'bg-slate-950 border-cyber-border hover:border-slate-700 text-slate-300'
-                }`;
-
-                button.innerHTML = `
-                    <h4 class="text-xs font-bold font-heading uppercase tracking-wider block ${isActive ? 'text-indigo-400' : 'text-slate-400'}">Kịch bản:</h4>
-                    <p class="text-xs font-bold mt-0.5 leading-normal">${sc.title}</p>
-                `;
-                button.onclick = () => selectScenario(sc.id);
-                container.appendChild(button);
+            coreMethods.forEach(m => {
+                if (m.type === 'STATIC') {
+                    totalWeights++;
+                    if (userAnswers[m.code] && (userAnswers[m.code].note || userAnswers[m.code].sol)) currentWeights++;
+                } else {
+                    totalWeights += m.data.length;
+                    m.data.forEach(sub => {
+                        if (userAnswers[`${m.code}_${sub.id}`] && (userAnswers[`${m.code}_${sub.id}`].note || userAnswers[`${m.code}_${sub.id}`].sol)) currentWeights++;
+                    });
+                }
             });
-        }
-        function selectScenario(id) {
-            playSound('success');
-            const found = problemScenarios.find(s => s.id === id);
-            if (found) {
-                currentProblem = found;
-                updateCurrentProblemUI();
-                saveLocalState();
-                closeProblemModal();
-                showToast("Đã đổi!", "Môi trường bối cảnh giải quyết vấn đề đã được cập nhật.", "success");
-            }
-        }
-        function applyCustomProblem() {
-            const title = document.getElementById('custom-problem-title-input').value.trim();
-            const desc = document.getElementById('custom-problem-desc-input').value.trim();
 
-            if (!title || !desc) {
-                playSound('remove');
-                showToast("Lỗi nhập liệu!", "Vui lòng nhập cả Tiêu đề và Mô tả cho vấn đề tùy chỉnh của bạn!", "error");
+            const pct = totalWeights > 0 ? Math.round((currentWeights / totalWeights) * 100) : 0;
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').innerText = pct + '%';
+        }
+
+        // Biên dịch cấu trúc cây tổng kết dữ liệu báo cáo sang cột phải
+        function renderSummaryReport() {
+            const summaryContainer = document.getElementById('summaryContainer');
+            const keys = Object.keys(userAnswers);
+
+            if (keys.length === 0) {
+                summaryContainer.innerHTML = '<div class="text-slate-600 text-center py-8">Vui lòng điền nội dung phân tích để kích hoạt báo cáo tổng hợp...</div>';
                 return;
             }
 
-            currentProblem = {
-                id: "custom_sc_" + Date.now(),
-                title: title,
-                desc: desc
-            };
+            summaryContainer.innerHTML = '';
 
-            playSound('success');
-            updateCurrentProblemUI();
-            saveLocalState();
-            closeProblemModal();
-            
-            // Clean custom fields
-            document.getElementById('custom-problem-title-input').value = "";
-            document.getElementById('custom-problem-desc-input').value = "";
-            showToast("Thành công!", "Đã nạp kịch bản vấn đề cá nhân hóa của bạn vào phòng LAB.", "success");
-        }
+            // Group data by method name for aesthetic grouping
+            coreMethods.forEach(method => {
+                let segmentHTML = '';
 
-        function updateCurrentProblemUI() {
-            document.getElementById('current-problem-title').innerText = currentProblem.title;
-            document.getElementById('current-problem-desc').innerText = currentProblem.desc;
-        }
-
-        // Local Storage persistence logic (Using standard localStorage as fallback for single offline build helper)
-        function saveLocalState() {
-            try {
-                localStorage.setItem('ps_current_problem', JSON.stringify(currentProblem));
-                localStorage.setItem('ps_custom_methods', JSON.stringify(methods.filter(m => m.id.startsWith('custom_'))));
-                localStorage.setItem('ps_analyses', JSON.stringify(analyses));
-            } catch (e) {
-                console.log('Failed to save state to localStorage:', e);
-            }
-        }
-
-        function loadLocalState() {
-            try {
-                const savedProblem = localStorage.getItem('ps_current_problem');
-                if (savedProblem) currentProblem = JSON.parse(savedProblem);
-
-                const savedCustomMethods = localStorage.getItem('ps_custom_methods');
-                if (savedCustomMethods) {
-                    const parsed = JSON.parse(savedCustomMethods);
-                    methods = [...defaultMethods, ...parsed];
+                if (method.type === 'STATIC') {
+                    if (userAnswers[method.code]) {
+                        segmentHTML += createReportBlock(method.name, userAnswers[method.code]);
+                    }
+                } else {
+                    let subBlocks = '';
+                    method.data.forEach(sub => {
+                        const sKey = `${method.code}_${sub.id}`;
+                        if (userAnswers[sKey]) {
+                            subBlocks += createReportBlock(sub.name, userAnswers[sKey]);
+                        }
+                    });
+                    if (subBlocks) {
+                        segmentHTML += `<div class="border-l-2 border-purple-500/40 pl-2 space-y-2">
+                            <h4 class="text-[10px] font-bold text-purple-400 uppercase tracking-tight">${method.name}</h4>
+                            ${subBlocks}
+                        </div>`;
+                    }
                 }
 
-                const savedAnalyses = localStorage.getItem('ps_analyses');
-                if (savedAnalyses) analyses = JSON.parse(savedAnalyses);
-            } catch (e) {
-                console.log('Failed to load state from localStorage:', e);
+                if (segmentHTML) {
+                    summaryContainer.innerHTML += segmentHTML;
+                }
+            });
+        }
+
+        function createReportBlock(title, data) {
+            return `
+                <div class="bg-slate-900/60 border border-slate-800 p-2 rounded">
+                    <h5 class="font-medium text-amber-400 text-[11px] mb-1">${title}</h5>
+                    ${data.note ? `<p class="text-slate-400 mb-1"><span class="text-[10px] uppercase text-slate-500 block">Nhận xét/Điều kiện:</span>${data.note}</p>` : ''}
+                    ${data.sol ? `<p class="text-emerald-400"><span class="text-[10px] uppercase text-slate-500 block">Giải pháp:</span>${data.sol}</p>` : ''}
+                </div>
+            `;
+        }
+
+        // Xuất Markdown thông minh ra bộ nhớ tạm (Clipboard) để chia sẻ nhanh
+        function exportToMarkdown() {
+            const prob = document.getElementById('problemInput').value.trim() || 'Chưa định nghĩa bài toán cụ thể.';
+            let md = `# BÁO CÁO CHIẾN LƯỢC GIẢI QUYẾT VẤN ĐỀ\n\n`;
+            md += `## 🎯 VẤN ĐỀ CỐT LÕI:\n> ${prob}\n\n`;
+            md += `--- \n\n`;
+
+            let bodyContent = '';
+            coreMethods.forEach(method => {
+                if (method.type === 'STATIC' && userAnswers[method.code]) {
+                    bodyContent += `### 💡 ${method.name}\n`;
+                    if (userAnswers[method.code].note) bodyContent += `- **Nhận xét/Điều kiện:** ${userAnswers[method.code].note}\n`;
+                    if (userAnswers[method.code].sol) bodyContent += `- **📌 Giải pháp chiến lược:** ${userAnswers[method.code].sol}\n`;
+                    bodyContent += `\n`;
+                } else if (method.type === 'DYNAMIC_SELECT') {
+                    let textAccumulator = '';
+                    method.data.forEach(sub => {
+                        const sKey = `${method.code}_${sub.id}`;
+                        if (userAnswers[sKey]) {
+                            textAccumulator += `#### → ${sub.name}\n`;
+                            if (userAnswers[sKey].note) textAccumulator += `  - **Nhận xét/Điều kiện:** ${userAnswers[sKey].note}\n`;
+                            if (userAnswers[sKey].sol) textAccumulator += `  - **📌 Giải pháp chiến lược:** ${userAnswers[sKey].sol}\n`;
+                        }
+                    });
+                    if (textAccumulator) {
+                        bodyContent += `### 🛠️ ${method.name.toUpperCase()}\n${textAccumulator}\n`;
+                    }
+                }
+            });
+
+            if (!bodyContent) {
+                alert('Chưa có dữ liệu phân tích nào được nhập để xuất báo cáo.');
+                return;
             }
+
+            md += bodyContent;
+            
+            navigator.clipboard.writeText(md).then(() => {
+                alert('Đã sao chép Bản báo cáo Chiến lược định dạng Markdown thành công vào Bộ nhớ tạm!');
+            }).catch(err => {
+                alert('Có lỗi xảy ra khi sao chép tự động: ' + err);
+            });
+        }
+
+        // Khởi động render hệ thống ban đầu
+        window.onload = function() {
+            renderMethodList();
         }
     </script>
 </body>
