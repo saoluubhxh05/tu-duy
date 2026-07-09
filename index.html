@@ -3,499 +3,852 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Problem Solving Lab - Không Gian Luyện Tập</title>
+    <title>Hệ thống Luyện tập Giải quyết Vấn đề & Tư duy Chiến lược</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 50%, #0d1527 0%, #070a13 100%);
+            font-family: 'Inter', sans-serif;
         }
-        .cyber-title { font-family: 'Space Grotesk', sans-serif; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); }
-        ::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.3); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.5); }
+        /* Custom scrollbar for premium look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Mindmap connection lines and styling */
+        .mindmap-node {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mindmap-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        .mindmap-branch-line {
+            stroke: #cbd5e1;
+            stroke-width: 2px;
+            fill: none;
+        }
     </style>
 </head>
-<body class="text-slate-200 h-screen overflow-hidden flex flex-col p-4">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-    <header class="flex-none grid grid-cols-3 items-center border-b border-slate-800 pb-3 mb-3">
-        <div>
-            <a href="main.html" class="inline-flex items-center text-xs text-blue-400 hover:text-blue-300 transition-all">
-                ← Quay lại trang chủ
-            </a>
-            <h1 class="cyber-title text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-amber-400 uppercase tracking-wider">
-                Problem Solving Lab
-            </h1>
-        </div>
-        <div class="col-span-2 flex flex-col gap-1">
-            <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">Nêu vấn đề cần giải quyết:</label>
-            <input type="text" id="problemInput" placeholder="Nhập bài toán hoặc thách thức cốt lõi bạn đang gặp phải tại đây..." 
-                   class="w-full bg-slate-900/80 border border-slate-700 rounded px-3 py-1.5 text-sm text-amber-300 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+    <!-- Top Navigation -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-4 py-3 sm:px-6">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md shadow-indigo-100">
+                    <i data-lucide="brain-circuit" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 tracking-tight">V-SOLVE WORKSPACE</h1>
+                    <p class="text-xs text-slate-500 font-medium">Hệ thống Luyện tập Giải quyết Vấn đề Đa phương pháp</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <span class="text-xs font-semibold text-slate-500 whitespace-nowrap hidden md:inline">Chọn Tình huống luyện tập:</span>
+                <select id="situationSelector" onchange="loadSituation()" class="w-full sm:w-72 bg-slate-100 border border-slate-200 text-sm rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none font-medium text-slate-800">
+                    <!-- Loaded dynamically -->
+                </select>
+            </div>
         </div>
     </header>
 
-    <main class="flex-1 grid grid-cols-12 gap-4 min-h-0">
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <section class="col-span-3 flex flex-col bg-slate-900/40 border border-slate-800 rounded p-3 min-h-0">
-            <div class="flex justify-between items-center mb-2 flex-none">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Bộ Khung Tư Duy</h2>
-                <button onclick="openAddMethodModal()" class="text-[10px] bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 text-blue-300 hover:text-white px-2 py-0.5 rounded transition-all">
-                    + Thêm mới
+        <!-- Left Column: Situation Detail & Strategy Navigator (4 Cols) -->
+        <section class="lg:col-span-4 flex flex-col gap-6">
+            <!-- Situation Box -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider" id="situationIdTag">TÌNH HUỐNG 01</span>
+                    <i data-lucide="help-circle" class="w-5 h-5 text-slate-400"></i>
+                </div>
+                <h2 class="text-base font-bold text-slate-900 mb-2" id="situationTitle">Tải tiêu đề tình huống...</h2>
+                <div class="text-sm text-slate-600 leading-relaxed max-h-48 overflow-y-auto pr-1" id="situationDesc">
+                    Tải nội dung mô tả...
+                </div>
+                
+                <!-- Targets/Clues for methods in this situation -->
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Đặc điểm cần lưu ý:</h4>
+                    <div class="grid grid-cols-2 gap-2" id="situationTags">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Methods Navigation Menu -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-950 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <i data-lucide="layers" class="w-4 h-4 text-indigo-600"></i>
+                    Bản đồ phương pháp
+                </h3>
+                <nav class="space-y-2" id="methodsNav">
+                    <!-- Methods dynamically loaded -->
+                </nav>
+            </div>
+        </section>
+
+        <!-- Right Column: Interactive Workspace (8 Cols) -->
+        <section class="lg:col-span-8 flex flex-col gap-6">
+            
+            <!-- Workspace Panel -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden">
+                <!-- Header of Workspace -->
+                <div class="border-b border-slate-100 bg-slate-50/50 px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-indigo-50 text-indigo-700 rounded-lg" id="methodIconContainer">
+                            <i data-lucide="compass" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-slate-900" id="currentMethodName">Tên phương pháp</h2>
+                            <p class="text-xs text-slate-500" id="currentMethodSubtitle">Khám phá tư duy & giải quyết triệt để</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 self-end sm:self-auto">
+                        <button onclick="toggleMindmapView(true)" class="flex items-center gap-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-3.5 py-2 rounded-lg transition-colors shadow-sm">
+                            <i data-lucide="git-branch" class="w-4 h-4"></i>
+                            <span>Xem Sơ đồ Tư duy</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Body: Split reference and form -->
+                <div class="p-5 flex flex-col gap-5">
+                    <!-- Verbatim Reference Block -->
+                    <div class="bg-slate-50 rounded-xl border border-slate-150 p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                                CƠ SỞ DỮ LIỆU GỐC (NGUYÊN VĂN BẢNG TRA CỨU)
+                            </h4>
+                            <span class="text-xs text-slate-400 italic">Chọn các mục nhỏ bên dưới để xem gợi ý</span>
+                        </div>
+                        
+                        <!-- Mini Navigator within Method -->
+                        <div id="subMethodSelectorContainer" class="flex flex-wrap gap-1.5 mb-3 max-h-24 overflow-y-auto p-1 bg-white rounded-lg border border-slate-200">
+                            <!-- Populated with elements of the method e.g. S, C, A, M... -->
+                        </div>
+
+                        <!-- Verbatim Content View -->
+                        <div id="verbatimView" class="bg-white rounded-lg border border-slate-200 p-4 min-h-[140px] flex flex-col justify-between">
+                            <div class="text-slate-500 text-sm text-center py-8">Hãy chọn một mục hoặc phân loại của phương pháp phía trên để đọc hướng dẫn chi tiết.</div>
+                        </div>
+                    </div>
+
+                    <!-- Input Workspace Form -->
+                    <div class="border-t border-slate-100 pt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" id="inputCommentLabel">
+                                1/ Nhận xét hoặc Điều kiện áp dụng
+                            </label>
+                            <textarea id="inputComment" rows="3" placeholder="Nhập các phân tích thực tế, điều kiện ràng buộc hoặc nhận xét cụ thể cho tình huống..." class="w-full text-sm border border-slate-200 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                2/ Giải pháp hành động đề xuất
+                            </label>
+                            <textarea id="inputSolution" rows="3" placeholder="Đề xuất các phương án hành động chi tiết áp dụng chiến lược/gợi ý trên..." class="w-full text-sm border border-slate-200 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Form Controls -->
+                    <div class="flex items-center justify-end gap-2 border-t border-slate-100 pt-4">
+                        <button onclick="clearInputs()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 px-4 py-2 transition-colors">
+                            Xóa nhập liệu
+                        </button>
+                        <button onclick="addSolutionToSummary()" class="flex items-center gap-1.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 px-4 py-2.5 rounded-lg transition-all shadow-sm shadow-emerald-100">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Thêm vào Bảng Tổng kết</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Summary Plan Table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="border-b border-slate-100 px-5 py-4 flex items-center justify-between bg-slate-50/50">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="clipboard-list" class="w-5 h-5 text-indigo-600"></i>
+                        <h2 class="text-base font-bold text-slate-900">Bảng Tổng Kết Giải Pháp Đã Thiết Lập</h2>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full" id="summaryCounter">0 Giải pháp</span>
+                </div>
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600 uppercase text-[10px] font-bold tracking-wider border-b border-slate-200">
+                                <th class="py-3 px-4 w-1/4">Phương pháp / Phân loại</th>
+                                <th class="py-3 px-4 w-1/3">Nhận xét & Điều kiện</th>
+                                <th class="py-3 px-4 w-1/3">Giải pháp Đề xuất</th>
+                                <th class="py-3 px-4 text-center w-12">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summaryTableBody" class="divide-y divide-slate-100">
+                            <!-- Dynamically updated -->
+                            <tr id="emptyRow">
+                                <td colspan="4" class="py-8 text-center text-slate-400 italic">
+                                    Chưa có giải pháp nào được thiết lập cho tình huống này. Hãy áp dụng các phương pháp bên trái và đề xuất giải pháp phía trên.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Fullscreen Mindmap View Modal -->
+    <div id="mindmapModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-6xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-indigo-100 text-indigo-800 rounded-xl">
+                        <i data-lucide="git-branch" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900" id="mindmapTitle">Sơ Đồ Tư Duy Phương Pháp</h3>
+                        <p class="text-xs text-slate-500">Kéo hoặc cuộn ngang/dọc trên di động để xem toàn diện cấu trúc sơ đồ cây</p>
+                    </div>
+                </div>
+                <button onclick="toggleMindmapView(false)" class="p-2 hover:bg-slate-200 rounded-full transition-colors text-slate-500 hover:text-slate-800">
+                    <i data-lucide="x" class="w-6 h-6"></i>
                 </button>
             </div>
             
-            <div id="methodList" class="flex-1 overflow-y-auto space-y-1.5 pr-1">
-                </div>
-        </section>
-
-        <section id="workspaceSection" class="col-span-5 flex flex-col bg-slate-900/40 border border-slate-800 rounded p-3 min-h-0 hidden">
-            <div class="flex-none border-b border-slate-800/80 pb-2 mb-2">
-                <div class="flex justify-between items-start">
-                    <h2 id="activeMethodName" class="cyber-title text-base font-bold text-blue-400">Tên Phương Pháp</h2>
-                    <span id="activeMethodBadge" class="text-[10px] px-2 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-400">Loại</span>
-                </div>
-                <div id="subSelectContainer" class="mt-2 hidden">
-                    <label id="subSelectLabel" class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Chọn khía cạnh phân tích:</label>
-                    <select id="subSelect" onchange="loadSubConceptDetails()" class="w-full text-xs bg-slate-950 border border-slate-700 rounded px-2 py-1 text-slate-300 focus:outline-none focus:border-purple-500"></select>
+            <!-- Scrollable Canvas Area -->
+            <div class="flex-1 overflow-auto bg-slate-50/50 p-6 relative select-none cursor-grab active:cursor-grabbing" id="mindmapCanvasContainer">
+                <div id="mindmapContainer" class="inline-flex items-center p-8 min-w-max min-h-full">
+                    <!-- Renders tree hierarchy expanding to the right -->
                 </div>
             </div>
 
-            <div class="flex-none bg-slate-950/60 border border-slate-800 rounded p-2.5 mb-3 text-xs text-slate-300 max-h-[35%] overflow-y-auto">
-                <p id="methodCore" class="font-medium text-slate-200 mb-1"></p>
-                <div id="methodSuggestions" class="space-y-1 text-slate-400 pl-2 border-l border-slate-700"></div>
-            </div>
-
-            <div class="flex-1 flex flex-col gap-2.5 min-h-0">
-                <div class="flex-1 flex flex-col">
-                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1">1. Nhận xét / Điều kiện thực tế:</label>
-                    <textarea id="workspaceNote" oninput="saveCurrentWork()" placeholder="Ghi lại các dữ kiện, ràng buộc thực tế, hoặc nhận định liên quan đến khía cạnh này..." 
-                              class="w-full flex-1 bg-slate-950 border border-slate-800 rounded p-2 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 resize-none"></textarea>
-                </div>
-                <div class="flex-1 flex flex-col">
-                    <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1">2. Giải pháp đề xuất:</label>
-                    <textarea id="workspaceSolution" oninput="saveCurrentWork()" placeholder="Đề xuất các hành động thực tế, phương án xử lý dựa trên gợi mở ở trên..." 
-                              class="w-full flex-1 bg-slate-950 border border-slate-800 rounded p-2 text-xs text-emerald-400 placeholder-slate-600 focus:outline-none focus:border-emerald-500 resize-none"></textarea>
-                </div>
-            </div>
-        </section>
-
-        <section class="col-span-4 flex flex-col bg-slate-900/40 border border-slate-800 rounded p-3 min-h-0">
-            <div class="flex justify-between items-center mb-2 flex-none">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Bản Báo Cáo Chiến Lược</h2>
-                <button onclick="exportToMarkdown()" class="text-[10px] bg-emerald-600/20 hover:bg-emerald-600 border border-emerald-500/30 text-emerald-300 hover:text-white px-2 py-0.5 rounded transition-all">
-                    Sao chép MD
-                </button>
-            </div>
-
-            <div id="summaryContainer" class="flex-1 overflow-y-auto border border-slate-800/60 bg-slate-950/40 rounded p-2 space-y-3 text-xs">
-                <div class="text-slate-600 text-center py-8">Vui lòng điền nội dung phân tích để kích hoạt báo cáo tổng hợp...</div>
-            </div>
-
-            <div class="flex-none border-t border-slate-800 pt-2 mt-2">
-                <div class="flex justify-between text-[10px] text-slate-400 mb-1">
-                    <span>Mức độ hoàn thành hệ thống</span>
-                    <span id="progressText">0%</span>
-                </div>
-                <div class="w-full bg-slate-800 h-1.5 rounded overflow-hidden">
-                    <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-emerald-500 h-full w-0 transition-all duration-300"></div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <div id="addModal" class="fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center hidden z-50">
-        <div class="bg-slate-900 border border-slate-700 w-96 rounded p-4 shadow-xl">
-            <h3 class="cyber-title text-sm font-bold text-slate-200 mb-3 uppercase tracking-wider border-b border-slate-800 pb-1.5">Thêm phương pháp tư duy</h3>
-            <div class="space-y-3 text-xs">
-                <div>
-                    <label class="block text-slate-400 mb-1">Tên phương pháp:</label>
-                    <input type="text" id="newMethodName" placeholder="Ví dụ: 6 Chiếc Nón Tư Duy, 5S..." class="w-full bg-slate-950 border border-slate-700 rounded px-2 py-1.5 text-slate-200 focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-slate-400 mb-1">Ý nghĩa cốt lõi:</label>
-                    <textarea id="newMethodCore" placeholder="Mô tả ngắn gọn tư duy cốt lõi..." class="w-full bg-slate-950 border border-slate-700 rounded p-2 h-16 text-slate-200 focus:outline-none focus:border-blue-500 resize-none"></textarea>
-                </div>
-                <div class="flex justify-end gap-2 pt-2">
-                    <button onclick="closeAddMethodModal()" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded text-slate-400">Hủy</button>
-                    <button onclick="addNewMethod()" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded text-white">Xác nhận</button>
-                </div>
+            <!-- Modal Footer Controls -->
+            <div class="px-6 py-3 border-t border-slate-100 bg-white flex justify-between items-center text-xs text-slate-400">
+                <span>* Click vào các nút trên sơ đồ tư duy để tự động áp dụng nhanh gợi ý vào Workspace!</span>
+                <span class="font-semibold text-slate-500">Mô hình cây phân rã chi tiết</span>
             </div>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 px-4 mt-12 text-center text-xs">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>© 2026 V-SOLVE Workspace. Phát triển dựa trên các Mô hình Tư duy đỉnh cao phục vụ chuyển đổi số và quản trị hệ thống.</p>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white transition-colors">Tài liệu hướng dẫn</a>
+                <span class="text-slate-700">|</span>
+                <a href="#" class="hover:text-white transition-colors font-semibold text-indigo-400">Tải dữ liệu PDF</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Javascript Data & Actions -->
     <script>
-        const SCAMPER_DATA = [
-            { id: 'S', name: 'S - Thay thế (Substitute)', core: 'Thay thế nguyên liệu, nhân sự, hay bước nào trong quy trình bằng một giải pháp tốt hơn?', prompts: ['Thay thế ai, hay cái gì?', 'Thay thế vật liệu, công cụ hoặc năng lượng?', 'Thay thế bước nào trong quy trình?', 'Thay đổi địa điểm hoặc thời gian?'] },
-            { id: 'C', name: 'C - Kết hợp (Combine)', core: 'Tích hợp tính năng, sản phẩm, hay nguồn lực lại với nhau để tạo ra giá trị vượt trội?', prompts: ['Kết hợp sản phẩm này với một sản phẩm khác?', 'Tích hợp những tính năng để tăng tính đa năng?', 'Kết hợp mục tiêu, nguồn lực hoặc tài năng của nhiều bên?', 'Gộp các bước trong quy trình lại làm một?'] },
-            { id: 'A', name: 'A - Thích nghi (Adapt)', core: 'Điều chỉnh điều gì để phù hợp với ngữ cảnh hoặc mục đích mới từ ngành khác?', prompts: ['Ý tưởng này có thể áp dụng vào một bối cảnh mới?', 'Sản phẩm hoặc quy trình nào tương tự trong quá khứ hay ngành khác?', 'Điều chỉnh yếu tố nào để phù hợp hơn với đối tượng mục tiêu mới?', 'Thay đổi cách tiếp cận để thích nghi với xu hướng hiện tại?'] },
-            { id: 'M', name: 'M - Bổ sung / Phóng đại (Modify)', core: 'Thay đổi hình dáng, kích thước, hoặc nhấn mạnh yếu tố cốt lõi nào để tăng giá trị?', prompts: ['Phóng đại, kéo dài hoặc tăng cường yếu tố để tạo khác biệt?', 'Thêm thắt tính năng, giá trị gia tăng?', 'Chỉnh sửa thiết kế, cấu trúc, hoặc hình thức bên ngoài?', 'Yếu tố nào có thể được làm nổi bật nhất để thu hút người dùng?'] },
-            { id: 'P', name: 'P - Ứng dụng (Put to other uses)', core: 'Có thể tái sử dụng thứ này vào mục đích hoàn toàn mới cho đối tượng khác không?', prompts: ['Sản phẩm/dịch vụ này có thể dùng vào việc gì khác ngoài chức năng chính?', 'Đối tượng nào khác có thể hưởng lợi từ giải pháp này?', 'Rác thải hoặc phụ phẩm của quy trình này có thể tái chế hay ứng dụng vào đâu?', 'Nếu đưa vào một thị trường hoàn toàn khác, nó sẽ giải quyết bài toán gì?'] },
-            { id: 'E', name: 'E - Loại bỏ (Eliminate)', core: 'Cắt bớt bước nào, tính năng nào để tối giản hóa tối đa hệ thống vận hành?', prompts: ['Lược bỏ tính năng, bộ phận hoặc bước nào mà không làm giảm chất lượng?', 'Làm quy trình trở nên đơn giản, nhanh chóng và dễ dàng hơn?', 'Cắt giảm chi phí, thời gian hoặc nhân lực ở khâu nào?', 'Điều gì xảy ra nếu chúng ta bỏ qua hoàn toàn quy tắc truyền thống này?'] },
-            { id: 'R', name: 'R - Đảo ngược (Reverse)', core: 'Đảo trật tự quy trình hoặc lật ngược vấn đề ra sao để tìm góc nhìn đột phá?', prompts: ['Quy trình sẽ ra sao nếu thực hiện ngược từ cuối lên đầu?', 'Có thể thay đổi thứ tự, trình tự các bước thực hiện không?', 'Điều gì xảy ra nếu lật ngược hoàn toàn giả định hoặc mục tiêu ban đầu?', 'Có thể hoán đổi vị trí, vai trò của các nhân sự hoặc bộ phận liên quan không?'] }
+        // --- 10 PROBLEM SITUATIONS ---
+        const situations = [
+            {
+                id: "S01",
+                title: "Khủng hoảng Doanh thu Quán Cà phê Đặc sản",
+                desc: "Quán cà phê đặc sản 'Urban Brew' do nhóm bạn trẻ khởi nghiệp đang gặp tình trạng sụt giảm 40% doanh thu chỉ sau 2 tháng khi một chuỗi cà phê thương hiệu lớn mở chi nhánh ngay bên cạnh với giá rẻ hơn, nhiều khuyến mãi và mặt bằng đỗ xe rộng rãi hơn. Nhân viên hoang mang, nội bộ lục đục, ngân sách vận hành sắp cạn kiệt.",
+                tags: ["Tổn thất thị phần", "Cạnh tranh vốn mạnh", "Chi phí vận hành", "Động lực nhân sự"]
+            },
+            {
+                id: "S02",
+                title: "Tỷ lệ Người dùng Rời bỏ Ứng dụng Học Tiếng Anh",
+                desc: "Một ứng dụng Edtech học tiếng Anh trực tuyến có tỷ lệ người dùng cài đặt khá tốt nhưng tỷ lệ rời bỏ (churn rate) sau 7 ngày đầu tiên lên tới 80%. Nhận xét cho thấy bài giảng rườm rà, giao diện khó thao tác trên điện thoại cũ, đồng thời người học nhanh chóng mất động lực tự học chỉ sau 2-3 buổi.",
+                tags: ["Tối giản trải nghiệm", "Động lực học viên", "Trải nghiệm rườm rà", "Trực quan hóa"]
+            },
+            {
+                id: "S03",
+                title: "Tỷ lệ Sản phẩm Lỗi của Nhà máy May mặc tăng cao",
+                desc: "Một nhà máy may mặc xuất khẩu vừa chuyển đổi sang dây chuyền bán tự động mới để tăng sản lượng. Tuy nhiên, tỷ lệ sản phẩm lỗi tăng vọt từ 2% lên 8% gây thiệt hại hàng trăm triệu mỗi tuần. Công nhân phàn nàn thiết bị khó dùng, không có tài liệu chuẩn, còn quản lý liên tục phạt công nhân khiến bầu không khí vô cùng căng thẳng.",
+                tags: ["Sai sót dây chuyền", "Năng lực nhân viên", "Cải thiện quy trình", "Lỗi vận hành máy"]
+            },
+            {
+                id: "S04",
+                title: "Đội ngũ Phát triển Phần mềm Trễ hạn & Kiệt sức",
+                desc: "Đội ngũ phát triển phần mềm cốt lõi (12 kỹ sư) của một ngân hàng đang rơi vào tình trạng kiệt sức (burn-out), trễ deadline liên tiếp các dự án quan trọng. Lý do là yêu cầu thay đổi liên tục từ ban giám đốc, quy trình báo cáo chồng chéo, không có công cụ tự động hóa và thiếu sự ghi nhận thành tích rõ ràng từ cấp trên.",
+                tags: ["Chồng chéo quy trình", "Mất động lực nhóm", "Deadline quá tải", "Ghi nhận đóng góp"]
+            },
+            {
+                id: "S05",
+                title: "Vấn nạn Hàng giả tàn phá Thương hiệu Thời trang Việt",
+                desc: "Một local brand thời trang thiết kế Việt Nam 'Dòng Chảy' đang trên đà phát triển thì bất ngờ bị hàng trăm cửa hàng giả mạo trên các sàn TMĐT bán sản phẩm nhái với giá chỉ bằng 1/3, chất lượng tồi tệ. Khách hàng nhầm lẫn khiếu nại dồn dập, uy tín thương hiệu suy giảm nghiêm trọng, lực lượng pháp lý mỏng không thể xử lý hết.",
+                tags: ["Xâm phạm bản quyền", "Bẫy thị trường", "Mất niềm tin khách", "Xử lý nguồn cung"]
+            },
+            {
+                id: "S06",
+                title: "Khủng hoảng Truyền thông Trung tâm Tiếng Anh",
+                desc: "Một trung tâm tiếng Anh uy tín bất ngờ dính khủng hoảng lớn khi một video clip rò rỉ cảnh giáo viên nước ngoài có phát ngôn nhạy cảm, thiếu tôn trọng văn hóa Việt Nam trong một buổi học thử. Cộng đồng mạng đòi tẩy chay trung tâm, phụ huynh tụ tập rút học phí, đối thủ cạnh tranh lập tức chạy quảng cáo thu hút học viên.",
+                tags: ["Sự cố thương hiệu", "Phản ứng khủng hoảng", "Tâm lý đám đông", "Sửa đổi nội bộ"]
+            },
+            {
+                id: "S07",
+                title: "Đầu ra Nông sản Hợp tác xã Hữu cơ bấp bênh",
+                desc: "Một hợp tác xã nông nghiệp muốn vận động 50 hộ nông dân chuyển từ trồng lúa truyền thống sang lúa hữu cơ giá trị cao. Tuy nhiên, nông dân e ngại rủi ro thời gian đầu không có lãi, quy trình canh tác khắt khe, trong khi hợp tác xã chưa có hợp đồng bao tiêu đầu ra vững chắc từ các chuỗi siêu thị lớn.",
+                tags: ["Sợ hãi rủi ro mới", "Thiếu liên kết chuỗi", "Đầu ra bấp bênh", "Thuyết phục số đông"]
+            },
+            {
+                id: "S08",
+                title: "Sự phản kháng khi Chuyển đổi Phòng Gym sang Tự phục vụ",
+                desc: "Chuỗi phòng gym cao cấp quyết định áp dụng công nghệ để cắt giảm nhân sự đón tiếp trực tiếp tại quầy, chuyển sang quét mã QR tự động ra vào. Quyết định này vấp phải làn sóng phản đối dữ dội từ các hội viên trung tuổi vì rắc rối khi đăng nhập, cảm giác lạnh lẽo thiếu tương tác người với người.",
+                tags: ["Công nghệ phức tạp", "Mất tương tác ấm áp", "Làn sóng phản đối", "Thích nghi nhóm tuổi"]
+            },
+            {
+                id: "S09",
+                title: "Tắc nghẽn Giao hàng Chặng cuối (Last-Mile Delivery) Dịp Tết",
+                desc: "Một công ty bưu chính công nghệ đối mặt với lượng đơn hàng tăng gấp 5 lần trong tháng giáp Tết. Hệ thống quá tải, tài xế quá mệt mỏi và bỏ việc hàng loạt vì áp lực giao hàng đúng giờ. Đơn hàng chất đống tại kho chặng cuối, hàng nghìn khách hàng giận dữ vì không nhận được quà Tết đúng hẹn.",
+                tags: ["Tăng trưởng nóng", "Tài xế kiệt sức", "Nghẽn cổ chai kho", "Điều phối khẩn cấp"]
+            },
+            {
+                id: "S10",
+                title: "Thờ ơ với Phong trào Đọc sách tại Trường học",
+                desc: "Ban giám hiệu một trường THCS quốc tế muốn xây dựng phong trào đọc sách văn học cổ điển cho học sinh. Tuy nhiên, các em chỉ hứng thú với điện thoại và trò chơi điện tử, phụ huynh thì chỉ chú tâm vào các môn thi cử điểm số toán lý hóa, thư viện nhà trường khang trang nhưng hầu như luôn trống vắng.",
+                tags: ["Mất động lực học", "Sự cám dỗ công nghệ", "Thờ ơ phong trào", "Môi trường học tập"]
+            }
         ];
 
-        const DONG_LUC_DATA = [
-            { id: 'TG', name: 'I. Trigger (Tác động)', core: 'Tạo kích thích, gợi nhắc hoặc thông báo để hành vi bắt đầu.', prompts: ['Gợi nhắc / Thông báo (Dán giấy, Chuông báo, Điện thoại)', 'Hướng dẫn (Bài viết, Sơ đồ trực quan)', 'Kích thích động lực (Cài đặt deadline áp lực, Quan sát hành vi, Cam kết công khai, Làm gương)'] },
-            { id: 'AB', name: 'II. Ability (Khả năng)', core: 'Làm cho hành vi trở nên dễ thực hiện hơn bằng cách nâng cao năng lực hoặc giảm độ khó.', prompts: ['Chia nhỏ mục tiêu (Phiên Pomodoro 25 phút)', 'Công cụ hỗ trợ (Chuẩn bị sẵn tài nguyên đầy đủ)', 'Tăng năng lực (Checklist + Quy trình chuẩn 3-5 bước, Hướng dẫn trực quan, Thử nghiệm nhỏ)', 'Tương trợ nhóm (Phân công vai trò cụ thể, Tạo nhóm hỗ trợ xã hội)'] },
-            { id: 'MO', name: 'III. Motivation (Động lực)', core: 'Gia tăng khát khao hoặc năng lượng nội tại thúc đẩy hành động.', prompts: ['Mục tiêu & Thi đua (Bảng xếp hạng, Thử thách kích thích nỗ lực)', 'Áp lực xã hội (So sánh xã hội, Thông báo số đông 90% đã xong, Chuẩn mực chung)', 'Tạo cảm xúc (Tò mò đặt câu hỏi thú vị, Kể chuyện thuyết phục, Hình dung tương lai tích cực)', 'Phân tích lợi hại (Giải thích ý nghĩa lâu dài, Tránh mất mát bằng cách trừ điểm)'] },
-            { id: 'RE', name: 'IV. Reinforcement (Củng cố)', core: 'Thưởng phạt nhằm định hình và lặp lại hành vi tốt.', prompts: ['Phần thưởng (Tích điểm đổi quà, Thưởng bất ngờ, Thưởng nhóm)', 'Ghi nhận (Khen cụ thể chi tiết, Vinh danh công khai, Danh hiệu tự hào)', 'Hình phạt & Phản hồi (Quy định rõ ràng nhất quán, Hiển thị số liệu tiến độ, Nhận xét lẫn nhau)'] },
-            { id: 'EN', name: 'V. Môi trường (Environment)', core: 'Thiết kế không gian vật lý hoặc số để hành vi diễn ra thuận lợi tự nhiên.', prompts: ['Thiết kế tối ưu (Sắp xếp đồ vật thuận tiện, Giảm bước thực hiện, Loại bỏ rào cản thừa)', 'Tâm lý mặc định (Cài đặt hành vi tốt làm mặc định, Rút gọn chỉ giữ lại 2-3 lựa chọn để dễ quyết định)'] },
-            { id: 'SU', name: 'VI. Duy trì (Sustenance)', core: 'Giữ vững hành vi tạo thành thói quen lâu dài không đứt gãy.', prompts: ['Suy nghĩ tích cực (Cho phép tự quyết, Thay đổi góc nhìn tích cực, Tạo cảm giác tiến bộ)', 'Thói quen & Trò chơi hóa (Chọn giờ cố định lặp lại, Thói quen nối tiếp, Nghi thức hóa, Gamification)'] }
-        ];
+        // --- METHOD DATABASES ---
+        const methodsData = {
+            "5WHY": {
+                name: "Phương pháp 5WHY (Tìm nguyên nhân gốc rễ)",
+                subtitle: "Đào sâu nguồn gốc để triệt tiêu vấn đề tận gốc, tránh giải quyết phần ngọn",
+                items: [
+                    { key: "W1", name: "Why 1: Triệu chứng bề nổi", meaning: "Hỏi tại sao vấn đề trực tiếp xảy ra?", desc: "Xác định sự cố ngay tại thời điểm quan sát thấy đầu tiên. Ví dụ: Máy dừng hoạt động.", prompts: ["Tại sao khách hàng khiếu nại?", "Tại sao doanh số giảm ngay tháng này?", "Tại sao nhân sự nộp đơn nghỉ việc?", "Triệu chứng rõ nhất là gì?"] },
+                    { key: "W2", name: "Why 2: Lý do kỹ thuật trực tiếp", meaning: "Hỏi tại sao sự cố ở Why 1 xảy ra?", desc: "Đi sâu hơn một bước vào các yếu tố kỹ thuật, hành vi hoặc hiện tượng trực tiếp liên quan đến Why 1.", prompts: ["Tại sao thiết bị lại quá tải?", "Tại sao quy trình này bị bỏ qua?", "Tại sao thông tin không đến tay người dùng?", "Có sự cố vật lý nào xảy ra không?"] },
+                    { key: "W3", name: "Why 3: Lỗi quy trình / Vận hành", meaning: "Hỏi tại sao hiện tượng ở Why 2 xuất hiện?", desc: "Bắt đầu hướng về các lỗ hổng trong hệ thống vận hành, cách thức bảo trì, huấn luyện hay phân công nhiệm vụ.", prompts: ["Tại sao không có bước kiểm tra định kỳ?", "Tại sao nhân viên chưa được hướng dẫn thao tác?", "Tại sao tiêu chuẩn chất lượng chưa được cập nhật?", "Ai chịu trách nhiệm kiểm tra việc này?"] },
+                    { key: "W4", name: "Why 4: Thiếu sót trong Hệ thống / Chính sách", meaning: "Hỏi tại sao quy trình ở Why 3 bị hổng?", desc: "Phát hiện lỗi ở cấp độ quản trị, thiết kế hệ thống, phân bổ ngân sách hoặc ban hành chính sách.", prompts: ["Tại sao quy trình cũ vẫn được giữ lại dù có máy mới?", "Tại sao ban quản trị chưa ưu tiên ngân sách huấn luyện?", "Tại sao tiêu chuẩn phê duyệt lại quá lỏng lẻo?", "Chính sách nào đang kìm hãm sự thay đổi này?"] },
+                    { key: "W5", name: "Why 5: Nguyên nhân gốc rễ (Root Cause)", meaning: "Hỏi tại sao triết lý / văn hóa quản trị dẫn tới Why 4?", desc: "Điểm cốt lõi nhất thường nằm ở tư duy, tầm nhìn của ban lãnh đạo hoặc văn hóa tổ chức chấp nhận rủi ro.", prompts: ["Triết lý cốt lõi nào đã dẫn đến tư duy xem nhẹ chất lượng?", "Có sự mâu thuẫn mục tiêu dài hạn và ngắn hạn không?", "Làm thế nào để thay đổi tư duy này một cách vĩnh viễn?", "Hành động triệt để nào sẽ giải quyết tận gốc?"] }
+                ]
+            },
+            "SWOT": {
+                name: "Phân tích SWOT & Ma trận Chiến lược",
+                subtitle: "Đánh giá nội tại và ngoại cảnh để xây dựng phương án tấn công - phòng thủ toàn diện",
+                items: [
+                    { key: "S", name: "Strengths - Điểm mạnh (Nội tại)", meaning: "Những lợi thế, tài nguyên độc quyền hoặc năng lực cốt lõi có sẵn.", desc: "Đánh giá tài sản, kỹ năng, uy tín thương hiệu hoặc công nghệ ưu việt của doanh nghiệp/tổ chức.", prompts: ["Ta có tài nguyên gì nổi bật hơn đối thủ?", "Kỹ năng chuyên môn nào của đội ngũ đang là tốt nhất?", "Khách hàng yêu thích nhất điểm gì ở ta?", "Lợi thế công nghệ hoặc chi phí của ta là gì?"] },
+                    { key: "W", name: "Weaknesses - Điểm yếu (Nội tại)", meaning: "Các hạn chế, lỗ hổng quy trình hoặc thiếu sót tài nguyên.", desc: "Xác định trung thực những rào cản khiến hệ thống hoạt động kém hiệu quả, dễ bị tổn thương.", prompts: ["Đâu là lý do lớn nhất khiến khách hàng không hài lòng?", "Đội ngũ đang thiếu hụt kỹ năng hay công cụ gì?", "Quy trình nội bộ nào đang rườm rà, tốn thời gian nhất?", "Hạn chế về ngân sách hoặc dòng tiền nằm ở đâu?"] },
+                    { key: "O", name: "Opportunities - Cơ hội (Ngoại cảnh)", meaning: "Các xu hướng thị trường, thay đổi chính sách hoặc lỗ hổng đối thủ.", desc: "Phân tích các yếu tố khách quan ngoài tầm kiểm soát của ta nhưng có thể tận dụng để bứt phá.", prompts: ["Có xu hướng công nghệ hay lối sống mới nào đang lên?", "Đối thủ cạnh tranh đang bỏ trống phân khúc khách hàng nào?", "Có sự thay đổi chính sách hỗ trợ nào từ nhà nước không?", "Nhu cầu chưa được đáp ứng của thị trường là gì?"] },
+                    { key: "T", name: "Threats - Thách thức (Ngoại cảnh)", meaning: "Nguy cơ từ đối thủ mới, khủng hoảng kinh tế hoặc luật pháp.", desc: "Những rủi ro bên ngoài có thể gây hại nghiêm trọng cho hoạt động của ta nếu không chuẩn bị phòng thủ.", prompts: ["Đối thủ lớn sắp tới có động thái gì nguy hiểm?", "Chi phí nguyên vật liệu đầu vào có nguy cơ tăng không?", "Xu hướng tiêu dùng có dịch chuyển rời xa ta không?", "Công nghệ mới có thể làm lỗi thời sản phẩm của ta không?"] }
+                ]
+            },
+            "SCAMPER": {
+                name: "Phương pháp SCAMPER (Sáng tạo Đột phá)",
+                subtitle: "Kích hoạt tư duy thiết kế lại sản phẩm, quy trình hay dịch vụ hiện có",
+                items: [
+                    { key: "S", name: "S - Thay thế (Substitute)", meaning: "Thay thế nguyên liệu, nhân sự, hay bước nào trong quy trình?", desc: "Thay thế các yếu tố như nguyên vật liệu, nhân sự, bước nào trong quy trình, công nghệ, thời gian hoặc địa điểm bằng một giải pháp thay thế tốt hơn.", prompts: ["thay thế ai, hay cái gì", "thay thế vật liệu, công cụ hoặc năng lượng", "thay thế bước nào trong quy trình", "thay đổi địa điểm hoặc thời gian"] },
+                    { key: "C", name: "C - Kết hợp (Combine)", meaning: "Tích hợp tính năng, sản phẩm, hay nguồn lực nào lại với nhau?", desc: "Tích hợp, kết hợp hoặc kết nối hai hoặc nhiều phần, tính năng, ý tưởng, sản phẩm, dịch vụ hoặc mục tiêu lại với nhau để tạo ra một giá trị mới vượt trội hơn.", prompts: ["kết hợp sản phẩm này với một sản phẩm khác", "tích hợp những tính năng để tăng tính đa năng", "kết hợp mục tiêu, nguồn lực hoặc tài nguyên của nhiều bên", "gộp các bước trong quy trình lại làm một"] },
+                    { key: "A", name: "A - Thích nghi (Adapt)", meaning: "Điều chỉnh điều gì để phù hợp với ngữ cảnh hoặc mục đích mới?", desc: "Điều chỉnh, thích ứng hoặc vay mượn ý tưởng từ các lĩnh vực, bối cảnh, ngành nghề hoặc sản phẩm khác để phù hợp với ngữ cảnh hoặc mục đích mới", prompts: ["Ý tưởng này có thể áp dụng vào một bối cảnh mới", "sản phẩm hoặc quy trình nào tương tự trong quá khứ hay ngành khác", "điều chỉnh yếu tố nào để phù hợp hơn với đối tượng mục tiêu mới", "thay đổi cách tiếp cận để thích nghi với xu hướng hiện tại"] },
+                    { key: "M", name: "M - Bổ sung / Phóng đại (Modify/Magnify)", meaning: "Thay đổi hình dáng, kích thước, hoặc nhấn mạnh yếu tố nào?", desc: "Thay đổi hình dáng, kích thước, màu sắc, âm thanh, tính năng, hoặc nhấn mạnh, phóng đại một yếu tố cốt lõi để tạo ra điểm nhấn và gia tăng giá trị.", prompts: ["phóng đại, kéo dài hoặc tăng cường yếu tố để tạo khác biệt", "thêm thắt tính năng, giá trị gia tăng", "chỉnh sửa thiết kế, cấu trúc, hoặc hình thức bên ngoài", "Yếu tố nào có thể được làm nổi bật nhất để thu hút người dùng"] },
+                    { key: "P", name: "P - Ứng dụng (Put to other uses)", meaning: "Có thể tái sử dụng thứ này vào việc gì khác không?", desc: "Tái sử dụng hoặc chuyển đổi công năng của sản phẩm, dịch vụ, quy trình hoặc tài nguyên hiện có vào một mục đích hoàn toàn mới, phục vụ cho đối tượng khách hàng khác.", prompts: ["Sản phẩm/dịch vụ này có thể dùng vào việc gì khác ngoài chức năng chính", "Đối tượng nào khác có thể hưởng lợi từ giải pháp này?", "Rác thải hoặc phụ phẩm của quy trình này có thể tái chế hay ứng dụng vào đâu?", "Nếu đưa vào một thị trường hoàn toàn khác, nó sẽ giải quyết bài toán gì?"] },
+                    { key: "E", name: "E - Loại bỏ (Eliminate)", meaning: "Cắt bớt bước nào, tính năng nào để tối giản hóa?", desc: "Tối giản hóa bằng cách loại bỏ, cắt giảm hoặc loại trừ hoàn toàn các bước rườm rà, tính năng thừa thãi, chi phí không cần thiết để hệ thống vận hành gọn nhẹ, hiệu quả hơn.", prompts: ["lược bỏ tính năng, bộ phận hoặc bước nào mà không làm giảm chất lượng", "làm quy trình trở nên đơn giản, nhanh chóng và dễ dàng hơn", "cắt giảm chi phí, thời gian hoặc nhân lực ở khâu nào?", "Điều gì xảy ra nếu chúng ta bỏ qua hoàn toàn quy tắc truyền thống này?"] },
+                    { key: "R", name: "R - Đảo ngược (Reverse)", meaning: "Đảo trật tự quy trình hoặc lật ngược vấn đề ra sao?", desc: "Đảo ngược trật tự quy trình, lật ngược vấn đề, thay đổi cấu trúc vị trí, hoặc đổi vai trò của các yếu tố để tìm ra góc nhìn mới đột phá.", prompts: ["Quy trình sẽ ra sao nếu thực hiện ngược từ cuối lên đầu?", "Có thể thay đổi thứ tự, trình tự các bước thực hiện không?", "Điều gì xảy ra nếu lật ngược hoàn toàn giả định hoặc mục tiêu ban đầu?", "Có thể hoán đổi vị trí, vai trò của các nhân sự hoặc bộ phận liên quan không?"] }
+                ]
+            },
+            "MOTIVATION": {
+                name: "Hệ thống Động lực Hành vi (Fogg Behavior Model mở rộng)",
+                subtitle: "Kích hoạt hành động thông qua Tác động, Khả năng, Động lực, Củng cố và Môi trường",
+                items: [
+                    { key: "I", name: "I. Trigger (Tác động)", meaning: "Các yếu tố gợi nhắc, hướng dẫn hay kích thích ban đầu.", desc: "Thiết lập hệ thống thông báo, rào chắn nhắc nhở hoặc chỉ dẫn trực quan để bắt đầu hành vi.", prompts: ["Gợi nhắc / Thông báo (Dán giấy, Chuông báo, Notification điện thoại)", "Hướng dẫn thực hiện (Bài hướng dẫn ngắn, hình vẽ nhanh)", "Kích thích động lực (Đặt deadline tạo áp lực, công khai cam kết trước tập thể, làm gương)"] },
+                    { key: "II", name: "II. Ability (Khả năng)", meaning: "Đơn giản hóa hành động bằng công cụ và nâng cao năng lực.", desc: "Giảm độ khó của hành vi giúp hành động dễ dàng xảy ra mà không tốn nhiều năng lượng.", prompts: ["Chia nhỏ mục tiêu (Phương pháp Pomodoro 25p làm + 5p nghỉ)", "Công cụ hỗ trợ (Chuẩn bị sẵn tài nguyên đầy đủ để tập trung)", "Tăng năng lực (Huấn luyện kỹ năng trước, bộ checklist quy trình chuẩn 3-5 bước, hướng dẫn trực quan, học từ lỗi sai, thử nghiệm nhỏ)", "Tương trợ nhóm (Hợp tác nhóm, phân công vai trò cụ thể, nhóm hỗ trợ xã hội)"] },
+                    { key: "III", name: "III. Motivation (Động lực)", meaning: "Tạo khát khao nội tại thông qua thi đua, cảm xúc và lý trí.", desc: "Tác động vào tâm lý, mong muốn đạt được lợi ích hoặc tránh xa tổn thất để duy trì hành động.", prompts: ["Mục tiêu & Thi đua (Đặt mục tiêu đo lường được, bảng xếp hạng nhóm/cá nhân, thách thức kích thích)", "Áp lực xã hội (So sánh xã hội, thông báo tỷ lệ 90% đã hoàn thành, chuẩn mực lớp học/tổ chức)", "Tạo cảm xúc (Tò mò bằng câu hỏi thú vị, kể câu chuyện thuyết phục, poster xúc động, hình dung tương lai tốt đẹp, kỳ vọng cao từ sếp/thầy)", "Thẩm quyền (Lời khuyên chuyên gia, mệnh lệnh cấp trên)", "Phân tích lợi hại (Giải thích lợi ích dài hạn, tránh mất mát - cho điểm trước trừ dần khi vi phạm)"] },
+                    { key: "IV", name: "IV. Reinforcement (Củng cố)", meaning: "Thưởng phạt phân minh và duy trì niềm tự hào.", desc: "Hồi đáp trực tiếp sau khi hành vi xảy ra để thúc đẩy lặp lại hoặc triệt tiêu hành vi xấu.", prompts: ["Khen thưởng (Thưởng ngay lập tức, tích điểm đổi quà, thưởng bất ngờ, thưởng theo nhóm)", "Ghi nhận xã hội (Khen ngợi chi tiết, tuyên dương trước nhóm, giấy khen, bảng vinh danh cập nhật định kỳ)", "Phạt & Phản hồi (Đặt quy định rõ ràng áp dụng nhất quán, phản hồi số liệu tiến độ trực quan, nhận xét chéo giữa bạn bè/đồng nghiệp)"] },
+                    { key: "V", name: "V. Môi trường", meaning: "Thiết kế không gian tối ưu hành vi dễ xảy ra.", desc: "Sắp xếp thế giới vật lý hoặc số để loại bỏ lực cản và tăng tính tiện dụng.", prompts: ["Thiết kế môi trường (Sắp đặt đồ vật tại vị trí dễ thấy/dễ lấy nhất)", "Tối giản quy trình (Giảm thiểu các bước không cần thiết để hành vi xảy ra nhanh nhất)", "Lựa chọn mặc định (Đặt hành vi mong muốn làm mặc định sẵn có)", "Giới hạn lựa chọn (Chỉ đưa ra 2-3 lựa chọn để tránh tê liệt quyết định)"] },
+                    { key: "VI", name: "VI. Duy trì", meaning: "Rèn luyện tư duy tích cực và thiết lập thói quen lặp lại.", desc: "Củng cố ý chí cá nhân bền bỉ kết hợp các nghi thức tự động hóa hành vi.", prompts: ["Suy nghĩ tích cực (Thay đổi góc nhìn tích cực, cảm giác tiến bộ qua thanh tiến độ, ghi nhật ký tự theo dõi, hô khẩu hiệu hành động)", "Thói quen lặp lại (Chọn thời gian cố định mỗi ngày, thói quen nối tiếp ngay sau một việc quen thuộc, nghi thức hóa trước khi làm, trò chơi hóa Gamification, tạo sự khan hiếm)"] }
+                ]
+            },
+            "STRATAGEMS": {
+                name: "36 Kế Chiến lược (Binh pháp ứng dụng)",
+                subtitle: "Vận dụng các thế trận mưu lược truyền thống vào giải quyết tranh chấp và đột phá",
+                items: [
+                    { key: "1", name: "Kế 1: Phao chuyên dẫn ngọc (Đưa đá đổi ngọc)", meaning: "Đưa ra cái nhỏ thu hút để lấy lợi ích lớn", desc: "Chấp nhận bỏ chi phí nhỏ hoặc mồi nhử ít giá trị ban đầu để thăm dò phản ứng đối phương hoặc kéo về cơ hội lớn vượt trội.", prompts: ["Điều kiện áp dụng: Ta có sẵn mồi nhử đánh đúng nhu cầu địch, đối phương có tính thực dụng dễ bị mờ mắt.", "Thời cơ sử dụng: Xuất hiện đàm phán, đối phương tìm kiếm lợi ích cụ thể trước mắt."] },
+                    { key: "2", name: "Kế 2: Mỹ nhân kế (Kế dùng người đẹp)", meaning: "Dùng sức hấp dẫn cá nhân, tình cảm để phân tâm", desc: "Sử dụng sức hút cá nhân, các mối quan hệ tình cảm, sự kiêng nể hoặc quà tặng vật chất cao cấp để làm lung lay ý chí người quyết định tối cao.", prompts: ["Điều kiện áp dụng: Đối phương có nhược điểm lớn về tâm lý, cảm xúc hoặc lối sống cá nhân.", "Thời cơ sử dụng: Giai đoạn chuẩn bị quyết sách lớn, thời điểm then chốt cần tác động người đứng đầu."] },
+                    { key: "3", name: "Kế 3: Không thành kế (Kế bỏ trống thành)", meaning: "Tạo hình ảnh tự tin, sơ hở để đối phương nghi ngờ", desc: "Khi thực lực yếu nhất, chủ động mở toang phòng tuyến, biểu hiện bình tĩnh cực độ để đánh vào tâm lý đa nghi, cẩn trọng của đối phương khiến họ rút lui.", prompts: ["Điều kiện áp dụng: Ta rơi vào thế cực yếu cô độc; địch là kẻ cực kỳ đa nghi, hành động dựa vào quá nhiều phân tích nguy cơ.", "Thời cơ sử dụng: Địch chuẩn bị tổng tấn công nhưng chưa nắm rõ thực hư nội bộ của ta."] },
+                    { key: "4", name: "Kế 4: Quan môn tróc tặc (Đóng cửa bắt giặc)", meaning: "Bao vây cắt đường thoát rồi mới xử lý", desc: "Chủ động kiểm soát tuyệt đối địa bàn hoặc các lối thoát, đưa đối thủ vào thế cô lập không có nguồn viện trợ rồi mới tiến hành dứt điểm xử lý.", prompts: ["Điều kiện áp dụng: Ta có ưu thế tuyệt đối về vị trí địa lý hoặc pháp lý; đối thủ là nhóm nhỏ lẻ đang hoảng loạn.", "Thời cơ sử dụng: Địch đã sa bẫy sâu, cạn kiệt tài nguyên không thể liên lạc với bên ngoài."] },
+                    { key: "5", name: "Kế 5: Thượng ốc trừu thê (Lên mái nhà rút thang)", meaning: "Dụ đối phương vào sâu rồi cắt đứt đường lui", desc: "Dẫn dắt đối tác hoặc đối thủ tham gia đầu tư sâu, ký kết các ràng buộc pháp lý chặt chẽ rồi mới thay đổi luật chơi hoặc cắt bỏ các phương án dự phòng để họ buộc phải dốc toàn lực đi tiếp.", prompts: ["Điều kiện áp dụng: Ta kiểm soát nền tảng huyết mạch hoặc đầu ra/đầu vào cốt lõi.", "Thời cơ sử dụng: Địch đã đầu tư lớn, tiến vào vùng không thể tự thoái lui."] },
+                    { key: "6", name: "Kế 6: Dục cầm cố túng (Muốn bắt nên thả)", meaning: "Tạm thời nới lỏng để đối phương chủ quan lộ điểm yếu", desc: "Tránh dồn đối phương vào đường cùng khiến họ phản kháng liều mạng. Chủ động thả lỏng có kiểm soát để họ bộc lộ toàn bộ mạng lưới đồng bọn hoặc tự tiêu hao sức lực.", prompts: ["Điều kiện áp dụng: Ta đủ năng lực bao vây từ xa, có mạng lưới giám sát ngầm chặt chẽ.", "Thời cơ sử dụng: Đối phương vừa thất bại tạm thời, đang có ý định bỏ trốn hoặc phản kháng ngầm."] },
+                    { key: "7", name: "Kế 7: Khổ nhục kế (Kế hành hạ xác thịt)", meaning: "Chủ động chịu tổn thất để gây dựng lòng tin", desc: "Chấp nhận chịu hy sinh quyền lợi ngắn hạn, tự gây thiệt hại cho mình để che giấu mục tiêu thực sự, lấy lòng tin tuyệt đối của đối phương nhằm tiếp cận sâu bên trong.", prompts: ["Điều kiện áp dụng: Địch phòng thủ quá nghiêm ngặt; ta chấp nhận tổn thất nhỏ để đổi lấy mục tiêu chiến lược lớn.", "Thời cơ sử dụng: Đối phương ráo riết thanh lọc nội bộ hoặc đang thắng lớn nên nảy sinh chủ quan."] },
+                    { key: "8", name: "Kế 8: Khích tướng kế (Chọc giận kích động)", meaning: "Dùng hành động làm đối phương mất tự chủ", desc: "Nhắm vào lòng tự ái, danh dự hoặc tính tự phụ của đối phương để kích động họ hành động bộc đồng, phá vỡ kế hoạch phòng thủ ban đầu của chính họ.", prompts: ["Điều kiện áp dụng: Nắm rõ điểm yếu tâm lý nhạy cảm của đối thủ; đối thủ là người nóng nảy, kiêu ngạo.", "Thời cơ sử dụng: Trước các trận đàm phán trực tiếp hoặc khi đối thủ đang do dự chưa đưa ra quyết định."] },
+                    { key: "9", name: "Kế 9: Mượn đao giết người (Lợi dụng bên thứ ba)", meaning: "Lợi dụng mâu thuẫn người khác để tiêu diệt đối thủ", desc: "Mượn sức mạnh, nguồn lực hoặc sự xung đột lợi ích của bên thứ ba với mục tiêu để xử lý đối thủ, bảo toàn thực lực và tránh rủi ro trực diện cho bản thân.", prompts: ["Điều kiện áp dụng: Ta không muốn ra mặt; bên thứ ba có mâu thuẫn gay gắt sẵn có với đối thủ.", "Thời cơ sử dụng: Xung đột lợi ích giữa đối thủ và bên thứ ba bùng nổ."] },
+                    { key: "10", name: "Kế 10: Viễn giao cận công (Liên kết xa đánh gần)", meaning: "Hợp tác thế lực ở xa để cô lập kẻ thù trực diện gần", desc: "Thiết lập liên minh chiến lược với các nhóm ở xa chưa tranh chấp trực tiếp lợi ích, tập trung dọn sạch các mối đe dọa sát sườn trước khi mở rộng quy mô lớn hơn.", prompts: ["Điều kiện áp dụng: Ta bị bao vây bởi nhiều đối thủ; cần chia rẽ liên minh của kẻ thù cạnh tranh trực tiếp.", "Thời cơ sử dụng: Cục diện thị trường thay đổi nhanh chóng, các đối thủ cạnh tranh sát sườn đang gây hấn."] },
+                    { key: "11", name: "Kế 11: Cầm tặc cầm vương (Bắt giặc bắt vua)", meaning: "Đánh trực diện vào mắt xích cốt lõi đứng đầu", desc: "Tập trung toàn lực triệt tiêu người đứng đầu, trung tâm quyền lực hoặc nút thắt quan trọng nhất của hệ thống đối thủ để khiến toàn bộ bộ máy phía sau tự tan rã.", prompts: ["Điều kiện áp dụng: Đối thủ vận hành theo mô hình tập quyền hoàn toàn, phụ thuộc nặng nề vào thủ lĩnh.", "Thời cơ sử dụng: Bộ máy chỉ huy của đối thủ xuất hiện sơ hở hoặc lỏng lẻo ở vùng lõi bảo vệ."] },
+                    { key: "12", name: "Kế 12: Phủ đề trừu tân (Rút củi đáy nồi)", meaning: "Triệt hạ nguồn tài chính, dòng tiền hoặc hậu cần", desc: "Tránh đối đầu trực diện hao tổn binh lực. Tập trung đánh thẳng vào nguồn sống cốt lõi của đối thủ như nguồn vốn, dòng tiền, kho hàng, khách hàng VIP hoặc hậu cần.", prompts: ["Điều kiện áp dụng: Đối thủ có vẻ ngoài mạnh mẽ nhưng thực tế phụ thuộc lớn vào nguồn cấp bên ngoài.", "Thời cơ sử dụng: Cuộc chiến kéo dài tiêu hao năng lượng, phát hiện ra điểm nghẽn tài chính của địch."] },
+                    { key: "13", name: "Kế 13: Thay lương hoán trụ (Thay rường đổi cột)", meaning: "Âm thầm tráo đổi cấu trúc, nhân sự cốt lõi bên trong", desc: "Bề ngoài giữ nguyên danh nghĩa cũ nhưng thực chất đã thay đổi hoàn toàn hệ thống vận hành, nhân sự then chốt bên trong để thâu tóm quyền lực một cách êm thấm.", prompts: ["Điều kiện áp dụng: Ta đã cài cắm được nhân sự bên trong đối thủ; đối thủ chủ quan khâu giám sát vận hành.", "Thời cơ sử dụng: Đối thủ đang bước vào giai đoạn chuyển giao thế hệ hoặc tái cấu trúc lỏng lẻo."] },
+                    { key: "14", name: "Kế 14: Vô trung sinh hữu (Không có làm thành có)", meaning: "Tạo tin đồn, hiện tượng giả dẫn dắt nhận thức", desc: "Dàn dựng thông tin, truyền thông ảo hoặc các tín hiệu lặp đi lặp lại để đối thủ tin là thật, buộc phải đưa ra quyết sách sai lệch dựa trên dữ liệu ảo.", prompts: ["Điều kiện áp dụng: Ta làm chủ các kênh truyền thông chủ chốt; đối thủ đang khát thông tin hoặc quá đa nghi.", "Thời cơ sử dụng: Trạng thái hoang mang, khủng hoảng thông tin lan rộng trong nội bộ địch."] },
+                    { key: "15", name: "Kế 15: Vây Ngụy cứu Triệu (Đánh chỗ yếu buộc cứu viện)", meaning: "Tạo áp lực ở điểm hiểm yếu để hóa giải thế công của địch", desc: "Khi đối thủ dồn lực tấn công tuyến đầu của ta, thay vì trực diện chống đỡ, ta tấn công thẳng vào đầu não hoặc cứ điểm cực kỳ quan trọng đang bị bỏ trống của họ để buộc họ phải lập tức rút quân về cứu viện.", prompts: ["Điều kiện áp dụng: Ta có tốc độ cơ động cực nhanh; nắm rõ cứ điểm phòng thủ yếu nhưng tối quan trọng của đối thủ.", "Thời cơ sử dụng: Đối thủ dốc toàn lực đi viễn chinh, hậu phương bỏ trống hoàn toàn."] },
+                    { key: "16", name: "Kế 16: Điều hổ ly sơn (Dụ hổ rời núi)", meaning: "Dụ đối thủ rời vị trí có lợi để tiêu diệt", desc: "Tạo ra miếng mồi béo bở hoặc một biến động khẩn cấp để dụ đối phương rời khỏi vùng an toàn hoặc địa bàn phòng守 kiên cố nhất của họ nhằm triệt hạ dễ dàng.", prompts: ["Điều kiện áp dụng: Đối thủ sở hữu lợi thế tuyệt đối khi đứng ở vị trí cũ; ta có mồi nhử đủ hấp dẫn.", "Thời cơ sử dụng: Xuất hiện biến động lớn ngoài vùng kiểm soát khiến đối phương phải ra mặt giải quyết."] },
+                    { key: "17", name: "Kế 17: Thanh đông kích tây (Tiếng đông kích tây)", meaning: "Giả tấn công một hướng nhưng bất ngờ đánh hướng khác", desc: "Tạo tiếng vang cực lớn, dàn dựng hiện trường giả ở một phía để thu hút toàn bộ sự phòng thủ và chú ý của đối phương, sau đó lập tức tấn công chớp nhoáng vào hướng ngược lại.", prompts: ["Điều kiện áp dụng: Lực lượng ta yếu hơn; đối thủ dễ bị điều động phân tán bởi các sự kiện bề nổi.", "Thời cơ sử dụng: Tuyến phòng thủ của đối thủ dài nhưng tập trung cảnh giác một chỗ."] },
+                    { key: "18", name: "Kế 18: Ám độ Trần Thương (Công khai đường cũ, bí mật đi đường mới)", meaning: "Giả tuân thủ quy trình cũ làm bình phong cho đột phá", desc: "Thực hiện các thủ tục, đàm phán công khai rầm rộ theo quy chuẩn thông thường để ru ngủ đối thủ, đồng thời âm thầm triển khai một mũi tấn công đột phá hướng hoàn toàn mới.", prompts: ["Điều kiện áp dụng: Cần tạo đột biến chiến lược; ta chấp nhận tốn chi phí làm thủ tục hình thức.", "Thời cơ sử dụng: Các cuộc đàm phán chính thức hoặc dư luận đang tập trung cao độ vào một lối đi duy nhất."] },
+                    { key: "19", name: "Kế 19: Giả đồ phạt Quắc (Mượn đường diệt Quắc)", meaning: "Mượn tạm danh nghĩa bên thứ ba để tiếp cận mục tiêu", desc: "Xin phép hoặc mượn danh nghĩa hợp tác với một bên trung gian để tiếp cận vị trí chiến lược, sau khi hoàn thành nhiệm vụ lập tức thâu tóm luôn cả bên trung gian.", prompts: ["Điều kiện áp dụng: Quan hệ ngoại giao của ta cực tốt; mục tiêu bị cô lập không có đường tự vệ.", "Thời cơ sử dụng: Bên thứ ba và mục tiêu xuất hiện rạn nứt sâu sắc."] },
+                    { key: "20", name: "Kế 20: Tiếu lý tàng đao (Cười nụ giấu dao)", meaning: "Bên ngoài thân thiện, bên trong quyết liệt kế hoạch", desc: "Tạo ra vẻ ngoài hòa nhã, ký kết các cam kết hữu nghị để giữ chân đối thủ chủ quan, tạo thêm thời gian cho ta âm thầm tích lũy sức mạnh trước khi tung đòn quyết định.", prompts: ["Điều kiện áp dụng: Thực lực chưa đủ để lật bài ngửa; khả năng làm chủ cảm xúc và ngoại giao đỉnh cao.", "Thời cơ sử dụng: Hợp tác ban đầu hoặc thời kỳ bang giao ký kết hiệp ước."] },
+                    { key: "21", name: "Kế 21: Giả si bất điên (Giả heo ăn hổ)", meaning: "Giả ngu ngơ để tránh bị đối thủ mạnh đề phòng", desc: "Che giấu hoàn toàn năng lực, giả vờ ngốc nghếch, vô hại để các thế lực lớn xung quanh chủ quan khinh thường, từ đó âm thầm xây dựng thực lực chờ thời cơ bứt phá.", prompts: ["Điều kiện áp dụng: Ta mới gia nhập thị trường thế yếu; xung quanh là nhiều đối thủ khát máu đang tranh đoạt.", "Thời cơ sử dụng: Đối thủ đang bận rộn thanh trừng lẫn nhau hoặc đứng trên đỉnh cao độc tôn."] },
+                    { key: "22", name: "Kế 22: Dĩ dật đãi lao (Lấy khỏe nhẹ địch mệt mỏi)", meaning: "Chờ đối phương mệt mỏi mới tung đòn kiểm soát", desc: "Xây dựng phòng tuyến kiên cố trên sân nhà, dụ đối phương phải di chuyển quãng đường dài tiêu hao sức lực, khi đối phương đã mỏi mệt nản lòng mới tiến hành phản công.", prompts: ["Điều kiện áp dụng: Ta chiếm ưu thế địa lợi và dồi dào nguồn lực; không bị áp lực gấp gáp về mặt thời gian.", "Thời cơ sử dụng: Địch hành quân xa nhà, nôn nóng công thành và hậu cần bấp bênh."] },
+                    { key: "23", name: "Kế 23: Tầu vi thượng sách (Chạy là kế hay nhất)", meaning: "Rút lui bảo toàn lực lượng để phục thù", desc: "Khi phân tích thấy cục diện thất bại hoàn toàn không thể cứu vãn, chủ động rút lui ngay lập tức để giữ gìn sinh lực, tránh tổn thất vô ích và chuẩn bị cho tương lai.", prompts: ["Điều kiện áp dụng: Sức mạnh chênh lệch quá lớn; ở lại chắc chắn bị xóa sổ hoàn toàn.", "Thời cơ sử dụng: Trận địa tan vỡ, đối phương tung ra lực lượng tinh nhuệ nhất để truy quét."] },
+                    { key: "24", name: "Kế 24: Lý đại đào cương (Cây mận chết thay cây đào)", meaning: "Chấp nhận hy sinh mảng phụ để cứu toàn cục", desc: "Cắt bỏ các bộ phận không cốt lõi, chấp nhận các tổn thất tài chính biên hoặc chịu phạt hành chính để bảo vệ hạt nhân sống còn của toàn công ty/hệ thống.", prompts: ["Điều kiện áp dụng: Hệ thống bị đe dọa trực diện; có sẵn các mảng phụ có thể buông bỏ làm tấm khiên.", "Thời cơ sử dụng: Vòng vây pháp lý hoặc tài chính siết chặt, buộc phải đưa ra lựa chọn đánh đổi."] },
+                    { key: "25", name: "Kế 25: Kim thiền thoát xác (Ve sầu lột xác)", meaning: "Giữ vỏ bọc cũ nhưng cốt lõi đã dịch chuyển", desc: "Tạo lập một hình ảnh báo cáo, số liệu hoặc văn phòng cũ hoạt động bình thường để đánh lạc hướng giám sát của đối thủ trong khi toàn bộ tài sản, nhân lực cốt lõi đã rút lui an toàn.", prompts: ["Điều kiện áp dụng: Ta ở thế bị kẹt bị giám sát chặt; cần thời gian chuyển dịch cơ cấu âm thầm.", "Thời cơ sử dụng: Đối thủ chỉ nhìn vỏ bọc bề ngoài mà thiếu sự kiểm tra thực chất sâu bên trong."] },
+                    { key: "26", name: "Kế 26: Sấn hỏa đả kiếp (Theo lửa hoành hành)", meaning: "Tranh thủ lúc đối thủ gặp nạn để trục lợi", desc: "Khi đối thủ đang vướng bê bối lớn, khủng hoảng tài chính hay chia rẽ nhân sự trầm trọng, lập tức tung đòn cạnh tranh trực diện để thâu tóm khách hàng hoặc nhân sự cốt lõi của họ.", prompts: ["Điều kiện áp dụng: Ta có nguồn lực cơ động sẵn sàng hành động; đối thủ gặp scandal hoặc khủng hoảng nặng.", "Thời cơ sử dụng: Địch chia rẽ nội bộ trầm trọng, mất hoàn toàn khả năng kiểm soát khủng hoảng."] },
+                    { key: "27", name: "Kế 27: Thuận thủ khiên dương (Thuận tay dắt dê)", meaning: "Nhân cơ hội tiện tay thu vén lợi ích từ sơ hở nhỏ", desc: "Trong quá trình triển khai kế hoạch chính, nếu phát hiện ra bất kỳ kẽ hở hoặc tài nguyên bỏ trống nào của đối thủ thì lập tức thu hồi mà không tốn thêm chi phí.", prompts: ["Điều kiện áp dụng: Ta ở thế chủ động; đối thủ đang quá bận rộn xử lý sự cố khác.", "Thời cơ sử dụng: Sơ hở nhất thời do hệ thống vận hành hàng ngày của đối thủ xuất hiện."] },
+                    { key: "29", name: "Kế 29: Phản khách vi chủ (Đổi khách thành chủ)", meaning: "Từ thế phụ thuộc từng bước vươn lên nắm quyền kiểm soát", desc: "Gia nhập hệ thống dưới vai trò nhỏ (đối tác phụ, nhà cung cấp phụ). Tích lũy công nghệ cốt lõi và sự tin tưởng để biến mình thành không thể thay thế, từ đó thâu tóm quyền quyết định.", prompts: ["Điều kiện áp dụng: Ta có sự kiên nhẫn cao; đối thủ lỏng lẻo quản lý và quá dựa dẫm vào chuyên môn của ta.", "Thời cơ sử dụng: Người làm chủ cũ sa sút năng lực hoặc lơ là khâu quản lý then chốt."] },
+                    { key: "30", name: "Kế 30: Tá thi hoàn hồn (Mượn xác hoàn hồn)", meaning: "Sử dụng danh nghĩa cũ để phục hồi mục tiêu mới", desc: "Tận dụng lại các thương hiệu cũ đã bị khai tử, các trào lưu hoài niệm xưa cũ hoặc uy tín lịch sử sẵn có để triển khai một dòng sản phẩm hoặc chiến dịch hoàn toàn mới.", prompts: ["Điều kiện áp dụng: Ta thiếu danh nghĩa chính thống mới; thị trường có sự hoài niệm sâu sắc với cái cũ.", "Thời cơ sử dụng: Thị trường bão hòa cái mới, xuất hiện làn sóng tìm về giá trị truyền thống."] },
+                    { key: "31", name: "Kế 31: Hỗn thủy mạc ngư (Đục nước béo cò)", meaning: "Khuấy động tạo hỗn loạn để dễ dàng đoạt lợi thế", desc: "Tung các tin đồn đa chiều, gây chia rẽ nội bộ các bên liên quan để làm nhiễu loạn thông tin khiến các bên mất phương hướng, từ đó ta dễ dàng đứng ra làm trung gian hòa giải trục lợi.", prompts: ["Điều kiện áp dụng: Ta có năng lực linh hoạt và tinh quái cao; thị trường quá ổn định cần khuấy động.", "Thời cơ sử dụng: Thị trường đa bên tranh tối tranh sáng, lòng người hoang mang thiếu định hướng."] },
+                    { key: "32", name: "Kế 32: Cách ngạn quan hỏa (Đứng nhìn bên sông xem lửa cháy)", meaning: "Giữ trung lập chờ hai đối thủ lớn tự tiêu diệt nhau", desc: "Khi hai thế lực lớn đối thủ của ta đang bước vào cuộc chiến sống còn, ta tuyệt đối không can thiệp hay liên minh với bên nào. Kiên nhẫn đứng ngoài bảo toàn thực lực chờ họ kiệt quệ mới ra tay.", prompts: ["Điều kiện áp dụng: Ta ở thế độc lập vững chắc; hai đối thủ có sức mạnh ngang nhau lao vào cắn xé nhau.", "Thời cơ sử dụng: Cuộc chiến tranh giành thị phần tiêu hao toàn bộ sinh lực cốt lõi của cả hai bên."] }
+                ]
+            }
+        };
 
-        const KESACH_DATA = [
-            { id: 'K1', name: 'Kế 1-6: Nhóm Mong Muốn / Thu Phục', core: 'Điều động đối phương thông qua lợi dụ, bẫy ngầm hoặc chinh phục nhân tâm.', prompts: ['Phao chuyên dẫn ngọc (Thả mồi nhỏ câu món hời lớn)', 'Mỹ nhân kế (Tác động cảm xúc/mối quan hệ gây nhiễu trí tuệ)', 'Không thành kế (Thế yếu tuyệt đối, cố tình bày hở để địch đa nghi rút lui)', 'Quan môn tróc tặc (Đóng cửa bắt giặc - Cắt đường thoát rồi mới xử lý)', 'Thượng ốc trừu thê (Rút thang - Đưa vào thế sâu không thể quay đầu)', 'Dục cầm cố túng (Muốn bắt nên thả - Nới lỏng kiểm soát để lộ mạng lưới ngầm)'] },
-            { id: 'K2', name: 'Kế 7-8: Nhóm Tính Cách', core: 'Tấn công trực tiếp vào điểm yếu tâm lý hoặc thể xác đối thủ.', prompts: ['Khổ nhục kế (Chủ động chịu tổn thất ngắn hạn để thâm nhập, xóa nghi ngờ)', 'Khích tướng kế (Đánh vào lòng tự trọng, sĩ diện khiến đối phương mất tự chủ)'] },
-            { id: 'K3', name: 'Kế 9-13: Đánh Vào Điểm Yếu Hệ Thống', core: 'Tác động trực tiếp vào bộ máy chỉ huy, nguồn hậu cần hoặc cấu trúc cốt lõi.', prompts: ['Mượn đao giết người (Lợi dụng mâu thuẫn bên thứ ba để xử lý đối thủ)', 'Viễn giao cận công (Kết giao xa đánh gần - Phân rã liên minh)', 'Cầm tặc cầm vương (Bắt giặc bắt vua - Đột kích thẳng mắt xích cốt lõi đứng đầu)', 'Phủ đề trừu tân (Rút củi đáy nồi - Triệt hạ dòng tiền, nguồn tài chính, hậu cần)', 'Thay lương hoán trụ (Thay rường đổi cột - Âm thầm đổi ruột bên trong giữ vỏ bên ngoài)'] },
-            { id: 'K4', name: 'Kế 14-18: Điều Động Nguồn Lực', core: 'Sử dụng thông tin giả và nghi binh khiến đối phương bố trí sai vị trí quân bài.', prompts: ['Vô trung sinh hữu (Không làm thành có - Dàn dựng thông tin giả biến thật)', 'Vây Ngụy cứu Triệu (Tránh chỗ mạnh, đánh thẳng vào đầu não buộc địch rút về cứu viện)', 'Điều hổ ly sơn (Dụ cọp rời núi - Kéo đối phương ra khỏi vùng an toàn kiên cố)', 'Thanh đông kích tây (Tiếng động phía đông đánh phía tây - Điều động phân tán địch)', 'Ám độ Trần Thương (Công khai làm thủ tục quy trình cũ, âm thầm đi đường bí mật)'] },
-            { id: 'K5', name: 'Kế 19-21: Che Giấu Bản Thân', core: 'Giấu mình tinh vi để tích lũy sức mạnh hoặc tiếp cận mục tiêu hợp pháp.', prompts: ['Giả đồ phạt Quắc (Mượn đường diệt Quắc - Dùng danh nghĩa bên trung gian hợp pháp)', 'Tiếu lý tàng đao (Cười nụ giấu dao - Ngoài mềm mỏng ngoại giao, trong chuẩn bị quyết liệt)', 'Giả si bất điên (Giả heo ăn hổ - Giả ngu ngơ tránh bị thanh trừng để tích lũy lực lượng)'] },
-            { id: 'K6', name: 'Kế 22-25: Nhóm Phòng Thủ Rút Lui', core: 'Bảo toàn đại cục khi đối mặt với khủng hoảng hoặc sức mạnh áp đảo của địch.', prompts: ['Dĩ dật đãi lao (Lấy khỏe nhẹ địch mệt mỏi - Chiếm lợi thế sân nhà, chờ địch hành quân xa tiêu hao)', 'Tẩu vi thượng sách (Chạy là kế hay nhất - Chủ động rút lui bảo toàn hạt giống phục thù)', 'Lý đại đào cương (Cây mận chết thay đào - Hy sinh bộ phận nhỏ/mảng biên để cứu đại cục)', 'Kim thiền thoát xác (Ve sầu lột xác - Giữ nguyên vỏ bọc báo cáo bề ngoài để âm thầm chuyển đổi ruột)'] },
-            { id: 'K7', name: 'Kế 26-32: Nhóm Thu Lợi & Tranh Chấp', core: 'Tận dụng khủng hoảng, sơ hở nhỏ hoặc mâu thuẫn đa phương để giành ưu thế.', prompts: ['Sấn hỏa đả kiếp (Theo lửa hoành hành - Trục lợi khi đối phương vướng scandal, chia rẽ nội bộ)', 'Thuận thủ khiên dương (Thuận tay dắt dê - Nhân cơ hội sơ hở nhỏ của hệ thống để thu vén)', 'Phản khách vi chủ (Đổi khách thành chủ - Từ vai trò phụ/cổ đông nhỏ vươn lên nắm quyền lõi)', 'Tá thi hoàn hồn (Mượn xác hoàn hồn - Hồi sinh thương hiệu/trào lưu cũ lỗi thời còn giá trị hoài niệm)', 'Hỗn thủy mạc ngư (Đục nước béo cò - Tung tin nhiễu khuấy động hỗn loạn đa phương)', 'Cách ngạn quan hỏa (Đứng nhìn lửa cháy - Trung lập chờ các đối thủ lớn triệt hạ kiệt quệ nhau)'] }
-        ];
-    </script>
+        // --- GLOBAL STATE ---
+        let selectedSituationId = "S01";
+        let activeMethodId = "SCAMPER";
+        let activeSubItemIndex = 0;
+        let solutionStore = {}; // Stores array of solutions per situationId
 
-    <script>
-        // Khởi tạo state dữ liệu ứng dụng
-        let coreMethods = [
-            { code: '5WHY', type: 'STATIC', name: 'Chiến lược 5-WHY', core: 'Tìm nguyên nhân gốc rễ bằng cách đặt câu hỏi "Tại sao" liên tiếp 5 lần.', prompts: ['Hỏi liên tiếp để bóc tách các lớp bề mặt của vấn đề.', 'Mục tiêu: Tìm ra điểm nghẽn hệ thống thay vì lỗi cá nhân.'] },
-            { code: 'SWOT', type: 'STATIC', name: 'Ma Trận SWOT', core: 'Phân tích toàn diện bối cảnh nội bộ và các tác động khách quan bên ngoài.', prompts: ['Strengths: Điểm mạnh cốt lõi có sẵn là gì?', 'Weaknesses: Điểm yếu, lỗ hổng hiện tại cần bù đắp?', 'Opportunities: Thời cơ, xu hướng bên ngoài có thể tận dụng?', 'Threats: Thách thức, rủi ro ngoại cảnh nào đang rình rập?'] },
-            { code: 'SCAMPER', type: 'DYNAMIC_SELECT', name: 'SCAMPER Lab', data: SCAMPER_DATA },
-            { code: 'DONG_LUC', type: 'DYNAMIC_SELECT', name: 'Đấu Trường Động Lực', data: DONG_LUC_DATA },
-            { code: '36KE', type: 'DYNAMIC_SELECT', name: '36 Kế Sách Quân Sự', data: KESACH_DATA }
-        ];
+        // --- INIT APP ---
+        window.onload = function() {
+            // Load Situations into selector
+            const selector = document.getElementById("situationSelector");
+            situations.forEach(s => {
+                const opt = document.createElement("option");
+                opt.value = s.id;
+                opt.textContent = `${s.id}: ${s.title}`;
+                selector.appendChild(opt);
+            });
 
-        // Bộ lưu trữ câu trả lời người dùng
-        // Cấu trúc key: "METHODCODE" hoặc "METHODCODE_SUBID"
-        let userAnswers = {};
-        let activeKey = null;
+            // Initialize Solution Store for each situation
+            situations.forEach(s => {
+                solutionStore[s.id] = [];
+            });
 
-        // Render danh sách phương pháp cột trái
-        function renderMethodList() {
-            const listContainer = document.getElementById('methodList');
-            listContainer.innerHTML = '';
-
-            coreMethods.forEach((method, index) => {
-                const isSelected = activeKey && activeKey.startsWith(method.code);
-                
-                // Đếm số lượng tiểu mục đã điền của phương pháp này để tính hoàn thành
-                let totalSub = 1;
-                let doneSub = 0;
-
-                if (method.type === 'STATIC') {
-                    if (userAnswers[method.code] && (userAnswers[method.code].note || userAnswers[method.code].sol)) doneSub = 1;
-                } else {
-                    totalSub = method.data.length;
-                    method.data.forEach(sub => {
-                        const sKey = `${method.code}_${sub.id}`;
-                        if (userAnswers[sKey] && (userAnswers[sKey].note || userAnswers[sKey].sol)) doneSub++;
-                    });
-                }
-
-                const pct = Math.round((doneSub / totalSub) * 100);
-
-                const item = document.createElement('div');
-                item.className = `group flex flex-col p-2 rounded cursor-pointer transition-all border ${
-                    isSelected 
-                    ? 'bg-blue-950/60 border-blue-500/60 shadow-[0_0_8px_rgba(59,130,246,0.2)]' 
-                    : 'bg-slate-900/60 border-slate-800/80 hover:border-slate-700'
-                }`;
-                item.setAttribute('onclick', `selectMethod('${method.code}')`);
-
-                item.innerHTML = `
-                    <div class="flex justify-between items-center w-full">
-                        <span class="text-xs font-semibold ${isSelected ? 'text-blue-400' : 'text-slate-200'} group-hover:text-blue-300 transition-colors">
-                            ${method.name}
-                        </span>
-                        <div class="flex items-center gap-1.5 flex-none" onclick="event.stopPropagation();">
-                            <span class="text-[9px] font-mono text-slate-500">${doneSub}/${totalSub}</span>
-                            <button onclick="removeMethod(${index})" class="text-slate-600 hover:text-rose-400 text-[11px] font-bold px-1 transition-colors" title="Xóa phương pháp này">×</button>
+            // Render Methods Left Nav Menu
+            const nav = document.getElementById("methodsNav");
+            Object.keys(methodsData).forEach(mId => {
+                const method = methodsData[mId];
+                const btn = document.createElement("button");
+                btn.id = `navBtn-${mId}`;
+                btn.onclick = () => selectMethod(mId);
+                btn.className = "w-full text-left p-3 rounded-xl flex items-center justify-between transition-all hover:bg-slate-100 group";
+                btn.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 text-slate-500 group-hover:bg-white group-hover:text-indigo-600 transition-all font-bold text-xs" id="navIcon-${mId}">
+                            ${mId === '5WHY' ? '5W' : mId[0]}
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-slate-900 group-hover:text-indigo-700 transition-colors block">${mId}</span>
+                            <span class="text-[10px] text-slate-400 block truncate max-w-[180px]">${method.name}</span>
                         </div>
                     </div>
-                    <div class="w-full bg-slate-950 h-0.5 mt-1.5 rounded-full overflow-hidden">
-                        <div class="bg-gradient-to-r from-blue-500 to-purple-500 h-full transition-all" style="width: ${pct}%"></div>
-                    </div>
+                    <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300 group-hover:text-indigo-500 transition-colors"></i>
                 `;
-                listContainer.appendChild(item);
+                nav.appendChild(btn);
             });
 
-            updateGlobalProgress();
+            // Initial load
+            loadSituation();
+            selectMethod("SCAMPER");
+            lucide.createIcons();
         }
 
-        // Chọn một phương pháp từ danh sách
-        function selectMethod(code) {
-            const method = coreMethods.find(m => m.code === code);
-            if (!method) return;
+        // --- SITUATION ACTIONS ---
+        function loadSituation() {
+            const selector = document.getElementById("situationSelector");
+            selectedSituationId = selector.value;
+            const sit = situations.find(s => s.id === selectedSituationId);
 
-            document.getElementById('workspaceSection').classList.remove('hidden');
-            document.getElementById('activeMethodName').innerText = method.name;
+            document.getElementById("situationIdTag").textContent = `TÌNH HUỐNG ${sit.id}`;
+            document.getElementById("situationTitle").textContent = sit.title;
+            document.getElementById("situationDesc").textContent = sit.desc;
 
-            const subContainer = document.getElementById('subSelectContainer');
-            const subSelect = document.getElementById('subSelect');
+            // Load Tags
+            const tagContainer = document.getElementById("situationTags");
+            tagContainer.innerHTML = "";
+            sit.tags.forEach(t => {
+                const span = document.createElement("span");
+                span.className = "bg-slate-100 text-slate-600 text-[10px] font-semibold px-2 py-1 rounded border border-slate-200 truncate";
+                span.textContent = `# ${t}`;
+                tagContainer.appendChild(span);
+            });
 
-            if (method.type === 'STATIC') {
-                subContainer.classList.add('hidden');
-                document.getElementById('activeMethodBadge').innerText = "Cấu trúc Tĩnh";
-                activeKey = method.code;
+            // Refresh summary table for this situation
+            renderSummaryTable();
+        }
+
+        // --- METHOD SELECTION ---
+        function selectMethod(mId) {
+            // Remove active classes from old nav items
+            Object.keys(methodsData).forEach(id => {
+                const btn = document.getElementById(`navBtn-${id}`);
+                const icon = document.getElementById(`navIcon-${id}`);
+                if (btn) btn.className = "w-full text-left p-3 rounded-xl flex items-center justify-between transition-all hover:bg-slate-100 group";
+                if (icon) icon.className = "w-8 h-8 rounded-lg flex items-center justify-center bg-slate-100 text-slate-500 group-hover:bg-white group-hover:text-indigo-600 transition-all font-bold text-xs";
+            });
+
+            // Set active states on new nav item
+            activeMethodId = mId;
+            const activeBtn = document.getElementById(`navBtn-${mId}`);
+            const activeIcon = document.getElementById(`navIcon-${mId}`);
+            if (activeBtn) activeBtn.className = "w-full text-left p-3 rounded-xl flex items-center justify-between transition-all bg-indigo-50 border border-indigo-100 group";
+            if (activeIcon) activeIcon.className = "w-8 h-8 rounded-lg flex items-center justify-center bg-indigo-600 text-white font-bold text-xs shadow-md shadow-indigo-100";
+
+            // Update Header Information of Workspace
+            const method = methodsData[mId];
+            document.getElementById("currentMethodName").textContent = method.name;
+            document.getElementById("currentMethodSubtitle").textContent = method.subtitle;
+
+            // Switch Workspace Icons
+            const iconMap = {
+                "5WHY": "help-circle",
+                "SWOT": "bar-chart-2",
+                "SCAMPER": "lightbulb",
+                "MOTIVATION": "activity",
+                "STRATAGEMS": "shield"
+            };
+            const iconContainer = document.getElementById("methodIconContainer");
+            iconContainer.innerHTML = `<i data-lucide="${iconMap[mId] || 'compass'}" class="w-5 h-5 text-indigo-700"></i>`;
+            lucide.createIcons();
+
+            // Render Mini Selector inside the Method Panel
+            renderSubMethodSelector();
+            selectSubMethodItem(0);
+        }
+
+        // --- SUB METHOD SELECTION ---
+        function renderSubMethodSelector() {
+            const container = document.getElementById("subMethodSelectorContainer");
+            container.innerHTML = "";
+            const method = methodsData[activeMethodId];
+
+            method.items.forEach((item, index) => {
+                const btn = document.createElement("button");
+                btn.onclick = () => selectSubMethodItem(index);
+                btn.id = `subBtn-${index}`;
+                btn.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100";
                 
-                // Load nội dung lý thuyết static
-                document.getElementById('methodCore').innerText = method.core;
-                const sugBox = document.getElementById('methodSuggestions');
-                sugBox.innerHTML = '';
-                method.prompts.forEach(p => {
-                    sugBox.innerHTML += `<div class="flex items-start gap-1"><span>•</span><span>${p}</span></div>`;
-                });
-
-                loadWorkspaceInput();
-            } else {
-                subContainer.classList.remove('hidden');
-                document.getElementById('activeMethodBadge').innerText = "Cấu trúc Đa mục";
-                
-                // Build dropdown options
-                subSelect.innerHTML = '';
-                method.data.forEach(sub => {
-                    const opt = document.createElement('option');
-                    opt.value = sub.id;
-                    opt.innerText = sub.name;
-                    subSelect.appendChild(opt);
-                });
-
-                // Chọn tiểu mục đầu tiên mặc định
-                subSelect.selectedIndex = 0;
-                loadSubConceptDetails();
-            }
-
-            // Đồng bộ giao diện highlight list
-            renderMethodList();
-        }
-
-        // Tải thông tin chi tiết của tiểu mục (SCAMPER / Động lực / Kế sách)
-        function loadSubConceptDetails() {
-            const subSelect = document.getElementById('subSelect');
-            const subId = subSelect.value;
-            
-            // Tìm phương pháp lớn đang active thông qua cấu trúc activeKey cũ hoặc tìm trong mảng
-            const activeMethod = coreMethods.find(m => activeKey && activeKey.startsWith(m.code)) || coreMethods.find(m => m.code === document.getElementById('subSelect').parentNode.parentNode.parentNode.querySelector('h2').innerText || m.name === document.getElementById('activeMethodName').innerText);
-            if (!activeMethod || !activeMethod.data) return;
-
-            activeKey = `${activeMethod.code}_${subId}`;
-            const targetData = activeMethod.data.find(d => d.id === subId);
-
-            if (targetData) {
-                document.getElementById('methodCore').innerText = targetData.core;
-                const sugBox = document.getElementById('methodSuggestions');
-                sugBox.innerHTML = '';
-                targetData.prompts.forEach(p => {
-                    sugBox.innerHTML += `<div class="flex items-start gap-1"><span>•</span><span>${p}</span></div>`;
-                });
-            }
-
-            loadWorkspaceInput();
-        }
-
-        // Đổ dữ liệu đã lưu từ userAnswers ra textareas
-        function loadWorkspaceInput() {
-            if (!activeKey) return;
-            const data = userAnswers[activeKey] || { note: '', sol: '' };
-            document.getElementById('workspaceNote').value = data.note;
-            document.getElementById('workspaceSolution').value = data.sol;
-        }
-
-        // Lưu real-time khi người dùng gõ chữ
-        function saveCurrentWork() {
-            if (!activeKey) return;
-            const noteVal = document.getElementById('workspaceNote').value;
-            const solVal = document.getElementById('workspaceSolution').value;
-
-            if (noteVal.trim() === '' && solVal.trim() === '') {
-                delete userAnswers[activeKey];
-            } else {
-                userAnswers[activeKey] = {
-                    note: noteVal,
-                    sol: solVal
-                };
-            }
-            
-            // Cập nhật ngầm mà không gây giật lag giao diện list hoặc re-focus
-            updateGlobalProgress();
-            renderSummaryReport();
-        }
-
-        // Xóa một phương pháp tư duy khỏi bộ khung (Tính năng thêm bớt động)
-        function removeMethod(index) {
-            const method = coreMethods[index];
-            // Xóa dữ liệu liên quan trong bộ nhớ trả lời
-            if (method.type === 'STATIC') {
-                delete userAnswers[method.code];
-            } else {
-                method.data.forEach(sub => delete userAnswers[`${method.code}_${sub.id}`]);
-            }
-
-            coreMethods.splice(index, 1);
-            
-            // Nếu phương pháp đang xóa khớp với màn hình hiện tại thì ẩn workspace đi
-            if (activeKey && activeKey.startsWith(method.code)) {
-                activeKey = null;
-                document.getElementById('workspaceSection').classList.add('hidden');
-            }
-
-            renderMethodList();
-            renderSummaryReport();
-        }
-
-        // Điều khiển Modal Thêm phương pháp
-        function openAddMethodModal() { document.getElementById('addModal').classList.remove('hidden'); }
-        function closeAddMethodModal() { 
-            document.getElementById('addModal').classList.add('hidden');
-            document.getElementById('newMethodName').value = '';
-            document.getElementById('newMethodCore').value = '';
-        }
-
-        // Thêm phương pháp tùy biến mới vào hệ thống
-        function addNewMethod() {
-            const name = document.getElementById('newMethodName').value.trim();
-            const core = document.getElementById('newMethodCore').value.trim();
-
-            if (!name) { alert('Vui lòng nhập tên phương pháp tư duy!'); return; }
-
-            const generatedCode = 'CUSTOM_' + Date.now();
-            coreMethods.push({
-                code: generatedCode,
-                type: 'STATIC',
-                name: name,
-                core: core || 'Phương pháp tự định nghĩa bởi chuyên gia.',
-                prompts: ['Điền các khía cạnh phân tích thực tế phù hợp với đặc thù bài toán của bạn.']
-            });
-
-            closeAddMethodModal();
-            renderMethodList();
-            selectMethod(generatedCode);
-        }
-
-        // Tính toán & hiển thị chỉ số tiến độ hoàn thành toàn cục
-        function updateGlobalProgress() {
-            let totalWeights = 0;
-            let currentWeights = 0;
-
-            coreMethods.forEach(m => {
-                if (m.type === 'STATIC') {
-                    totalWeights++;
-                    if (userAnswers[m.code] && (userAnswers[m.code].note || userAnswers[m.code].sol)) currentWeights++;
-                } else {
-                    totalWeights += m.data.length;
-                    m.data.forEach(sub => {
-                        if (userAnswers[`${m.code}_${sub.id}`] && (userAnswers[`${m.code}_${sub.id}`].note || userAnswers[`${m.code}_${sub.id}`].sol)) currentWeights++;
-                    });
+                // Truncated title for buttons
+                let title = item.name.split(":")[0];
+                if (activeMethodId === 'STRATAGEMS') {
+                    title = `Kế ${item.key}: ${item.name.split("-")[0].trim()}`;
                 }
-            });
-
-            const pct = totalWeights > 0 ? Math.round((currentWeights / totalWeights) * 100) : 0;
-            document.getElementById('progressBar').style.width = pct + '%';
-            document.getElementById('progressText').innerText = pct + '%';
-        }
-
-        // Biên dịch cấu trúc cây tổng kết dữ liệu báo cáo sang cột phải
-        function renderSummaryReport() {
-            const summaryContainer = document.getElementById('summaryContainer');
-            const keys = Object.keys(userAnswers);
-
-            if (keys.length === 0) {
-                summaryContainer.innerHTML = '<div class="text-slate-600 text-center py-8">Vui lòng điền nội dung phân tích để kích hoạt báo cáo tổng hợp...</div>';
-                return;
-            }
-
-            summaryContainer.innerHTML = '';
-
-            // Group data by method name for aesthetic grouping
-            coreMethods.forEach(method => {
-                let segmentHTML = '';
-
-                if (method.type === 'STATIC') {
-                    if (userAnswers[method.code]) {
-                        segmentHTML += createReportBlock(method.name, userAnswers[method.code]);
-                    }
-                } else {
-                    let subBlocks = '';
-                    method.data.forEach(sub => {
-                        const sKey = `${method.code}_${sub.id}`;
-                        if (userAnswers[sKey]) {
-                            subBlocks += createReportBlock(sub.name, userAnswers[sKey]);
-                        }
-                    });
-                    if (subBlocks) {
-                        segmentHTML += `<div class="border-l-2 border-purple-500/40 pl-2 space-y-2">
-                            <h4 class="text-[10px] font-bold text-purple-400 uppercase tracking-tight">${method.name}</h4>
-                            ${subBlocks}
-                        </div>`;
-                    }
-                }
-
-                if (segmentHTML) {
-                    summaryContainer.innerHTML += segmentHTML;
-                }
+                btn.textContent = title;
+                container.appendChild(btn);
             });
         }
 
-        function createReportBlock(title, data) {
-            return `
-                <div class="bg-slate-900/60 border border-slate-800 p-2 rounded">
-                    <h5 class="font-medium text-amber-400 text-[11px] mb-1">${title}</h5>
-                    ${data.note ? `<p class="text-slate-400 mb-1"><span class="text-[10px] uppercase text-slate-500 block">Nhận xét/Điều kiện:</span>${data.note}</p>` : ''}
-                    ${data.sol ? `<p class="text-emerald-400"><span class="text-[10px] uppercase text-slate-500 block">Giải pháp:</span>${data.sol}</p>` : ''}
+        function selectSubMethodItem(index) {
+            activeSubItemIndex = index;
+            const method = methodsData[activeMethodId];
+            const item = method.items[index];
+
+            // Toggle active classes
+            method.items.forEach((_, idx) => {
+                const btn = document.getElementById(`subBtn-${idx}`);
+                if (btn) {
+                    btn.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100";
+                }
+            });
+
+            const activeBtn = document.getElementById(`subBtn-${index}`);
+            if (activeBtn) {
+                activeBtn.className = "px-3 py-1.5 rounded-md text-xs font-bold transition-all border border-indigo-200 bg-indigo-600 text-white shadow-sm shadow-indigo-100";
+            }
+
+            // Populate Verbatim details
+            const verbatimView = document.getElementById("verbatimView");
+            
+            let promptsHtml = "";
+            item.prompts.forEach(p => {
+                promptsHtml += `<li class="flex items-start gap-2 text-xs text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                    <span class="text-indigo-500 font-bold mt-0.5">•</span>
+                    <span>${p}</span>
+                </li>`;
+            });
+
+            verbatimView.innerHTML = `
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded border border-indigo-100">
+                            MỤC: ${item.name}
+                        </span>
+                        <span class="text-xs font-medium text-slate-500 italic">${item.meaning}</span>
+                    </div>
+                    <p class="text-xs text-slate-700 leading-relaxed font-medium bg-indigo-50/20 p-3 rounded-lg border border-indigo-100/40">
+                        ${item.desc}
+                    </p>
+                    <div class="pt-2">
+                        <h5 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Câu hỏi / Chỉ dẫn gợi mở nguyên văn:</h5>
+                        <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            ${promptsHtml}
+                        </ul>
+                    </div>
                 </div>
             `;
         }
 
-        // Xuất Markdown thông minh ra bộ nhớ tạm (Clipboard) để chia sẻ nhanh
-        function exportToMarkdown() {
-            const prob = document.getElementById('problemInput').value.trim() || 'Chưa định nghĩa bài toán cụ thể.';
-            let md = `# BÁO CÁO CHIẾN LƯỢC GIẢI QUYẾT VẤN ĐỀ\n\n`;
-            md += `## 🎯 VẤN ĐỀ CỐT LÕI:\n> ${prob}\n\n`;
-            md += `--- \n\n`;
+        // --- WORKSPACE ACTIONS ---
+        function clearInputs() {
+            document.getElementById("inputComment").value = "";
+            document.getElementById("inputSolution").value = "";
+        }
 
-            let bodyContent = '';
-            coreMethods.forEach(method => {
-                if (method.type === 'STATIC' && userAnswers[method.code]) {
-                    bodyContent += `### 💡 ${method.name}\n`;
-                    if (userAnswers[method.code].note) bodyContent += `- **Nhận xét/Điều kiện:** ${userAnswers[method.code].note}\n`;
-                    if (userAnswers[method.code].sol) bodyContent += `- **📌 Giải pháp chiến lược:** ${userAnswers[method.code].sol}\n`;
-                    bodyContent += `\n`;
-                } else if (method.type === 'DYNAMIC_SELECT') {
-                    let textAccumulator = '';
-                    method.data.forEach(sub => {
-                        const sKey = `${method.code}_${sub.id}`;
-                        if (userAnswers[sKey]) {
-                            textAccumulator += `#### → ${sub.name}\n`;
-                            if (userAnswers[sKey].note) textAccumulator += `  - **Nhận xét/Điều kiện:** ${userAnswers[sKey].note}\n`;
-                            if (userAnswers[sKey].sol) textAccumulator += `  - **📌 Giải pháp chiến lược:** ${userAnswers[sKey].sol}\n`;
-                        }
-                    });
-                    if (textAccumulator) {
-                        bodyContent += `### 🛠️ ${method.name.toUpperCase()}\n${textAccumulator}\n`;
-                    }
-                }
-            });
+        function addSolutionToSummary() {
+            const comment = document.getElementById("inputComment").value.trim();
+            const solution = document.getElementById("inputSolution").value.trim();
 
-            if (!bodyContent) {
-                alert('Chưa có dữ liệu phân tích nào được nhập để xuất báo cáo.');
+            if (!comment && !solution) {
+                alertCustom("Vui lòng điền ít nhất Nhận xét hoặc Giải pháp trước khi lưu!");
                 return;
             }
 
-            md += bodyContent;
+            const method = methodsData[activeMethodId];
+            const item = method.items[activeSubItemIndex];
             
-            navigator.clipboard.writeText(md).then(() => {
-                alert('Đã sao chép Bản báo cáo Chiến lược định dạng Markdown thành công vào Bộ nhớ tạm!');
-            }).catch(err => {
-                alert('Có lỗi xảy ra khi sao chép tự động: ' + err);
-            });
+            // Build safe item details
+            let displayTitle = `${activeMethodId} - ${item.name.split(":")[0]}`;
+            if (activeMethodId === 'STRATAGEMS') {
+                displayTitle = `Kế ${item.key}: ${item.name.split("-")[0].trim()}`;
+            }
+
+            const newEntry = {
+                id: Date.now().toString(),
+                methodName: activeMethodId,
+                subMethodName: displayTitle,
+                comment: comment || "N/A",
+                solution: solution || "N/A"
+            };
+
+            solutionStore[selectedSituationId].push(newEntry);
+            renderSummaryTable();
+            clearInputs();
         }
 
-        // Khởi động render hệ thống ban đầu
-        window.onload = function() {
-            renderMethodList();
+        function removeEntry(id) {
+            solutionStore[selectedSituationId] = solutionStore[selectedSituationId].filter(entry => entry.id !== id);
+            renderSummaryTable();
         }
+
+        function renderSummaryTable() {
+            const tbody = document.getElementById("summaryTableBody");
+            const entries = solutionStore[selectedSituationId] || [];
+            
+            // Update counter
+            document.getElementById("summaryCounter").textContent = `${entries.length} Giải pháp`;
+
+            if (entries.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="emptyRow">
+                        <td colspan="4" class="py-8 text-center text-slate-400 italic">
+                            Chưa có giải pháp nào được thiết lập cho tình huống này. Hãy áp dụng các phương pháp bên trái và đề xuất giải pháp phía trên.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = "";
+            entries.forEach(entry => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-50 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-4 px-4 font-semibold text-xs text-slate-800">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                            <div>
+                                <span class="text-[9px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded font-bold">${entry.methodName}</span>
+                                <span class="block mt-1">${entry.subMethodName}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 text-xs text-slate-600 leading-relaxed whitespace-pre-line">${entry.comment}</td>
+                    <td class="py-4 px-4 text-xs text-slate-900 leading-relaxed font-medium whitespace-pre-line">${entry.solution}</td>
+                    <td class="py-4 px-4 text-center">
+                        <button onclick="removeEntry('${entry.id}')" class="p-1 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+
+        // --- Custom Alert Box ---
+        function alertCustom(message) {
+            const overlay = document.createElement("div");
+            overlay.className = "fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4";
+            overlay.innerHTML = `
+                <div class="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl space-y-4">
+                    <div class="mx-auto w-12 h-12 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-slate-900">Chú ý nhập liệu</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">${message}</p>
+                    <button onclick="this.closest('.fixed').remove()" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2.5 rounded-lg transition-colors">
+                        Đồng ý
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            lucide.createIcons();
+        }
+
+        // --- MINDMAP / HIERARCHY LOGIC ---
+        function toggleMindmapView(show) {
+            const modal = document.getElementById("mindmapModal");
+            if (show) {
+                modal.classList.remove("hidden");
+                renderMindmap();
+            } else {
+                modal.classList.add("hidden");
+            }
+        }
+
+        function renderMindmap() {
+            const container = document.getElementById("mindmapContainer");
+            container.innerHTML = "";
+
+            const method = methodsData[activeMethodId];
+            document.getElementById("mindmapTitle").textContent = `Sơ đồ tư duy: ${method.name}`;
+
+            // Build Mindmap Hierarchy Nodes
+            // Root Node (Leftmost)
+            const rootNode = document.createElement("div");
+            rootNode.className = "flex items-center";
+
+            // Creating Tree via standard clean flex layout with connecting divs representing lines
+            let html = `
+                <div class="flex items-center gap-12">
+                    <!-- Root Node -->
+                    <div class="mindmap-node bg-indigo-600 text-white p-5 rounded-2xl shadow-lg border border-indigo-500 max-w-[200px] text-center shrink-0">
+                        <span class="text-[10px] uppercase font-bold tracking-wider opacity-85">Phương Pháp</span>
+                        <h4 class="font-bold text-sm mt-1">${activeMethodId}</h4>
+                        <p class="text-[10px] mt-1.5 opacity-75">${method.subtitle.substring(0, 45)}...</p>
+                    </div>
+
+                    <!-- Connective branch container extending to right -->
+                    <div class="flex flex-col gap-6 border-l-2 border-dashed border-indigo-200 pl-8 relative">
+            `;
+
+            // Loop Branch Level 1 (S, C, A, M, P, E, R / Whys / Swot)
+            method.items.forEach((item, index) => {
+                let displayName = item.name.split(":")[0];
+                if (activeMethodId === 'STRATAGEMS') {
+                    displayName = `Kế ${item.key}: ${item.name.split("-")[0].trim()}`;
+                }
+
+                html += `
+                    <div class="flex items-center gap-8 relative py-1">
+                        <!-- Left Connector Line Indicator -->
+                        <div class="absolute -left-8 top-1/2 w-8 h-0.5 bg-indigo-200"></div>
+
+                        <!-- Level 1 Node Card -->
+                        <div class="mindmap-node bg-white border border-slate-200 hover:border-indigo-400 p-4 rounded-xl shadow-sm w-72 shrink-0 relative">
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="bg-indigo-50 text-indigo-700 font-bold text-[10px] px-2 py-0.5 rounded border border-indigo-100">${item.key || (index + 1)}</span>
+                                <span class="text-[9px] text-slate-400 italic">${item.meaning.substring(0, 35)}...</span>
+                            </div>
+                            <h5 class="font-bold text-xs text-slate-800">${displayName}</h5>
+                            <p class="text-[10px] text-slate-500 mt-1 leading-relaxed">${item.desc.substring(0, 85)}...</p>
+                            
+                            <!-- Shortcut Action Button -->
+                            <button onclick="selectAndApplyFromMindmap(${index})" class="mt-3 w-full bg-slate-50 hover:bg-indigo-600 hover:text-white text-[10px] font-bold text-slate-600 py-1.5 rounded transition-all border border-slate-100 flex items-center justify-center gap-1">
+                                <i data-lucide="edit-3" class="w-3 h-3"></i> Áp dụng ngay
+                            </button>
+                        </div>
+
+                        <!-- Level 2 Sub-Branches (Prompts) -->
+                        <div class="flex flex-col gap-2 border-l-2 border-indigo-100 pl-4 relative">
+                `;
+
+                // Loop Branch Level 2 (Prompts / Specific criteria)
+                item.prompts.forEach(prompt => {
+                    html += `
+                        <div class="flex items-center relative py-0.5">
+                            <!-- Branch connector -->
+                            <div class="absolute -left-4 top-1/2 w-4 h-0.5 bg-indigo-100"></div>
+                            
+                            <!-- Prompt Leaf Node -->
+                            <div class="bg-slate-50 border border-slate-200/80 p-2.5 rounded-lg max-w-[280px] text-[10px] text-slate-600 leading-relaxed font-medium">
+                                ${prompt}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            lucide.createIcons();
+            
+            // Set scroll to starting position center-left
+            const canvasContainer = document.getElementById("mindmapCanvasContainer");
+            canvasContainer.scrollLeft = 0;
+        }
+
+        function selectAndApplyFromMindmap(index) {
+            selectSubMethodItem(index);
+            toggleMindmapView(false);
+            // Scroll to inputs smoothly
+            document.getElementById("inputComment").scrollIntoView({ behavior: 'smooth' });
+            document.getElementById("inputComment").focus();
+        }
+
+        // Drag to scroll logic for Mindmap Container
+        const slider = document.getElementById('mindmapCanvasContainer');
+        let isDown = false;
+        let startX;
+        let startY;
+        let scrollLeft;
+        let scrollTop;
+
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.replace('cursor-grab', 'cursor-grabbing');
+            startX = e.pageX - slider.offsetLeft;
+            startY = e.pageY - slider.offsetTop;
+            scrollLeft = slider.scrollLeft;
+            scrollTop = slider.scrollTop;
+        });
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.replace('cursor-grabbing', 'cursor-grab');
+        });
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.replace('cursor-grabbing', 'cursor-grab');
+        });
+        slider.addEventListener('mousemove', (e) => {
+            if(!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const y = e.pageY - slider.offsetTop;
+            const walkX = (x - startX) * 1.5; // Scroll speed
+            const walkY = (y - startY) * 1.5;
+            slider.scrollLeft = scrollLeft - walkX;
+            slider.scrollTop = scrollTop - walkY;
+        });
     </script>
 </body>
 </html>
