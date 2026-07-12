@@ -1,1632 +1,791 @@
 <!DOCTYPE html>
-<html lang="vi" class="h-full">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đấu Trường Bát Dịch - Huấn Luyện Tư Duy Chiến Lược & Thiết Kế Hành Vi</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons for modern aesthetic -->
+    <title>MindMatrix Ultra - Hệ Thống Chẩn Đoán Tư Duy Chiến Lược</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        slate: {
-                            950: '#0b0f19',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* Modern Scrollbars */
-        ::-webkit-scrollbar {
+        body {
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111827;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 3px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
-
-        /* Drag to Scroll Mindmap cursor */
-        .mindmap-container {
-            cursor: grab;
-        }
-        .mindmap-container:active {
-            cursor: grabbing;
-        }
-        
-        .horizontal-mindmap-container {
-            cursor: grab;
-        }
-        .horizontal-mindmap-container:active {
-            cursor: grabbing;
-        }
-        
-        /* Node Animations */
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 12px rgba(99, 102, 241, 0.2); }
-            50% { box-shadow: 0 0 24px rgba(99, 102, 241, 0.4); }
-        }
-        .pulse-node {
-            animation: pulse-glow 3s infinite;
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-full flex flex-col selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+<body class="h-screen flex flex-col overflow-hidden">
 
-    <!-- HEADER / DASHBOARD BRANDING -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 px-4 py-3 shrink-0">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <i class="fa-solid fa-yin-yang text-xl text-white animate-spin-slow"></i>
-                </div>
-                <div>
-                    <h1 class="text-base sm:text-lg font-bold tracking-tight bg-gradient-to-r from-white via-indigo-200 to-emerald-400 bg-clip-text text-transparent">
-                        ĐẤU TRƯỜNG BÁT DỊCH
-                    </h1>
-                    <p class="text-[10px] sm:text-xs text-slate-400">Hệ Thống Huấn Luyện Tư Duy Chiến Lược & Thiết Kế Hành Vi v6.5</p>
-                </div>
+    <header class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex flex-wrap items-center justify-between gap-4 shrink-0">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-600 text-white p-2 rounded-lg shadow-lg">
+                <i class="fa-solid fa-brain text-xl"></i>
             </div>
-            
-            <div class="flex items-center gap-2">
-                <!-- Tab Workspace / Mindmap for Mobile -->
-                <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800 sm:hidden">
-                    <button onclick="toggleMobileView('workspace')" id="btn-tab-workspace" class="px-3 py-1.5 text-xs font-medium rounded-md bg-indigo-600 text-white transition-all">
-                        Không Gian Làm Việc
-                    </button>
-                    <button onclick="toggleMobileView('mindmap')" id="btn-tab-mindmap" class="px-3 py-1.5 text-xs font-medium rounded-md text-slate-400 transition-all">
-                        Sơ Đồ Tư Duy (Live)
-                    </button>
-                </div>
-
-                <!-- Global Stats -->
-                <div class="hidden md:flex items-center gap-4 text-xs">
-                    <div class="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 flex items-center gap-2">
-                        <span class="text-slate-500">Tình huống:</span>
-                        <span id="stat-scenario" class="font-semibold text-indigo-400">Chưa chọn</span>
-                    </div>
-                    <div class="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 flex items-center gap-2">
-                        <span class="text-slate-500">Hành động:</span>
-                        <span id="stat-actions" class="font-semibold text-emerald-400">0</span>
-                    </div>
-                    <div class="bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800 flex items-center gap-2">
-                        <span class="text-slate-500">Rủi ro chưa giải quyết:</span>
-                        <span id="stat-risks" class="font-semibold text-rose-400">0</span>
-                    </div>
-                </div>
+            <div>
+                <h1 class="text-lg font-bold tracking-wide text-white">MIND MATRIX ULTRA</h1>
+                <p class="text-xs text-gray-400">Giả lập phân tích liên hoàn & Chẩn đoán tác động 10 khía cạnh</p>
             </div>
         </div>
+        <nav class="flex space-x-1 bg-gray-950 p-1 rounded-xl border border-gray-800">
+            <button onclick="switchTab('home')" id="btn-tab-home" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-blue-600 text-white">
+                <i class="fa-solid fa-house mr-2"></i>Trang chủ
+            </button>
+            <button onclick="switchTab('import')" id="btn-tab-import" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white">
+                <i class="fa-solid fa-database mr-2"></i>Import & Kho dữ liệu
+            </button>
+            <button onclick="switchTab('learn')" id="btn-tab-learn" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white">
+                <i class="fa-solid fa-graduation-cap mr-2"></i>Học thuộc lòng
+            </button>
+            <button onclick="switchTab('practice')" id="btn-tab-practice" class="tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white">
+                <i class="fa-solid fa-diagram-project mr-2"></i>Luyện tập tư duy
+            </button>
+        </nav>
     </header>
 
-    <!-- MAIN BODY SPLIT WINDOW (Workspace / Live Mindmap) -->
-    <main class="flex-1 flex overflow-hidden min-h-0 relative">
-        
-        <!-- LEFT WORKSPACE WINDOW (Scrollable) -->
-        <section id="workspace-panel" class="w-full lg:w-3/5 flex flex-col border-r border-slate-800/80 bg-slate-950 overflow-y-auto z-10">
-            
-            <!-- PROGRESS TRACKER (STEPS 1 TO 5) -->
-            <div class="sticky top-0 bg-slate-950/95 backdrop-blur z-20 border-b border-slate-800/50 px-4 py-3 shrink-0">
-                <div class="flex justify-between items-center max-w-2xl mx-auto">
-                    <!-- Step 1: Chọn Tình Huống -->
-                    <button onclick="changeStep(1)" class="step-btn flex flex-col items-center gap-1 focus:outline-none" data-step="1">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-indigo-600 bg-indigo-900/30 text-indigo-300 font-bold text-xs transition-all">1</div>
-                        <span class="text-[10px] font-medium text-indigo-400 hidden sm:block">Kịch Bản</span>
-                    </button>
-                    <div class="flex-1 h-[2px] bg-slate-800 mx-2 mb-4" id="line-1"></div>
-                    
-                    <!-- Step 2: Phân Tích SWOT/5WHY -->
-                    <button onclick="changeStep(2)" class="step-btn flex flex-col items-center gap-1 focus:outline-none" data-step="2">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-800 bg-slate-900 text-slate-400 font-bold text-xs transition-all">2</div>
-                        <span class="text-[10px] font-medium text-slate-500 hidden sm:block">Phân Tích</span>
-                    </button>
-                    <div class="flex-1 h-[2px] bg-slate-800 mx-2 mb-4" id="line-2"></div>
-                    
-                    <!-- Step 3: Thiết Kế Hành Động -->
-                    <button onclick="changeStep(3)" class="step-btn flex flex-col items-center gap-1 focus:outline-none" data-step="3">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-800 bg-slate-900 text-slate-400 font-bold text-xs transition-all">3</div>
-                        <span class="text-[10px] font-medium text-slate-500 hidden sm:block">Hành Động</span>
-                    </button>
-                    <div class="flex-1 h-[2px] bg-slate-800 mx-2 mb-4" id="line-3"></div>
-                    
-                    <!-- Step 4: Đánh Giá Tác Động -->
-                    <button onclick="changeStep(4)" class="step-btn flex flex-col items-center gap-1 focus:outline-none" data-step="4">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-800 bg-slate-900 text-slate-400 font-bold text-xs transition-all">4</div>
-                        <span class="text-[10px] font-medium text-slate-500 hidden sm:block">Bát Dịch</span>
-                    </button>
-                    <div class="flex-1 h-[2px] bg-slate-800 mx-2 mb-4" id="line-4"></div>
-                    
-                    <!-- Step 5: Tự Đối Chiếu Mindmap -->
-                    <button onclick="changeStep(5)" class="step-btn flex flex-col items-center gap-1 focus:outline-none" data-step="5">
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-800 bg-slate-900 text-slate-400 font-bold text-xs transition-all">5</div>
-                        <span class="text-[10px] font-medium text-slate-500 hidden sm:block">Bản Đồ Lớn</span>
-                    </button>
-                </div>
+    <main class="flex-1 overflow-hidden relative">
+
+        <section id="tab-home" class="tab-content absolute inset-0 overflow-y-auto p-8 flex flex-col items-center justify-center transition-all duration-300">
+            <div class="max-w-3xl text-center mb-12">
+                <h2 class="text-3xl font-extrabold mb-4 text-white">Hệ Thống Huấn Luyện Mưu Lược & Đánh Giá Đa Chiều</h2>
+                <p class="text-gray-400 text-sm leading-relaxed">Không gian tối ưu hóa phản xạ ghi nhớ lý thuyết cốt lõi và giả lập các kịch bản thực tế phức tạp thông qua cơ chế phân rã 10 khía cạnh tác động tại bối cảnh và hệ quả.</p>
             </div>
-
-            <!-- MANDATORY RULE: PERSISTENT STICKY HORIZONTAL MINDMAP / TIMELINE (AT THE TOP) -->
-            <div class="bg-slate-900/60 border-b border-slate-800/80 px-4 py-3 overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-slate-700 select-none horizontal-mindmap-container shrink-0 sticky top-[62px] z-30 backdrop-blur-sm" 
-                 id="top-horizontal-mindmap" 
-                 onmousedown="startHorizontalDrag(event)" 
-                 onmousemove="horizontalDrag(event)" 
-                 onmouseup="endHorizontalDrag()" 
-                 onmouseleave="endHorizontalDrag()">
-                <!-- Dynamic Horizontal Nodes will load here instantly when user types/acts -->
-            </div>
-
-            <!-- STEP CONTENT WRAPPERS -->
-            <div class="p-4 sm:p-6 flex-1">
-                
-                <!-- STEP 1: CHỌN TÌNH HUỐNG (10 SCENARIOS) -->
-                <div id="step-content-1" class="step-container space-y-4">
-                    <div class="border-l-4 border-indigo-500 pl-4 py-1">
-                        <h2 class="text-lg font-bold text-white">Bước 1: Lựa Chọn Đấu Trường Nghiệp Vụ</h2>
-                        <p class="text-xs text-slate-400">Chọn 1 trong 10 kịch bản mô phỏng cực kỳ hóc búa, cài cắm các vết nứt và cơ hội chiến thuật dưới đây.</p>
-                    </div>
-
-                    <!-- Scenario Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="scenario-grid">
-                        <!-- Javascript will inject 10 Scenarios here -->
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
+                <div onclick="switchTab('import')" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-blue-500 cursor-pointer transition-all">
+                    <i class="fa-solid fa-cloud-arrow-up text-2xl text-purple-400 mb-3 block"></i>
+                    <h3 class="text-md font-bold text-white mb-1">1. Quản lý Kho Dữ Liệu</h3>
+                    <p class="text-xs text-gray-400">Import Excel thông minh, rà soát bảng dữ liệu hiện tại, rà soát Preview trước khi nạp.</p>
                 </div>
-
-                <!-- STEP 2: PHÂN TÍCH SWOT & 5WHY -->
-                <div id="step-content-2" class="step-container space-y-6 hidden">
-                    <div class="border-l-4 border-indigo-500 pl-4 py-1">
-                        <h2 class="text-lg font-bold text-white">Bước 2: Giải Phẫu Hiện Trạng</h2>
-                        <p class="text-xs text-slate-400">Sử dụng mô hình Bối cảnh, SWOT và 5-WHY để tìm ra hạt nhân của điểm nghẽn.</p>
-                    </div>
-
-                    <!-- Selected Scenario Info Banner -->
-                    <div id="selected-scenario-banner" class="bg-slate-900 border border-slate-800 p-4 rounded-xl flex items-start gap-3">
-                        <i class="fa-solid fa-circle-info text-indigo-400 text-lg mt-0.5"></i>
-                        <div>
-                            <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-400">Kịch Bản Đang Phân Tích</h4>
-                            <h3 id="banner-scenario-title" class="text-sm font-bold text-white mt-1">Chưa chọn tình huống</h3>
-                            <p id="banner-scenario-desc" class="text-xs text-slate-400 mt-2 line-clamp-3"></p>
-                        </div>
-                    </div>
-
-                    <!-- Input 1: Bối Cảnh Thực Tế (Context) -->
-                    <div class="space-y-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">
-                            1. Tổng Quan Bối Cảnh Thực Tế <span class="text-rose-500">*</span>
-                        </label>
-                        <textarea id="input-context" oninput="saveAnalysis()" placeholder="Bóc tách dữ kiện cụ thể, con số, xung đột lợi ích cốt lõi có trong kịch bản..." class="w-full h-24 bg-slate-900 border border-slate-800 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all"></textarea>
-                    </div>
-
-                    <!-- Input 2: SWOT Matrix Matrix -->
-                    <div class="space-y-3">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">
-                            2. Ma Trận Chẩn Đoán SWOT <span class="text-rose-500">*</span>
-                        </label>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <div class="bg-indigo-950/20 border border-indigo-900/50 p-3 rounded-lg space-y-1">
-                                <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">S - Điểm Mạnh (Strengths)</span>
-                                <textarea id="swot-s" oninput="saveAnalysis()" placeholder="Ta có quân bài chiến lược nào?" class="w-full h-16 bg-slate-900/60 border border-slate-800 rounded p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all"></textarea>
-                            </div>
-                            <div class="bg-rose-950/20 border border-rose-900/50 p-3 rounded-lg space-y-1">
-                                <span class="text-[10px] font-bold text-rose-400 uppercase tracking-wider">W - Điểm Yếu (Weaknesses)</span>
-                                <textarea id="swot-w" oninput="saveAnalysis()" placeholder="Gót chân Achilles của ta nằm ở đâu?" class="w-full h-16 bg-slate-900/60 border border-slate-800 rounded p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all"></textarea>
-                            </div>
-                            <div class="bg-emerald-950/20 border border-emerald-900/50 p-3 rounded-lg space-y-1">
-                                <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">O - Cơ Hội (Opportunities)</span>
-                                <textarea id="swot-o" oninput="saveAnalysis()" placeholder="Đâu là miếng mồi béo bở?" class="w-full h-16 bg-slate-900/60 border border-slate-800 rounded p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all"></textarea>
-                            </div>
-                            <div class="bg-amber-950/20 border border-amber-900/50 p-3 rounded-lg space-y-1">
-                                <span class="text-[10px] font-bold text-amber-400 uppercase tracking-wider">T - Thách Thức (Threats)</span>
-                                <textarea id="swot-t" oninput="saveAnalysis()" placeholder="Địch/Rủi ro thị trường nguy hiểm nào?" class="w-full h-16 bg-slate-900/60 border border-slate-800 rounded p-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Input 3: 5 WHYs Core Root-Cause -->
-                    <div class="space-y-3 bg-slate-900/50 border border-slate-800 p-4 rounded-xl">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">
-                            3. Chuỗi Truy Vết Độc Tố: 5 WHYs <span class="text-rose-500">*</span>
-                        </label>
-                        <p class="text-[11px] text-slate-400">Đào sâu từng lớp nhân quả để đi tìm nguyên nhân gốc rễ.</p>
-                        
-                        <div class="space-y-3 mt-3">
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-semibold text-slate-500 shrink-0 w-16">Why 1?</span>
-                                <input type="text" id="why1" oninput="saveAnalysis()" placeholder="Tại sao hiện tượng xấu này xảy ra đầu tiên?" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-semibold text-slate-500 shrink-0 w-16">Why 2?</span>
-                                <input type="text" id="why2" oninput="saveAnalysis()" placeholder="Tại sao nguyên nhân số 1 lại xảy ra?" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-semibold text-slate-500 shrink-0 w-16">Why 3?</span>
-                                <input type="text" id="why3" oninput="saveAnalysis()" placeholder="Tại sao nguyên nhân số 2 xảy ra?" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-semibold text-slate-500 shrink-0 w-16">Why 4?</span>
-                                <input type="text" id="why4" oninput="saveAnalysis()" placeholder="Tại sao nguyên nhân số 3 xảy ra?" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all">
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-semibold text-slate-500 shrink-0 w-16">Why 5?</span>
-                                <input type="text" id="why5" oninput="saveAnalysis()" placeholder="Nguyên nhân gốc rễ nền tảng (Thói quen/Quy luật)?" class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Control Buttons -->
-                    <div class="flex justify-between items-center pt-2">
-                        <button onclick="changeStep(1)" class="px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-900 border border-slate-850 hover:text-white rounded-lg transition-all">
-                            Quay lại Bước 1
-                        </button>
-                        <button onclick="changeStep(3)" class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-lg shadow-indigo-600/20 transition-all">
-                            Tiếp tục: Thiết Kế Hành Động <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
+                <div onclick="switchTab('learn')" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-emerald-500 cursor-pointer transition-all">
+                    <i class="fa-solid fa-bolt text-2xl text-emerald-400 mb-3 block"></i>
+                    <h3 class="text-md font-bold text-white mb-1">2. Đấu Trường Phản Xạ</h3>
+                    <p class="text-xs text-gray-400">Trắc nghiệm ghi nhớ lọc theo phân loại cụ thể từ dữ liệu thực tế.</p>
                 </div>
-
-                <!-- STEP 3: THIẾT KẾ HÀNH ĐỘNG (SCAMPER, MOTIVATION, 36 STRATAGEMS) -->
-                <div id="step-content-3" class="step-container space-y-6 hidden">
-                    <div class="border-l-4 border-indigo-500 pl-4 py-1">
-                        <h2 class="text-lg font-bold text-white">Bước 3: Lập Trận Đồ Hành Động</h2>
-                        <p class="text-xs text-slate-400">Đề xuất các hành động dựa trên 3 hệ mưu lược đỉnh cao. Sử dụng cẩm nang tra cứu thời gian thực ngay bên dưới.</p>
-                    </div>
-
-                    <!-- Dynamic Action Creator -->
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-4">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Danh Sách Hành Động Đề Xuất</h3>
-                            <button onclick="addNewAction()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all">
-                                <i class="fa-solid fa-plus"></i> Thêm Hành Động
-                            </button>
-                        </div>
-
-                        <!-- Active Actions List Wrapper -->
-                        <div id="actions-creator-wrapper" class="space-y-4">
-                            <!-- Javascript dynamic injection of Actions Cards -->
-                        </div>
-                    </div>
-
-                    <!-- INTERACTIVE METHOD HANDBOOK (TRA CỨU PHƯƠNG PHÁP) -->
-                    <div class="border border-slate-800 bg-slate-900/30 p-4 rounded-xl space-y-3">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-book-open text-indigo-400 text-sm"></i>
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-200">Cẩm Nang Tra Cứu Lý Thuyết</h3>
-                        </div>
-                        <p class="text-[10px] text-slate-400">Chọn 1 trong 3 hệ tư duy để tra cứu nhanh bản chất, điều kiện sử dụng tối ưu và chuỗi câu hỏi đột phá.</p>
-                        
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="openHandbook('scamper')" id="tab-hb-scamper" class="hb-tab-btn py-2 text-[10px] sm:text-xs font-bold rounded-lg border bg-slate-900 border-indigo-600/30 text-indigo-300">
-                                SCAMPER
-                            </button>
-                            <button onclick="openHandbook('motivation')" id="tab-hb-motivation" class="hb-tab-btn py-2 text-[10px] sm:text-xs font-bold rounded-lg border bg-slate-900 border-slate-800 text-slate-400">
-                                SỔ TAY ĐỘNG LỰC
-                            </button>
-                            <button onclick="openHandbook('stratagems')" id="tab-hb-stratagems" class="hb-tab-btn py-2 text-[10px] sm:text-xs font-bold rounded-lg border bg-slate-900 border-slate-800 text-slate-400">
-                                36 KẾ SÁCH
-                            </button>
-                        </div>
-
-                        <!-- Handbook content viewport -->
-                        <div id="handbook-viewport" class="bg-slate-950 p-3 rounded-lg max-h-64 overflow-y-auto border border-slate-850">
-                            <!-- Loaded via Javascript -->
-                        </div>
-                    </div>
-
-                    <!-- Control Buttons -->
-                    <div class="flex justify-between items-center pt-2">
-                        <button onclick="changeStep(2)" class="px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-900 border border-slate-850 hover:text-white rounded-lg transition-all">
-                            Quay lại Bước 2
-                        </button>
-                        <button onclick="changeStep(4)" class="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-lg shadow-indigo-600/20 transition-all">
-                            Tiếp tục: Đánh Giá Tác Động <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
+                <div onclick="switchTab('practice')" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-blue-500 cursor-pointer transition-all">
+                    <i class="fa-solid fa-network-wired text-2xl text-blue-400 mb-3 block"></i>
+                    <h3 class="text-md font-bold text-white mb-1">3. Phòng Luyện Tư Duy</h3>
+                    <p class="text-xs text-gray-400">Giả lập chuỗi tác động 10 trục quan hệ và đồng bộ sơ đồ cây mưu lược liên hoàn.</p>
                 </div>
-
-                <!-- STEP 4: ĐÁNH GIÁ TÁC ĐỘNG & CRISIS LOOP (BÁT DỊCH) -->
-                <div id="step-content-4" class="step-container space-y-6 hidden">
-                    <div class="border-l-4 border-indigo-500 pl-4 py-1">
-                        <h2 class="text-lg font-bold text-white">Bước 4: Thiết Kế Bát Dịch Đa Chiều</h2>
-                        <p class="text-xs text-slate-400">Đánh giá tác động của từng hành động lên các đối tượng và khía cạnh khác nhau. Hóa giải triệt để tác động tiêu cực bằng Vòng lặp trị trị liệu.</p>
-                    </div>
-
-                    <!-- Theory reference banner for step 4 -->
-                    <div class="bg-indigo-950/20 border border-indigo-900/40 p-4 rounded-xl space-y-2">
-                        <div class="flex items-center gap-2 text-xs font-bold text-indigo-300">
-                            <i class="fa-solid fa-mountain-sun"></i>
-                            <span>HỌC THUYẾT BÁT DỊCH & QUY LUẬT TÂM LÝ</span>
-                        </div>
-                        <p class="text-[11px] text-slate-300">
-                            <strong>Thuyết Chuyển Hóa Mâu Thuẫn:</strong> Bất kỳ biến cải nào trong hệ thống xã hội đều gieo hạt giống của phản lực hoặc rủi ro tiêu cực. Một chiến lược gia thực sự không chỉ tìm "Lợi", mà phải hóa giải các "Hại" phát sinh để xây dựng cấu trúc bền vững lâu dài.
-                        </p>
-                    </div>
-
-                    <!-- Impacts Evaluator Area -->
-                    <div class="space-y-4" id="impacts-evaluator-area">
-                        <!-- Loaded dynamically based on active actions created in Step 3 -->
-                    </div>
-
-                    <!-- Control Buttons -->
-                    <div class="flex justify-between items-center pt-2">
-                        <button onclick="changeStep(3)" class="px-4 py-2 text-xs font-semibold text-slate-400 bg-slate-900 border border-slate-850 hover:text-white rounded-lg transition-all">
-                            Quay lại Bước 3
-                        </button>
-                        <button onclick="changeStep(5)" class="px-5 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg shadow-lg shadow-emerald-600/20 transition-all">
-                            Tiếp tục: Bản Đồ Tư Duy <i class="fa-solid fa-yin-yang ml-1"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- STEP 5: TỰ ĐỐI CHIẾU MINDMAP LỚN -->
-                <div id="step-content-5" class="step-container space-y-6 hidden">
-                    <div class="border-l-4 border-indigo-500 pl-4 py-1">
-                        <h2 class="text-lg font-bold text-white">Bước 5: Thẩm Định Trận Đồ Tư Duy</h2>
-                        <p class="text-xs text-slate-400">Xem lại toàn bộ cây liên kết logic từ Bối cảnh gốc, Giải pháp hành động, Tác động đa khía cạnh, cho đến chuỗi Hóa giải rủi ro.</p>
-                    </div>
-
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-3">
-                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Tổng quan Trận Đồ</h3>
-                        <p class="text-[11px] text-slate-400">Sơ đồ tương tác thời gian thực hiển thị dòng chảy tư duy của bạn. Bạn có thể kéo rê chuột hoặc chạm vuốt đa hướng trên bảng hiển thị bên cạnh để quan sát chi tiết.</p>
-                        <div class="grid grid-cols-2 gap-3 text-xs">
-                            <div class="bg-slate-950 p-3 rounded-lg border border-slate-850">
-                                <span class="text-slate-500">Kịch bản gốc:</span>
-                                <p id="summary-scenario-title" class="font-bold text-white mt-1">Chưa chọn</p>
-                            </div>
-                            <div class="bg-slate-950 p-3 rounded-lg border border-slate-850">
-                                <span class="text-slate-500">Mô hình phân tích:</span>
-                                <p class="font-bold text-indigo-400 mt-1">SWOT & 5-WHY đã kích hoạt</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-start gap-3">
-                        <button onclick="resetWholeSystem()" class="px-4 py-2 text-xs font-bold text-rose-400 bg-rose-950/20 border border-rose-900/50 hover:bg-rose-900/30 rounded-lg transition-all">
-                            <i class="fa-solid fa-trash-can mr-1.5"></i> Xóa & Reset Toàn Bộ
-                        </button>
-                        <button onclick="window.print()" class="px-4 py-2 text-xs font-bold text-slate-200 bg-slate-900 border border-slate-800 hover:text-white rounded-lg transition-all">
-                            <i class="fa-solid fa-print mr-1.5"></i> In / Xuất Bản PDF
-                        </button>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- RIGHT LIVE MINDMAP PREVIEW PANEL (Interactive Tree Diagram with Drag to Scroll) -->
-        <section id="mindmap-panel" class="hidden lg:flex w-2/5 flex-col bg-slate-900 overflow-hidden relative">
-            <div class="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-slate-900 via-slate-900/90 to-transparent z-10 flex justify-between items-center border-b border-slate-800/40">
-                <div class="flex items-center gap-2">
-                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Sơ Đồ Tư Duy Hệ Thống (Mở Rộng Live)</h3>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="zoomMindmap(0.1)" class="w-8 h-8 rounded-lg bg-slate-950 hover:bg-slate-850 border border-slate-800 flex items-center justify-center text-xs text-slate-400 hover:text-slate-200 transition-all">
-                        <i class="fa-solid fa-magnifying-glass-plus"></i>
-                    </button>
-                    <button onclick="zoomMindmap(-0.1)" class="w-8 h-8 rounded-lg bg-slate-950 hover:bg-slate-850 border border-slate-800 flex items-center justify-center text-xs text-slate-400 hover:text-slate-200 transition-all">
-                        <i class="fa-solid fa-magnifying-glass-minus"></i>
-                    </button>
-                    <button onclick="centerMindmap()" class="w-8 h-8 rounded-lg bg-slate-950 hover:bg-slate-850 border border-slate-800 flex items-center justify-center text-xs text-slate-400 hover:text-slate-200 transition-all" title="Căn giữa">
-                        <i class="fa-solid fa-crosshairs"></i>
+        <section id="tab-import" class="tab-content absolute inset-0 overflow-y-auto p-6 hidden">
+            <div class="max-w-6xl mx-auto space-y-6">
+                <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Kho Lưu Trữ Hệ Thống & Nạp Dữ Liệu</h2>
+                        <p class="text-xs text-gray-400">Tải tệp Excel cấu trúc chuẩn hoặc rà soát xóa sửa phần tử đang khai thác</p>
+                    </div>
+                    <button onclick="clearCompleteDatabase()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs rounded-xl shadow-md transition-all">
+                        <i class="fa-solid fa-circle-xmark mr-1.5"></i>Xóa Sạch Toàn Bộ Bộ Nhớ Máy
                     </button>
                 </div>
-            </div>
 
-            <!-- Scrollable & Grabbable Mindmap Container -->
-            <div id="mindmap-viewport" class="flex-1 overflow-auto mindmap-container p-16 select-none" onmousedown="startDrag(event)" onmousemove="drag(event)" onmouseup="endDrag()">
-                <div id="mindmap-canvas" class="origin-center transition-transform duration-75 flex flex-col items-center justify-center gap-8 min-w-[800px] h-full" style="transform: scale(1);">
-                    <!-- Dynamic SVG lines & connecting tree divs loaded here -->
-                    <div id="mindmap-tree-root" class="w-full flex flex-col items-center gap-8 py-10">
-                        <!-- Root node and branches will render dynamically -->
-                        <div class="text-center text-xs text-slate-500 py-12">
-                            <i class="fa-solid fa-yin-yang text-4xl mb-3 text-slate-700 animate-spin-slow"></i>
-                            <p>Hãy chọn kịch bản và thực hiện phân tích để trực quan hóa sơ đồ tư duy liên kết đa phương.</p>
+                <div class="border-2 border-dashed border-gray-800 bg-gray-900/30 rounded-2xl p-6 text-center hover:border-blue-500 transition-colors relative">
+                    <input type="file" id="excel-file-uploader" accept=".xlsx, .xls" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="processExcelFiles(event)">
+                    <div class="flex flex-col items-center justify-center pointer-events-none py-1">
+                        <i class="fa-solid fa-file-excel text-3xl text-emerald-500 mb-2"></i>
+                        <p class="text-sm font-medium text-gray-200">Kéo thả file Excel của bạn vào đây hoặc click để duyệt tệp</p>
+                        <p class="text-[11px] text-gray-500 mt-1">Hỗ trợ các sheet: Tình huống, Phương pháp, Quy luật</p>
+                    </div>
+                </div>
+
+                <div id="file-preview-panel" class="hidden bg-amber-950/10 border border-amber-900/40 rounded-xl p-5 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-amber-900/30 pb-3">
+                        <div>
+                            <h3 class="text-sm font-bold text-amber-400 flex items-center">
+                                <i class="fa-solid fa-triangle-exclamation mr-2"></i>Dữ liệu từ tệp vừa chọn (Preview trước khi nạp)
+                            </h3>
+                            <p class="text-[11px] text-gray-400">Kiểm tra thông tin hiển thị chính xác, sau đó nhấn nút Xác nhận nạp ở bên cạnh.</p>
                         </div>
+                        <button onclick="commitPendingImportData()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center">
+                            <i class="fa-solid fa-circle-check mr-2"></i>Bấm để xác nhận nạp dữ liệu này
+                        </button>
+                    </div>
+                    <div class="flex bg-gray-950 p-1 rounded-lg border border-gray-800 gap-1 w-max" id="file-preview-tabs"></div>
+                    <div class="overflow-x-auto custom-scrollbar max-h-[280px] border border-gray-800 rounded-lg">
+                        <table class="w-full text-left border-collapse text-xs" id="file-preview-table"></table>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <h3 class="text-sm font-bold text-white flex items-center">
+                            <i class="fa-solid fa-rectangle-list mr-2 text-blue-500"></i>Bảng Kiểm Tra & Giám Sát Dữ Liệu Hiện Tại Trong Máy
+                        </h3>
+                        <div class="flex bg-gray-950 p-1 rounded-lg border border-gray-800 gap-1" id="preview-tab-triggers">
+                            <button onclick="switchPreviewGridTab('methods')" id="btn-view-methods" class="px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-md transition-all">Bảng Phương Pháp</button>
+                            <button onclick="switchPreviewGridTab('rules')" id="btn-view-rules" class="px-3 py-1 text-gray-400 text-xs font-semibold rounded-md transition-all">Bảng Quy Luật</button>
+                            <button onclick="switchPreviewGridTab('scenarios')" id="btn-view-scenarios" class="px-3 py-1 text-gray-400 text-xs font-semibold rounded-md transition-all">Bảng Tình Huống</button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar max-h-[350px] border border-gray-800 rounded-lg">
+                        <table class="w-full text-left border-collapse text-xs" id="grid-view-table"></table>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Footer with helper notes -->
-            <div class="p-3 bg-slate-950/80 border-t border-slate-800 text-[10px] text-slate-500 flex justify-between shrink-0">
-                <span>Nhấp & kéo chuột để cuộn đa hướng</span>
-                <span>Emerald: Có lợi | Rose: Có hại & Hóa giải</span>
+        <section id="tab-learn" class="tab-content absolute inset-0 overflow-y-auto p-6 hidden">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-wrap items-center justify-between border-b border-gray-800 pb-4 mb-6 gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">Đấu Trường Học Thuộc Lòng</h2>
+                        <p class="text-xs text-gray-400">Chọn chế độ và phân loại cụ thể để rèn luyện phản xạ nhận diện định nghĩa</p>
+                    </div>
+                    <div class="flex items-center space-x-3 bg-gray-900 p-2 rounded-xl border border-gray-800">
+                        <div class="flex bg-gray-950 p-0.5 rounded-lg border border-gray-800 text-[11px]">
+                            <button onclick="toggleQuizCoreMode('methods')" id="learn-btn-methods" class="px-2.5 py-1 rounded bg-blue-600 text-white font-medium">Phương Pháp</button>
+                            <button onclick="toggleQuizCoreMode('rules')" id="learn-btn-rules" class="px-2.5 py-1 rounded text-gray-400 font-medium">Quy Luật</button>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <label class="text-[11px] font-bold text-gray-400 uppercase">Chọn Loại:</label>
+                            <select id="learn-type-selector" onchange="triggerQuizGeneration()" class="bg-gray-950 border border-gray-800 rounded px-2 py-1 text-xs text-gray-300 focus:outline-none">
+                                </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden mb-4">
+                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-600"></div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="quiz-lbl-category" class="px-2.5 py-0.5 bg-gray-950 border border-gray-800 rounded text-[10px] uppercase font-mono font-bold text-blue-400 tracking-wider">N/A</span>
+                        <span id="quiz-lbl-accuracy" class="text-xs font-mono text-emerald-400 font-bold">Tỉ lệ: 100% (0/0)</span>
+                    </div>
+                    <div class="mb-6">
+                        <span class="text-[10px] text-gray-500 uppercase font-black block mb-1">CÂU HỎI: NÊU NỘI DUNG CỦA THỰC THỂ SAU:</span>
+                        <h3 id="quiz-question-txt" class="text-xl font-black text-white tracking-wide">N/A</h3>
+                    </div>
+                    <div class="space-y-2.5" id="quiz-choices-container"></div>
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="triggerQuizGeneration()" class="px-4 py-2 bg-gray-800 hover:bg-gray-750 border border-gray-700 text-white rounded-xl text-xs font-semibold flex items-center transition-all">
+                        Bỏ qua / Câu tiếp theo <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                    </button>
+                </div>
             </div>
+        </section>
+
+        <section id="tab-practice" class="tab-content absolute inset-0 flex hidden">
+            
+            <div class="w-3/5 border-r border-gray-800 flex flex-col h-full bg-gray-950/20 relative">
+                
+                <div class="p-3 bg-gray-900 border-b border-gray-800 flex items-center justify-between gap-4 shrink-0 sticky top-0 z-10 shadow-lg shadow-black/40">
+                    <div class="flex items-center space-x-2">
+                        <label class="text-[11px] font-bold text-gray-400 uppercase whitespace-nowrap"><i class="fa-solid fa-clapperboard text-blue-500 mr-1"></i>Kịch bản xử lý:</label>
+                        <select id="prc-scenario-dropdown" onchange="handleScenarioSelectionChange()" class="bg-gray-950 border border-gray-800 rounded px-2 py-1 text-xs text-white focus:outline-none min-w-[180px]">
+                            </select>
+                    </div>
+                    
+                    <div class="flex gap-1.5">
+                        <button onclick="invokeSideSearchDrawer('methods')" class="px-3 py-1.5 bg-blue-950 text-blue-400 hover:bg-blue-900/50 border border-blue-900 text-xs font-bold rounded-lg transition-all flex items-center shadow shadow-blue-500/10">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-[11px]"></i>Kho Phương Pháp Tra Cứu
+                        </button>
+                        <button onclick="invokeSideSearchDrawer('rules')" class="px-3 py-1.5 bg-purple-950 text-purple-400 hover:bg-purple-900/50 border border-purple-900 text-xs font-bold rounded-lg transition-all flex items-center shadow shadow-purple-500/10">
+                            <i class="fa-solid fa-book-open mr-1.5 text-[11px]"></i>Bảng Quy Luật Tra Cứu
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar pb-12">
+                    
+                    <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                        <h3 class="text-xs font-bold tracking-widest uppercase text-gray-400 mb-3 flex items-center"><i class="fa-solid fa-compass text-amber-500 mr-2"></i>Bước 1: Phân tích bối cảnh & Từ khóa kịch bản</h3>
+                        <div id="prc-keywords-box" class="flex flex-wrap gap-1.5 mb-3"></div>
+                        <textarea id="prc-textarea-context" oninput="compileLiveRenderTree()" class="w-full bg-gray-950 border border-gray-800 rounded-xl p-2.5 text-xs text-gray-200 focus:outline-none focus:border-blue-600 h-14" placeholder="Đánh giá bối cảnh chiến trường vĩ mô sơ bộ, các lực lượng mâu thuẫn..."></textarea>
+                    </div>
+
+                    <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                        <h3 class="text-xs font-bold tracking-widest uppercase text-gray-400 mb-3 flex items-center"><i class="fa-solid fa-arrow-down-wide-short text-blue-500 mr-2"></i>Bước 2: Chuỗi bậc thang nguyên nhân (5-Why Technique)</h3>
+                        <div class="space-y-1.5">
+                            <div class="flex items-center space-x-2"><span class="text-[10px] font-mono text-gray-500 w-12 shrink-0">WHY 1:</span><input type="text" id="why-cell-1" oninput="compileLiveRenderTree()" class="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-blue-600"></div>
+                            <div class="flex items-center space-x-2"><span class="text-[10px] font-mono text-gray-500 w-12 shrink-0">WHY 2:</span><input type="text" id="why-cell-2" oninput="compileLiveRenderTree()" class="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-blue-600"></div>
+                            <div class="flex items-center space-x-2"><span class="text-[10px] font-mono text-gray-500 w-12 shrink-0">WHY 3:</span><input type="text" id="why-cell-3" oninput="compileLiveRenderTree()" class="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-blue-600"></div>
+                            <div class="flex items-center space-x-2"><span class="text-[10px] font-mono text-gray-500 w-12 shrink-0">WHY 4:</span><input type="text" id="why-cell-4" oninput="compileLiveRenderTree()" class="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-blue-600"></div>
+                            <div class="flex items-center space-x-2"><span class="text-[10px] font-mono text-gray-500 w-12 shrink-0">WHY 5:</span><input type="text" id="why-cell-5" oninput="compileLiveRenderTree()" class="flex-1 bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-blue-600" placeholder="Động cơ lợi ích cốt lõi tối thượng..."></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                        <h3 class="text-xs font-bold tracking-widest uppercase text-gray-400 mb-3 flex items-center border-b border-gray-800 pb-1.5"><i class="fa-solid fa-chart-simple text-purple-500 mr-2"></i>Bước 3: Định vị vị thế ma trận đối đầu (SWOT)</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label class="text-[9px] font-bold text-emerald-400 block mb-0.5">STRENGTHS (Điểm mạnh Ta):</label><textarea id="swot-cell-s" oninput="compileLiveRenderTree()" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs focus:outline-none h-12 custom-scrollbar"></textarea></div>
+                            <div><label class="text-[9px] font-bold text-rose-400 block mb-0.5">WEAKNESSES (Điểm yếu Ta):</label><textarea id="swot-cell-w" oninput="compileLiveRenderTree()" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs focus:outline-none h-12 custom-scrollbar"></textarea></div>
+                            <div><label class="text-[9px] font-bold text-blue-400 block mb-0.5">OPPORTUNITIES (Cơ hội ngoài):</label><textarea id="swot-cell-o" oninput="compileLiveRenderTree()" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs focus:outline-none h-12 custom-scrollbar"></textarea></div>
+                            <div><label class="text-[9px] font-bold text-amber-500 block mb-0.5">THREATS (Thách thức nguy cơ):</label><textarea id="swot-cell-t" oninput="compileLiveRenderTree()" class="w-full bg-gray-950 border border-gray-800 rounded-lg p-2 text-xs focus:outline-none h-12 custom-scrollbar"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                        <div class="flex flex-wrap items-center justify-between border-b border-gray-800 pb-2 mb-3 gap-2">
+                            <h3 class="text-xs font-bold tracking-widest uppercase text-pink-400 flex items-center"><i class="fa-solid fa-users-viewfinder mr-2"></i>Bước 3.5: Đối tượng liên quan trong bối cảnh gốc (10 Khía cạnh)</h3>
+                            <div class="flex gap-1 items-center">
+                                <select id="stk-bctx-select" class="bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-xs text-gray-300 focus:outline-none">
+                                    <option value="Bản thân">Bản thân</option>
+                                    <option value="Người khác">Người khác</option>
+                                    <option value="Xã hội">Xã hội</option>
+                                    <option value="Quốc gia">Quốc gia</option>
+                                    <option value="Danh tiếng">Danh tiếng</option>
+                                    <option value="Tương lai">Tương lai</option>
+                                </select>
+                                <input type="text" id="stk-bctx-custom" class="w-20 bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none placeholder-gray-700" placeholder="Tự điền...">
+                                <button onclick="addContextStakeholderProfile()" class="px-2.5 py-0.5 bg-pink-600 hover:bg-pink-700 text-white text-xs font-bold rounded transition-colors"><i class="fa-solid fa-plus mr-1"></i>Thêm</button>
+                            </div>
+                        </div>
+                        <div id="context-stakeholders-layout-box" class="space-y-4"></div>
+                    </div>
+
+                    <div class="bg-gray-900 border border-gray-800 rounded-xl p-4">
+                        <h3 class="text-xs font-bold tracking-widest uppercase text-gray-400 mb-3 flex items-center border-b border-gray-800 pb-1.5"><i class="fa-solid fa-lightbulb text-emerald-500 mr-2"></i>Bước 4: Thiết kế giải pháp chiến lược hỏa lực</h3>
+                        <div id="prc-actions-stack-container" class="space-y-5"></div>
+                        <button onclick="insertNewBlankActionBlock()" class="w-full py-2 border border-dashed border-gray-800 hover:border-blue-500 rounded-xl text-xs font-semibold text-blue-400 flex items-center justify-center bg-gray-950/20 mt-3 transition-colors">
+                            <i class="fa-solid fa-circle-plus mr-2"></i>Kích hoạt thêm Hành động hóa giải mới
+                        </button>
+                    </div>
+
+                </div>
+                
+                <div class="absolute bottom-3 left-4 right-4 flex justify-end shrink-0 pointer-events-none">
+                    <button onclick="downloadJsonStateBlueprint()" class="px-4 py-2 bg-gray-900 hover:bg-gray-850 border border-gray-800 text-gray-200 text-xs font-bold rounded-lg shadow-xl pointer-events-auto transition-all"><i class="fa-solid fa-file-code mr-1.5 text-blue-400"></i>Xuất cấu trúc mưu lược (.json)</button>
+                </div>
+            </div>
+
+            <div class="w-2/5 flex flex-col h-full bg-gray-950 relative">
+                <div class="p-4 bg-gray-900 border-b border-gray-800 flex justify-between items-center shrink-0">
+                    <h3 class="text-xs font-bold tracking-widest uppercase text-gray-300 flex items-center">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-2"></span>
+                        Bản đồ cây mưu lược liên hoàn (Live View)
+                    </h3>
+                </div>
+                <div class="flex-1 overflow-auto p-5 custom-scrollbar text-xs" id="tree-live-canvas"></div>
+
+                <div id="side-search-drawer-panel" class="absolute top-0 bottom-0 right-0 w-[85%] bg-gray-900 border-l border-gray-800 shadow-2xl z-30 flex flex-col transform translate-x-full transition-transform duration-250">
+                    <div class="p-4 bg-gray-950 border-b border-gray-800 flex items-center justify-between shrink-0">
+                        <h4 id="drawer-panel-title" class="text-xs font-bold uppercase text-white tracking-wider">Thư viện</h4>
+                        <button onclick="dismissSideSearchDrawer()" class="w-6 h-6 flex items-center justify-center bg-gray-850 hover:bg-gray-800 text-gray-400 hover:text-white rounded-md transition-colors"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="p-2.5 bg-gray-950/40 border-b border-gray-800 shrink-0">
+                        <input type="text" id="drawer-search-box" oninput="filterDrawerListItems()" class="w-full bg-gray-950 border border-gray-800 rounded-lg px-3 py-1.5 text-xs text-gray-200 focus:outline-none" placeholder="Lọc nội dung thực tế từ file đã nạp...">
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-3" id="drawer-nodes-target-box"></div>
+                </div>
+            </div>
+
         </section>
 
     </main>
 
-    <!-- WEB AUDIO API PLAYBACK ENGINE -->
-    <script>
-        // Core Audio Synth
-        let audioCtx = null;
-        function playTone(freq, type, duration) {
-            try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-                osc.type = type || 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {}
-        }
-        function soundSuccess() { playTone(587.33, 'triangle', 0.15); setTimeout(() => playTone(880, 'triangle', 0.2), 100); }
-        function soundWarning() { playTone(220, 'sawtooth', 0.3); }
-        function soundTransition() { playTone(440, 'sine', 0.1); }
-    </script>
+    <footer class="bg-gray-950 border-t border-gray-900 px-6 py-2.5 flex items-center justify-between shrink-0 text-[10px] text-gray-500">
+        <p>Hệ thống MindMatrix Ultra 8.6 Core - Hoạt động Độc lập Ngoại tuyến An toàn.</p>
+        <div class="flex space-x-4 text-xs text-gray-400">
+            <span>Phương pháp nạp: <b id="foot-cnt-methods" class="text-white font-mono">0</b></span>
+            <span>Quy luật nạp: <b id="foot-cnt-rules" class="text-white font-mono">0</b></span>
+        </div>
+    </footer>
 
-    <!-- APP DATABASE (10 DETAILED SCENARIOS, 36 STRATAGEMS, SCAMPER & MOTIVATION) -->
     <script>
-        const SCENARIOS = [
-            {
-                id: 1,
-                title: "Cuộc Chiến F&B: Lộc Phát Đối Đầu GigaBrew",
-                category: "Kinh Doanh & Cạnh Tranh Giá",
-                description: "Chuỗi cà phê Việt cổ điển 'Lộc Phát' nổi tiếng với vị nguyên bản đang bị chuỗi ngoại 'GigaBrew' tấn công khốc liệt bằng chiến sách dìm giá siêu rẻ (chỉ bằng 1/2 giá của Lộc Phát) kèm phiếu mua hàng tích lũy 1 tặng 1 liên tục. GigaBrew có tiềm lực tài chính khổng lồ, họ đang rải mồi thử thách tâm lý nhằm dồn Lộc Phát vào bước thâm hụt vốn. Tuy nhiên, GigaBrew lại bị lỗi dịch vụ khách hàng do tuyển dụng quá nhanh, nhân viên lơ là, không gian ồn ào và chất lượng cà phê công nghiệp hóa chất.",
-                swot_s_hint: "Thương hiệu lâu đời, hương vị nguyên bản chất lượng cao, tập khách hàng trung thành, địa điểm quen thuộc.",
-                swot_w_hint: "Chi phí vận hành cao, bộ máy chậm cải tiến, thiếu ngân sách chạy đua giá khốc liệt với người khổng lồ.",
-                swot_o_hint: "Đối thủ đang tự bộc lộ điểm yếu dịch vụ kém, khách hàng bắt đầu bất mãn với không gian xô bồ.",
-                swot_t_hint: "Đối thủ dùng vốn lớn bao vây cắt đứt thói quen mua hàng cũ của khách bằng mồi nhử tích điểm."
-            },
-            {
-                id: 2,
-                title: "Học Viện EdTech TechEdu: Khủng Hoảng Tỷ Lệ Giữ Chân",
-                category: "Quản Trị Sản Phẩm & Trải Nghiệm Học",
-                description: "Nền tảng học lập trình trực tuyến TechEdu gặp lỗi nghiêm trọng: 75% học viên đăng ký khoá học trả phí bỏ học ngay sau tuần thứ 2. Người dùng phàn nàn bài tập quá khó, không có động lực hoàn thành dự án, thiếu người hỗ trợ tức thời, giao diện học khô khan. Ban giám đốc đang muốn dùng mưu để khơi gợi tinh thần học tập và xây dựng thói quen kiên trì hàng ngày cho học viên mà không tốn quá nhiều ngân sách thuê giảng viên kèm 1-1.",
-                swot_s_hint: "Kho bài học đồ sộ, nội dung chất lượng cao đã đóng gói, giá cả phải chăng.",
-                swot_w_hint: "Thiếu tương tác trực tiếp, bài tập phân cấp chưa mượt dễ gây nản lòng cho người mới.",
-                swot_o_hint: "Ứng dụng các quy luật trò chơi hóa (gamification), tạo đội nhóm đồng hành tự quản lý.",
-                swot_t_hint: "Các trung tâm offline chào mời kèm cam kết việc làm, lấy mất lòng tin học viên online."
-            },
-            {
-                id: 3,
-                title: "Khởi Nghiệp Xe Điện E-Volt: Sóng Gió Chất Lượng & Truyền Thông",
-                category: "Xử Lý Khủng Hoảng & Kỹ Thuật",
-                description: "Thương hiệu xe điện mới nổi E-Volt đang bùng nổ đơn đặt hàng thì bất ngờ xảy ra sự cố cháy nổ 2 chiếc xe khi đang sạc ban đêm tại khu chung cư. Đối thủ cạnh tranh trực tiếp rắp tâm tung mưu truyền thông bẩn, khuấy động sự hoang mang trong cộng đồng, kích động cư dân ký đơn cấm xe máy điện gửi xe dưới hầm chung cư. E-Volt rơi vào thế bị cô lập, dòng tiền sụt giảm nghiêm trọng, các nhà đầu tư bắt đầu cân nhắc rút vốn rút lui bảo toàn.",
-                swot_s_hint: "Thiết kế hiện đại đột phá, công nghệ phần mềm tự động hóa tốt.",
-                swot_w_hint: "Hệ thống kiểm soát nhiệt độ pin chưa tối ưu, khâu chăm sóc khách hàng còn non trẻ.",
-                swot_o_hint: "Minh bạch hóa lỗi kỹ thuật, biến khủng hoảng thành cơ hội cải cách tiêu chuẩn an toàn.",
-                swot_t_hint: "Sự tháo chạy của khách hàng dưới sức ép tẩy chay của cộng đồng chung cư."
-            },
-            {
-                id: 4,
-                title: "Đại Lộ Phần Mềm AlphaTech: Đội Ngũ Trì Trệ Mất Lửa",
-                category: "Quản Trị Nhân Sự & Thiết Kế Hành Vi",
-                description: "Phòng nghiên cứu AI của AlphaTech quy tụ toàn nhân tài xuất sắc nhưng hiệu suất dự án đang chạm đáy. Nhân sự chia bè phái chống đối ngầm, trễ hạn bàn giao liên tục vì không chịu hợp tác chia sẻ tài nguyên. Sếp tổng liên tục áp dụng luật phạt trừ lương khi trễ deadline, dẫn đến phản ứng ngược: nhân viên nộp đơn xin nghỉ hàng loạt ngay giai đoạn chuẩn bị đấu thầu gói dự án quốc tế triệu đô.",
-                swot_s_hint: "Đội ngũ chuyên môn cao bậc nhất, quỹ lương tốt.",
-                swot_w_hint: "Cơ chế quản trị quan liêu, tạo áp lực tiêu cực thay vì động lực nội tại, chia rẽ nội bộ.",
-                swot_o_hint: "Cải tổ quy trình bằng Agile/Scrum chia nhỏ mục tiêu, xây dựng lại cơ chế thưởng nhóm.",
-                swot_t_hint: "Các đối thủ săn đầu người túc trực chèo kéo nhân sự chủ chốt ngay khi có bất mãn."
-            },
-            {
-                id: 5,
-                title: "Chuỗi Bách Hóa Sạch GreenMart: Đối Thủ Phản Khách Vi Chủ",
-                category: "Đàm Phán & Thâu Tóm Chuỗi Cung Ứng",
-                description: "GreenMart là chuỗi bán lẻ nông sản hữu cơ rất được ưa chuộng. Để mở rộng quy mô, GreenMart ký hợp đồng độc quyền bao tiêu với hợp tác xã nông nghiệp CNC 'Đất Lành'. Tuy nhiên, GreenMart đã chủ quan ký điều khoản phụ: cho phép Đất Lành cài người vào ban điều hành quản trị danh mục sản phẩm của siêu thị. Gần đây, Đất Lành âm thầm tăng giá cung ứng thêm 30%, đồng thời ép GreenMart hạn chế trưng bày nông sản của các đối tác khác. GreenMart đang đứng trước nguy cơ bị Đất Lành thâu tóm lật đổ ngay trên sân nhà.",
-                swot_s_hint: "Danh tiếng thương hiệu mạnh, mạng lưới khách hàng tiêu dùng hữu cơ lớn.",
-                swot_w_hint: "Phụ thuộc nguồn hàng độc quyền vào một nhà cung cấp duy nhất, hợp đồng lỏng lẻo khâu kiểm soát.",
-                swot_o_hint: "Mở rộng liên kết với các nhà vườn nhỏ khác, tái định vị chuỗi cung ứng.",
-                swot_t_hint: "Bị đối tác cắt nguồn cung đột ngột gây cháy hàng diện rộng nếu không tuân thủ ép buộc."
-            },
-            {
-                id: 6,
-                title: "Hãng Thời Trang nhanh FastStyle: Scandal Bản Quyền & Tẩy Chay",
-                category: "Thương Hiệu & Khủng Hoảng Cộng Đồng",
-                description: "Thương hiệu FastStyle bị cộng đồng mạng bóc phốt sao chép trắng trợn thiết kế của một nhà tạo mẫu độc lập trẻ tuổi tại Việt Nam. Bài đăng bóc phốt đạt hàng trăm nghìn lượt chia sẻ chỉ sau 24 giờ. Người dùng nổi giận, kêu gọi tẩy chay các cửa hàng của FastStyle trên toàn quốc. Ban giám đốc lúng túng, định dùng tiền bồi thường ngầm để bịt miệng nhà thiết kế trẻ nhưng bị người này từ chối và công khai email đề nghị thương lượng lên mạng xã hội.",
-                swot_s_hint: "Hệ thống nhà xưởng sản xuất cực nhanh, giá thành rẻ.",
-                swot_w_hint: "Quy trình thiết kế lỏng lẻo, đội ngũ PR xử lý khủng hoảng kém, tư duy bao biện lỗi thời.",
-                swot_o_hint: "Chuyển hướng hợp tác chính thức với các nghệ sĩ trẻ độc lập, biến scandal thành cơ hội đồng hành.",
-                swot_t_hint: "Sự quay lưng vĩnh viễn của thế hệ gen Z - tập khách hàng mục tiêu cốt lõi."
-            },
-            {
-                id: 7,
-                title: "Dự Án Nông Nghiệp CNC Cao Nguyên: Gánh Nặng Nợ & Bão Thiên Tai",
-                category: "Tài Chính & Khôi Phục Hoạt Động",
-                description: "Một dự án trồng dâu tây công nghệ cao tại Đà Lạt vừa đầu tư 15 tỷ đồng tiền vay ngân hàng thì bị một trận siêu bão phá hủy hoàn toàn 80% hệ thống nhà màng hiện đại. Hoa màu mất trắng, nợ ngân hàng đến hạn phải trả vào tháng sau. Cổ đông hoang mang muốn rút lui, ngân hàng đe dọa niêm phong tài sản đất đai. Sáng lập viên cần tìm mưu kế mượn sức phục hồi và huy động vốn khân cấp từ các nguồn lực nhàn rỗi trong xã hội.",
-                swot_s_hint: "Đất trồng đắc địa, công nghệ lõi và kỹ thuật canh tác dâu sạch xuất sắc.",
-                swot_w_hint: "Cạn kiệt dòng tiền mặt, đòn bẩy nợ ngân hàng quá cao.",
-                swot_o_hint: "Mô hình cổ đông chung (đầu tư chung sở hữu dâu tây), kết hợp du lịch trải nghiệm.",
-                swot_t_hint: "Bị siết nợ đất đai, mất toàn bộ cơ hội khôi phục nếu không kịp xoay xở dòng tiền ngắn hạn."
-            },
-            {
-                id: 8,
-                title: "Startup Giao Vận Việt Express: Cuộc Chiến Sân Nhà",
-                category: "Cạnh Tranh Thị Trường & Logisitics",
-                description: "Việt Express đang bị ông lớn vận chuyển đa quốc gia 'GlobalSpeed' dồn ép bằng chiến dịch bao vây: GlobalSpeed mua lại toàn bộ các bãi đỗ lớn quanh khu công nghiệp và đưa ra chính sách giá vận tải âm (bù lỗ) để cướp toàn bộ khách hàng doanh nghiệp của Việt Express. Doanh thu của Việt Express sụt giảm 60%, lái xe nản lòng chuẩn bị đình công đòi tăng tỷ lệ chiết khấu.",
-                swot_s_hint: "Đội ngũ am hiểu địa phương sâu sắc, linh hoạt luồng giao hàng hẻm nhỏ.",
-                swot_w_hint: "Tài chính mỏng, không thể đấu giá trực diện bù lỗ với tập đoàn đa quốc gia.",
-                swot_o_hint: "Kết hợp với các chuỗi thương mại điện tử nội địa nhỏ để tạo liên minh khép kín.",
-                swot_t_hint: "Đội ngũ lái xe đình công hàng loạt làm tê liệt hoàn toàn hệ thống giao vận."
-            },
-            {
-                id: 9,
-                title: "Tập Đoàn Dệt May Hoàn Mỹ: Kháng Cự Chuyển Đổi Số",
-                category: "Quản Trị Thay Đổi & Văn Hóa Doanh Nghiệp",
-                description: "Tổng giám đốc quyết định số hóa toàn diện quy trình kiểm kho và kế toán bằng phần mềm ERP mới của tập đoàn. Tuy nhiên, đội ngũ quản lý phân xưởng lâu năm (những người quen ghi sổ tay thủ công) kiên quyết kháng cự ngầm. Họ cố tình nhập dữ liệu sai lệch lên phần mềm để chứng minh hệ thống mới hoạt động lỗi và kém hiệu quả, nhằm ép ban quản trị quay về quy trình giấy tờ thủ công cũ.",
-                swot_s_hint: "Hệ thống nhà xưởng quy mô lớn, đơn hàng dồi dào.",
-                swot_w_hint: "Độ tuổi nhân sự phân xưởng trung bình cao, ngại thay đổi thói quen cũ.",
-                swot_o_hint: "Tạo cơ chế thi đua có thưởng, đào tạo cầm tay chỉ việc, thiết kế giao diện ERP siêu đơn giản.",
-                swot_t_hint: "Khâu quản lý kho bị đình trệ kéo dài dẫn đến giao hàng trễ cho đối tác xuất khẩu ngoại."
-            },
-            {
-                id: 10,
-                title: "Nền Tảng Đặt Đồ Ăn ViệtFood: Đối Thủ Chơi Mưu Cắt Khuyết",
-                category: "Chiến Lược Nền Tảng & Độc Quyền",
-                description: "ViệtFood vừa phát triển ứng dụng gọi món địa phương cực kỳ thân thiện. Ngay lập tức, gã khổng lồ gọi xe ngoại 'FoodHuge' ra mắt tính năng độc quyền: ép tất cả các quán ăn nổi tiếng ký cam kết độc quyền chỉ được bán trên FoodHuge, nếu quán ăn nào dám đăng ký thêm trên ViệtFood sẽ bị FoodHuge hạ lượt hiển thị xuống 0 và khóa tài khoản của quán. Nhiều chủ quán sợ mất nguồn khách lớn nên đã xin rút khỏi ViệtFood.",
-                swot_s_hint: "Ủng hộ từ cộng đồng ẩm thực nội địa, chi phí chiết khấu cho chủ quán rất thấp.",
-                swot_w_hint: "Không có lượng khách hàng khổng lồ sẵn có từ mảng gọi xe như đối thủ ngoại.",
-                swot_o_hint: "Sử dụng kế sách 'Vây Ngụy cứu Triệu' hoặc 'Mượn đao giết người' bằng cách gửi đơn kiện độc quyền.",
-                swot_t_hint: "Quán ăn rút lui sạch khiến người dùng mở app ViệtFood lên không thấy có món ăn nào."
-            }
-        ];
-
-        const HANDBOOK = {
-            scamper: `
-                <div class="space-y-4">
-                    <div class="border-b border-slate-800 pb-2">
-                        <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wider">SCAMPER - Công Cụ Tư Duy Đột Phá Ý Tưởng</h4>
-                    </div>
-                    <div class="space-y-3 text-xs">
-                        <div>
-                            <span class="font-bold text-white">S - Substitute (Thay thế):</span>
-                            <p class="text-slate-400">Thay thế nguyên liệu, nhân sự, quy trình, hoặc công nghệ để đạt hiệu năng tốt hơn.</p>
-                            <p class="text-[11px] text-indigo-300 mt-1"><em>Điều kiện sử dụng:</em> Khi nguồn lực hiện tại đắt đỏ, khan hiếm hoặc lỗi thời.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">C - Combine (Kết hợp):</span>
-                            <p class="text-slate-400">Tích hợp các tính năng, sản phẩm, dịch vụ hoặc mục tiêu lại với nhau để tạo giá trị mới vượt trội.</p>
-                            <p class="text-[11px] text-indigo-300 mt-1"><em>Điều kiện sử dụng:</em> Khi các yếu tố đứng riêng lẻ có biên lợi nhuận thấp.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">A - Adapt (Thích nghi):</span>
-                            <p class="text-slate-400">Vay mượn hoặc điều chỉnh ý tưởng từ các lĩnh vực, bối cảnh khác để giải quyết bài toán hiện tại.</p>
-                            <p class="text-[11px] text-indigo-300 mt-1"><em>Điều kiện sử dụng:</em> Khi phương pháp truyền thống trong ngành đã bão hòa.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">M - Modify / Magnify (Phóng đại/Chỉnh sửa):</span>
-                            <p class="text-slate-400">Thay đổi hình dáng, kích thước, màu sắc hoặc nhấn mạnh một khía cạnh cốt lõi để thu hút.</p>
-                            <p class="text-[11px] text-indigo-300 mt-1"><em>Điều kiện sử dụng:</em> Khi sản phẩm cần tạo điểm nhấn nhận diện thương hiệu mạnh.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">P - Put to other uses (Sử dụng mục đích khác):</span>
-                            <p class="text-slate-400">Tái sử dụng tài nguyên hoặc phế phẩm vào một mục tiêu hoàn toàn mới phục vụ nhóm khách hàng khác.</p>
-                            <p class="text-[11px] text-indigo-300 mt-1"><em>Điều kiện sử dụng:</em> Khi dư thừa công suất sản xuất hoặc muốn mở rộng thị trường.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">E - Eliminate (Loại bỏ/Tối giản):</span>
-                            <p class="text-slate-400">Cắt giảm các bước rườm rà, tính năng thừa thãi để hệ thống vận hành gọn nhẹ, hiệu quả nhất.</p>
-                            <p class="text-[11px] text-indigo-300 mt-1"><em>Điều kiện sử dụng:</em> Quy trình quá phức tạp khiến khách hàng hoặc nhân viên nản chí.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">R - Reverse / Rearrange (Đảo ngược):</span>
-                            <p class="text-slate-400">Đảo lộn trật tự, thay đổi vai trò hoặc lật ngược giả định ban đầu để tìm góc nhìn đột phá.</p>
-                            <p class="text-[11px] text-indigo-300 mt-1"><em>Điều kiện sử dụng:</em> Khi thị trường đi vào lối mòn suy nghĩ rập khuôn.</p>
-                        </div>
-                    </div>
-                </div>
-            `,
-            motivation: `
-                <div class="space-y-4">
-                    <div class="border-b border-slate-800 pb-2">
-                        <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider">SỔ TAY THIẾT KẾ HÀNH VI (BỔ SUNG ĐỘNG LỰC)</h4>
-                    </div>
-                    <div class="space-y-3 text-xs max-h-56 overflow-y-auto">
-                        <div>
-                            <span class="font-bold text-white">I. Trigger (Tác động gợi nhắc):</span>
-                            <ul class="list-disc list-inside text-slate-400 space-y-1 mt-1">
-                                <li>Đặt đồ dùng dễ thấy (Visual cues).</li>
-                                <li>Chuông báo điện thoại / nhắc nhở tức thì.</li>
-                                <li>Gắn nhãn hành vi tốt để khen ngợi khơi mào.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">II. Ability (Đơn giản hóa hành vi):</span>
-                            <ul class="list-disc list-inside text-slate-400 space-y-1 mt-1">
-                                <li>Chia nhỏ mục tiêu (Phiên 25 phút Pomodoro).</li>
-                                <li>Cung cấp checklist quy trình 3-5 bước chuẩn mực.</li>
-                                <li>Sử dụng mẫu chuẩn, ví dụ trực quan dễ làm theo.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">III. Motivation (Thúc đẩy tâm lý):</span>
-                            <ul class="list-disc list-inside text-slate-400 space-y-1 mt-1">
-                                <li>Đặt thử thách kích thích (Thách tướng sĩ diện).</li>
-                                <li>Tạo áp lực xã hội: cho xem kết quả của nhóm khác.</li>
-                                <li>Tránh mất mát: Cho điểm trước rồi trừ điểm nếu vi phạm.</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">IV. Reinforcement (Củng cố thói quen):</span>
-                            <ul class="list-disc list-inside text-slate-400 space-y-1 mt-1">
-                                <li>Thưởng ngay bằng điểm tích lũy đổi quà trực tiếp.</li>
-                                <li>Tuyên dương và ghi nhận công khai trước tập thể.</li>
-                                <li>Phản hồi tiến trình trực quan bằng thanh đo tiến độ.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            `,
-            stratagems: `
-                <div class="space-y-4">
-                    <div class="border-b border-slate-800 pb-2">
-                        <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wider">36 KẾ SÁCH CHIẾN THUẬT KINH ĐIỂN</h4>
-                    </div>
-                    <div class="space-y-3 text-xs max-h-56 overflow-y-auto">
-                        <div>
-                            <span class="font-bold text-white">Kế 1: Phao chuyên dẫn ngọc (Đưa đá đổi ngọc)</span>
-                            <p class="text-slate-400">Đưa ra một lợi ích nhỏ có tính toán để thu về kết quả lớn hơn.</p>
-                            <p class="text-[11px] text-indigo-300"><em>Điều kiện:</em> Địch bộc lộ tính tham, dễ bị mờ mắt bởi cái lợi trước mắt.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">Kế 3: Không thành kế (Kế bỏ trống thành)</span>
-                            <p class="text-slate-400">Khi thế yếu tuyệt đối, cố tình phơi bày sự lỏng lẻo nhưng tự tin để đối phương đa nghi không dám ra tay.</p>
-                            <p class="text-[11px] text-indigo-300"><em>Điều kiện:</em> Biết rõ đối phương hành sự cực kỳ cẩn trọng, đa nghi.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">Kế 12: Phủ đề trừu tân (Rút củi đáy nồi)</span>
-                            <p class="text-slate-400">Không đánh trực diện vào phần mạnh của địch mà âm thầm triệt phá nền tảng cung ứng (dòng tiền, nguồn hàng).</p>
-                            <p class="text-[11px] text-indigo-300"><em>Điều kiện:</em> Địch mạnh về bề nổi nhưng phụ thuộc nặng nề vào nguồn lực bên ngoài.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">Kế 15: Vây Ngụy cứu Triệu (Đánh vào đầu não)</span>
-                            <p class="text-slate-400">Khi đối phương dồn toàn lực đi tấn công, ta không cứu viện trực diện mà phản đòn thẳng vào hậu phương hiểm yếu của họ.</p>
-                            <p class="text-[11px] text-indigo-300"><em>Điều kiện:</em> Hậu phương của đối phương đang trống trải, lơ là.</p>
-                        </div>
-                        <div>
-                            <span class="font-bold text-white">Kế 22: Dĩ dật đãi lao (Lấy khỏe nhẹ địch mệt mỏi)</span>
-                            <p class="text-slate-400">Xây dựng thế trận phòng thủ vững chắc, dụ đối phương di chuyển hành quân xa mệt mỏi rồi mới ra tay phản công.</p>
-                            <p class="text-[11px] text-indigo-300"><em>Điều kiện:</em> Ta nắm lợi thế địa lợi, nguồn dự trữ dồi dào.</p>
-                        </div>
-                    </div>
-                </div>
-            `
-        };
-    </script>
-
-    <!-- APP CONTROLLER STATE & CORE LOGIC -->
-    <script>
-        let appState = {
-            currentStep: 1,
-            selectedScenarioId: null,
-            analysis: {
-                context: "",
-                swot_s: "", swot_w: "", swot_o: "", swot_t: "",
-                why1: "", why2: "", why3: "", why4: "", why5: ""
-            },
-            actions: [], // array of objects: { id, text, framework, subMethod, details }
-            impacts: {} // key: actionId, value: array of objects: { id, target, dimension, type, details, mitigationAnalysis, mitigationAction }
+        // HARDCODED IN-MEMORY ADVANCED DATABASE WITH STABLE DATA FROM PROVIDED FILES (20 SCENARIOS, METHODS & RULES)
+        let appDataStore = {
+            scenarios: [
+                { id: 1, name: "Đối thủ bất ngờ chơi bài dìm giá sản phẩm cốt lõi nhằm thâu tóm thị phần", keywords: "Dìm giá, Cạnh tranh khốc liệt, Lợi ích biên giảm dần, Tâm lý FOMO" },
+                { id: 2, name: "Quy trình vận hành cồng kềnh tạo ra điểm nghẽn ỷ lại và chi phí chìm lớn", keywords: "Quy trình cồng kềnh, Loại bỏ bước thừa, Ỷ lại tập thể, Checklist chuẩn" },
+                { id: 3, name: "Nhân viên nòng cốt đột ngột xin nghỉ việc hàng loạt, đe dọa làm tê liệt dự án", keywords: "Rò rỉ nhân sự, Tâm lý dao động, Thiếu bù đắp, Khủng hoảng vận hành" },
+                { id: 4, name: "Thị trường bão hòa, sản phẩm mới ra mắt không thu hút được người dùng mới", keywords: "Sản phẩm bão hòa, Thiếu điểm nhấn, Lợi ích biên giảm, Tái ứng dụng" },
+                { id: 5, name: "Nhóm khách hàng vip phản kháng âm thầm vì chính sách hậu mãi bị cắt giảm", keywords: "Cắt giảm hậu mãi, Mất lợi ích, Phản kháng âm thầm, Bù trừ lợi ích" },
+                { id: 6, name: "Dự án mới đòi hỏi chuyên môn quá cao khiến đội ngũ tự ti, né tránh nhiệm vụ", keywords: "Thiếu năng lực, Tự ti né tránh, Dạy kỹ năng trước, Thực hành có hướng dẫn" },
+                { id: 7, name: "Xung đột lợi ích cục bộ bùng nổ dữ dội giữa phòng kinh doanh và phòng sản xuất", keywords: "Xung đột phòng ban, Lợi ích cục bộ, Tầm nhìn định hướng, Tầm nhìn chung" },
+                { id: 8, name: "Tin đồn ác ý (tin giả) lan truyền trên mạng xã hội làm sụt giảm niềm tin thương hiệu", keywords: "Tin giả, Khủng hoảng thông tin, Chân không thông tin, Định hướng dư luận" },
+                { id: 9, name: "Lãnh đạo đương nhiệm chuẩn bị rút lui nhưng chưa công bố lộ trình kế thừa rõ ràng", keywords: "Chuyển giao quyền lực, Tranh giành ngôi vị, Kế thừa, Đấu đá phe cánh" },
+                { id: 10, name: "Hệ thống siết chặt kiểm soát quá mức khiến nhân sự bất mãn, chống đối ngầm", keywords: "Kiểm soát quá mức, Chống đối ngầm, Quyền lực phản tác dụng, Chu kỳ kiểm soát" },
+                { id: 11, name: "Chi phí nguyên vật liệu đầu vào tăng vọt làm biên lợi nhuận doanh nghiệp sụt giảm nghiêm trọng", keywords: "Chi phí tăng vọt, Quy luật giá trị, Hao phí lao động, Thay thế vật liệu" },
+                { id: 12, name: "Đội ngũ liên tục xảy ra sai sót cơ học do lượng kiến thức quy trình quá lớn", keywords: "Sai sót cơ học, Quá tải nhận thức, Hệ thống tài liệu, Quy trình chuẩn" },
+                { id: 13, name: "Doanh nghiệp thâm nhập thị trường mới nhưng bị các thế lực thân hữu phong tỏa", keywords: "Thị trường mới, Mạng lưới thân hữu, Viễn giao cận công, Giả đồ phạt Quắc" },
+                { id: 14, name: "Ý tưởng chiến lược mới của công ty bị rò rỉ, đối thủ đang tập trung canh phòng đường công khai", keywords: "Rò rỉ chiến lược, Canh phòng công khai, Ám độ Trần Thương, Thanh đông kích tây" },
+                { id: 15, name: "Hạ tầng cố định bị quá tải trầm trọng do doanh nghiệp tiếp tục tuyển dụng ồ ạt nhân sự", keywords: "Quá tải hạ tầng, Năng suất giảm dần, Ngưỡng tối ưu, Tối ưu công đoạn" },
+                { id: 16, name: "Đối thủ mạnh về bề nổi đang kiểm soát toàn bộ kênh phân phối và nền tảng quảng cáo cố định", keywords: "Địch mạnh bề nổi, Nền tảng cố định, Phủ đề trừu tân, Rút củi đáy nồi" },
+                { id: 17, name: "Môi trường làm việc xuất hiện tình trạng ỷ lại, các thành viên dẫm chân lên nhau", keywords: "Ỷ lại tập thể, Trách nhiệm giải trình, Phan công vai trò, Chuẩn mực xã hội" },
+                { id: 18, name: "Công ty đối thủ rơi vào rối loạn nghiêm trọng vì scandal tài chính và chia rẽ nội bộ", keywords: "Khủng hoảng nội bộ, Đối thủ rối loạn, Sấn hỏa đả kiếp, Thuận thủ khiên dương" },
+                { id: 19, name: "Người dùng rơi vào trạng thái tê liệt quyết định do giao diện web có quá nhiều phương án", keywords: "Tê liệt quyết định, Quá tải nhận thức, Giảm lựa chọn, Lựa chọn mặc định" },
+                { id: 20, name: "Chi phí duy trì liên minh hợp tác quốc tế vượt quá lợi ích ròng thu về", keywords: "Duy trì liên minh, Chi phí vượt lợi ích, Quy luật đứt gãy, Rút lui bảo toàn" }
+            ],
+            methods: [
+                // SCAMPER CORE DATA
+                { type: "SCAMPER", id: 1, name: "Thay thế - Substitute", content: "Thay thế các yếu tố như nguyên vật liệu, nhân sự, bước nào trong quy trình, công nghệ, thời gian hoặc địa điểm bằng một giải pháp thay thế tốt hơn.", condition: "Khi yếu tố hiện tại bị lỗi thời, chi phí cao hoặc hiệu suất kém. Có sẵn giải pháp nguồn lực tốt hoặc bền vững hơn." },
+                { type: "SCAMPER", id: 2, name: "Kết hợp - Combine", content: "Tích hợp, kết hợp hoặc kết nối hai hoặc nhiều phần, tính năng, ý tưởng, sản phẩm, dịch vụ hoặc mục tiêu lại với nhau để tạo ra một giá trị mới vượt trội hơn.", condition: "Các sản phẩm đơn lẻ đang bị bão hòa hoặc bổ trợ nhau mạnh. Muốn tối ưu hóa bằng cách gộp bước." },
+                { type: "SCAMPER", id: 3, name: "Thích nghi - Adapt", content: "Điều chỉnh, thích ứng hoặc vay mượn ý tưởng từ các lĩnh vực, bối cảnh, ngành nghề hoặc sản phẩm khác để phù hợp với ngữ cảnh hoặc mục đích mới", condition: "Thâm nhập vào thị trường hoặc ngữ cảnh mới. Xuất hiện một xu hướng lớn bắt buộc phải chuyển mình để sống sót." },
+                { type: "SCAMPER", id: 4, name: "Bổ sung - Modify / Magnify", content: "Thay đổi hình dáng, kích thước, màu sắc, tính năng, hoặc phóng đại một yếu tố cốt lõi để tạo điểm nhấn.", condition: "Sản phẩm thiếu sức hút cạnh tranh. Cần gia tăng giá trị cảm nhận mà không thay đổi cốt lõi chức năng." },
+                { type: "SCAMPER", id: 5, name: "Ứng dụng - Put to other uses", content: "Tái sử dụng hoặc chuyển đổi công năng của sản phẩm, dịch vụ vào một mục đích hoàn toàn mới, phục vụ phân khúc khách hàng mới.", condition: "Thị trường hiện tại đạt đỉnh tăng trưởng bão hòa. Quy trình sinh ra tài nguyên dư thừa chưa khai thác." },
+                { type: "SCAMPER", id: 6, name: "Loại bỏ - Eliminate", content: "Tối giản hóa bằng cách loại bỏ, cắt giảm các bước rườm rà, tính năng thừa thãi để hệ thống vận hành gọn nhẹ, hiệu quả.", condition: "Hệ thống cồng kềnh, vận hành chậm chạp. Người dùng quá tải nhận thức do tính năng thừa." },
+                { type: "SCAMPER", id: 7, name: "Đảo ngược - Reverse / Rearrange", content: "Đảo ngược trật tự quy trình, lật ngược vấn đề hoặc hoán đổi vai trò để tìm góc nhìn đột phá.", condition: "Giả định cũ tạo ra lối mòn, không đem lại đột phá. Vận hành gặp nút thắt cổ chai ở nhân sự." },
+                // ĐỘNG LỰC DATA
+                { type: "Động lực", id: 1, name: "Trigger_Gợi nhắc", content: "Dán giấy nhắc nhở hành động trực quan tại các không gian cố định.", condition: "Hành vi đơn giản dễ làm nhưng hay bị quên. Người có môi trường làm việc cố định." },
+                { type: "Động lực", id: 5, name: "Trigger_Deadline", content: "Thời hạn tạo áp lực hoạt động -> đặt hạn hoàn thành rõ ràng.", condition: "Người thực hiện có tâm lý trì hoãn. Mục tiêu cần cam kết cao và có mốc kết thúc." },
+                { type: "Động lực", id: 13, name: "Ability_Checklist + Quy trình chuẩn", content: "Viết danh sách các bước cần làm, quy trình 3-5 bước để ổn định và giảm sai sót.", condition: "Hành vi lặp lại hàng ngày/tuần. Cần duy trì đầu ra đồng đều và tránh quên bước." },
+                { type: "Động lực", id: 37, name: "Motivation_Tránh mất mát", content: "Cho điểm thưởng trước rồi tiến hành trừ khi vi phạm nội quy (Loss Aversion).", condition: "Hệ thống có sẵn quỹ thưởng ban đầu. Tận dụng tâm lý sợ mất mát để răn đe hành vi xấu." },
+                // 36 KẾ DATA
+                { type: "36 kế", id: 1, name: "Phao chuyên dẫn ngọc", content: "Đưa ra cái nhỏ thu hút đối phương để lấy lại lợi ích lớn vượt trội hơn.", condition: "Đối phương bộc lộ tính tham lam, nông cạn, dễ bị mờ mắt bởi cái lợi trước mắt." },
+                { type: "36 kế", id: 12, name: "Phủ đề trừu tân - Rút củi đáy nồi", content: "Loại bỏ nguồn lực, nền tảng cơ bản hoặc nguyên nhân gốc rễ dẫn tới sức mạnh bề nổi của địch.", condition: "Địch mạnh bề nổi nhưng phụ thuộc nặng nề vào nguồn tiếp tế hoặc nền tảng cố định." },
+                { type: "36 kế", id: 18, name: "Ám độ Trần Thương", content: "Công khai hành động ở một hướng để hút sự chú ý, âm thầm thực hiện mục tiêu ở hướng khác.", condition: "Đối thủ tập trung hoàn toàn lực lượng canh phòng con đường công khai." }
+            ],
+            rules: [
+                // KINH TẾ DATA
+                { type: "Kinh tế", id: 1, name: "Quy luật Cung - Cầu", content: "Mối quan hệ tương tác định vị giá cả và số lượng hàng hóa trên thị trường.", if_condition: "Giá của một hàng hóa tăng lên (các yếu tố khác giữ nguyên)", then_effect: "Lượng cầu giảm xuống và lượng cung tăng lên từ người bán." },
+                { type: "Kinh tế", id: 5, name: "Quy luật Năng suất giảm dần", content: "Khi gia tăng liên tiếp một yếu tố sản xuất biến đổi trong khi các yếu tố khác giữ cố định.", if_condition: "Tiếp tục thêm nhân sự/nguyên liệu vượt quá ngưỡng tối ưu của năng lực hạ tầng", then_effect: "Tốc độ sản lượng chậm lại và năng suất biên của nhân sự thêm vào giảm dần." },
+                { type: "Kinh tế", id: 6, name: "Quy luật Lợi ích biên giảm dần", content: "Mức độ thỏa mãn nhận được từ việc tiêu dùng thêm một đơn vị hàng hóa giống nhau.", if_condition: "Người tiêu dùng liên tục tiêu thụ các đơn vị sản phẩm cùng loại trong thời gian ngắn", then_effect: "Lợi ích và sự thỏa mãn nhận được từ đơn vị sản phẩm tiếp theo sụt giảm liên tục." },
+                // LỢI ÍCH DATA
+                { type: "Lợi ích", id: 1, name: "Qui luật tối đa hoá lợi ích", content: "Mọi hành vi = phép tính (lợi ích thu được - chi phí - rủi ro).", if_condition: "Hành động mang lại lợi ích ròng dương", then_effect: "Hành vi được thực hiện; lý trí hoặc đạo đức bị gạt bỏ nếu chạm lợi ích lõi." },
+                { type: "Lợi ích", id: 4, name: "Qui luật phản kháng lợi ích", content: "Mất lợi ích + thiếu bù đắp xứng đáng -> bùng nổ phản kháng tỉ lệ thuận với mức mất mát.", if_condition: "Thành viên bị tước đoạt lợi ích cốt lõi mà không được đền bù thỏa đáng", then_effect: "Sinh ra phản kháng công khai hoặc âm thầm tỷ lệ thuận với mức độ thiệt hại." },
+                { type: "Lợi ích", id: 9, name: "Qui luật đứt gãy", content: "Trong liên minh hình thành, nếu Chi phí lớn hơn Lợi ích thì liên minh đứt gãy.", if_condition: "Chi phí duy trì liên minh vượt quá lợi ích ròng thu về", then_effect: "Các thành viên chủ động rút lui hoặc quay lưng đối đầu lẫn nhau." },
+                // QUYỀN LỰC DATA
+                { type: "Quyền lực", id: 6, name: "Qui luật phản tác dụng", content: "Kiểm soát hành vi quá mức dẫn tới sự phản kháng và chống đối ngầm.", if_condition: "Siết chặt kiểm soát và tước đoạt quyền tự do cá nhân quá đà", then_effect: "Kích hoạt làn sóng phản kháng mạnh mẽ và phong trào chống đối ngầm." },
+                { type: "Quyền lực", id: 11, name: "Khủng hoảng thông tin", content: "Tin giả ác ý lan truyền phá vỡ hoàn toàn cấu trúc niềm tin xã hội.", if_condition: "Tin giả lan truyền rộng rãi mà không bị đính chính và phản hồi nhanh chóng", then_effect: "Niềm tin xã hội sụp đổ diện rộng; toàn bộ hệ thống rơi vào khủng hoảng." }
+            ]
         };
 
-        // Initialize App
+        const STAKEHOLDER_AXES = ["lợi ích", "kinh tế", "chính trị", "quyền lực", "động lực", "thói quen", "phụ thuộc", "lan truyền", "leo thang", "tâm lý"];
+
+        let runtimeSession = { contextNotes: "", whyStack: ["", "", "", "", ""], swot: { s: "", w: "", o: "", t: "" }, contextStakeholders: [], actionsList: [] };
+        let quizState = { activeCoreMode: 'methods', currentItem: null, correctCount: 0, totalCount: 0 };
+        let activePreviewTabKey = "methods";
+        let pendingImportData = { scenarios: [], methods: [], rules: [] };
+        let activeFilePreviewSheet = "";
+
         window.onload = function() {
-            renderScenarios();
-            updateStepUI();
-            openHandbook('scamper');
-            addNewAction(); // start with one blank action template
-            renderHorizontalMindmap();
+            recalculateFooterMetrics();
+            syncScenarioSelectMenu();
+            renderActivePreviewGrid(activePreviewTabKey);
+            refreshQuizFilterOptions();
+            insertNewBlankActionBlock();
         };
 
-        function renderScenarios() {
-            const grid = document.getElementById('scenario-grid');
-            grid.innerHTML = '';
-            SCENARIOS.forEach(scen => {
-                const isSelected = appState.selectedScenarioId === scen.id;
-                const card = document.createElement('div');
-                card.className = `p-4 rounded-xl border transition-all duration-300 text-left space-y-2 cursor-pointer ${
-                    isSelected 
-                        ? 'bg-indigo-950/40 border-indigo-500 shadow-lg shadow-indigo-500/10' 
-                        : 'bg-slate-900 border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/60'
-                }`;
-                card.onclick = () => selectScenario(scen.id);
-                card.innerHTML = `
-                    <div class="flex justify-between items-start gap-2">
-                        <span class="text-[10px] font-bold text-indigo-400 uppercase tracking-wider bg-indigo-900/30 px-2 py-0.5 rounded">
-                            ${scen.category}
-                        </span>
-                        ${isSelected ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>' : ''}
-                    </div>
-                    <h3 class="text-sm font-bold text-white">${scen.title}</h3>
-                    <p class="text-xs text-slate-400 line-clamp-3 leading-relaxed">${scen.description}</p>
-                `;
-                grid.appendChild(card);
-            });
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(b => b.className = 'tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all text-gray-400 hover:text-white');
+            const targetBtn = document.getElementById(`btn-tab-${tabId}`);
+            if (targetBtn) targetBtn.className = 'tab-btn px-4 py-2 rounded-lg text-sm font-medium transition-all bg-blue-600 text-white';
+            if (tabId === 'practice') compileLiveRenderTree();
         }
 
-        function selectScenario(id) {
-            appState.selectedScenarioId = id;
-            const scen = SCENARIOS.find(s => s.id === id);
-            
-            // Populate auto hints if empty
-            if(!appState.analysis.context) {
-                appState.analysis.context = scen.description;
-                document.getElementById('input-context').value = scen.description;
-            }
-            if(!appState.analysis.swot_s) {
-                appState.analysis.swot_s = scen.swot_s_hint;
-                appState.analysis.swot_w = scen.swot_w_hint;
-                appState.analysis.swot_o = scen.swot_o_hint;
-                appState.analysis.swot_t = scen.swot_t_hint;
-                
-                document.getElementById('swot-s').value = scen.swot_s_hint;
-                document.getElementById('swot-w').value = scen.swot_w_hint;
-                document.getElementById('swot-o').value = scen.swot_o_hint;
-                document.getElementById('swot-t').value = scen.swot_t_hint;
-            }
-
-            // Sync Header Stats
-            document.getElementById('stat-scenario').innerText = scen.title.substring(0, 15) + '...';
-
-            renderScenarios();
-            updateScenarioBanners();
-            soundSuccess();
-            renderMindmap();
-            renderHorizontalMindmap();
-            
-            // Auto advance to step 2 for a seamless flow
-            setTimeout(() => {
-                changeStep(2);
-            }, 500);
+        function recalculateFooterMetrics() {
+            document.getElementById('foot-cnt-methods').innerText = appDataStore.methods.length;
+            document.getElementById('foot-cnt-rules').innerText = appDataStore.rules.length;
         }
 
-        function updateScenarioBanners() {
-            const scen = SCENARIOS.find(s => s.id === appState.selectedScenarioId);
-            if (scen) {
-                document.getElementById('banner-scenario-title').innerText = scen.title;
-                document.getElementById('banner-scenario-desc').innerText = scen.description;
-                document.getElementById('summary-scenario-title').innerText = scen.title;
+        function syncScenarioSelectMenu() {
+            const dropdown = document.getElementById('prc-scenario-dropdown');
+            dropdown.innerHTML = appDataStore.scenarios.map(s => `<option value="${s.id}">Kịch bản ${s.id}: ${s.name.substring(0, 50)}...</option>`).join('');
+            handleScenarioSelectionChange();
+        }
+
+        function handleScenarioSelectionChange() {
+            const id = parseInt(document.getElementById('prc-scenario-dropdown').value);
+            const sc = appDataStore.scenarios.find(s => s.id === id);
+            if(sc) {
+                const box = document.getElementById('prc-keywords-box');
+                box.innerHTML = sc.keywords.split(',').map(k => `<span class="px-2 py-0.5 bg-blue-950/60 border border-blue-900 rounded-md text-[11px] text-blue-400 font-medium font-mono"><i class="fa-solid fa-key text-[9px] mr-1"></i>${k.trim()}</span>`).join('');
+                compileLiveRenderTree();
             }
         }
 
-        function changeStep(stepNum) {
-            if (stepNum > 1 && !appState.selectedScenarioId) {
-                soundWarning();
-                alert("Vui lòng chọn 1 tình huống kịch bản ở Bước 1 trước!");
-                return;
-            }
-            appState.currentStep = stepNum;
-            updateStepUI();
-            soundTransition();
-            renderMindmap();
-            renderHorizontalMindmap();
-        }
-
-        function updateStepUI() {
-            // Update Buttons Classes
-            document.querySelectorAll('.step-btn').forEach(btn => {
-                const step = parseInt(btn.getAttribute('data-step'));
-                const circle = btn.querySelector('div');
-                const label = btn.querySelector('span');
-
-                if (step === appState.currentStep) {
-                    circle.className = "w-8 h-8 rounded-full flex items-center justify-center border-2 border-indigo-500 bg-indigo-900/50 text-indigo-100 font-bold text-xs transition-all ring-4 ring-indigo-500/10";
-                    if (label) label.className = "text-[10px] font-bold text-indigo-300 hidden sm:block";
-                } else if (step < appState.currentStep) {
-                    circle.className = "w-8 h-8 rounded-full flex items-center justify-center border-2 border-emerald-500 bg-emerald-950/20 text-emerald-400 font-bold text-xs transition-all";
-                    if (label) label.className = "text-[10px] font-medium text-emerald-500 hidden sm:block";
-                } else {
-                    circle.className = "w-8 h-8 rounded-full flex items-center justify-center border-2 border-slate-800 bg-slate-900 text-slate-500 font-bold text-xs transition-all";
-                    if (label) label.className = "text-[10px] font-medium text-slate-500 hidden sm:block";
-                }
-            });
-
-            // Update Lines Color
-            for (let i = 1; i <= 4; i++) {
-                const line = document.getElementById(`line-${i}`);
-                if (line) {
-                    if (i < appState.currentStep) {
-                        line.className = "flex-1 h-[2px] bg-emerald-500/50 mx-2 mb-4 transition-all";
-                    } else {
-                        line.className = "flex-1 h-[2px] bg-slate-800 mx-2 mb-4 transition-all";
-                    }
-                }
-            }
-
-            // Toggle Container Viewports
-            document.querySelectorAll('.step-container').forEach(cont => cont.classList.add('hidden'));
-            document.getElementById(`step-content-${appState.currentStep}`).classList.remove('hidden');
-        }
-
-        function openHandbook(topic) {
-            document.querySelectorAll('.hb-tab-btn').forEach(btn => {
-                btn.className = "hb-tab-btn py-2 text-[10px] sm:text-xs font-bold rounded-lg border bg-slate-900 border-slate-800 text-slate-400";
-            });
-            const activeBtn = document.getElementById(`tab-hb-${topic}`);
-            if (activeBtn) {
-                activeBtn.className = "hb-tab-btn py-2 text-[10px] sm:text-xs font-bold rounded-lg border bg-slate-900 border-indigo-600/50 text-indigo-300 shadow-md shadow-indigo-500/5";
-            }
-            document.getElementById('handbook-viewport').innerHTML = HANDBOOK[topic];
-        }
-
-        // SAVE DISAGNOSTIC ANALYSIS
-        function saveAnalysis() {
-            appState.analysis.context = document.getElementById('input-context').value;
-            appState.analysis.swot_s = document.getElementById('swot-s').value;
-            appState.analysis.swot_w = document.getElementById('swot-w').value;
-            appState.analysis.swot_o = document.getElementById('swot-o').value;
-            appState.analysis.swot_t = document.getElementById('swot-t').value;
-            
-            appState.analysis.why1 = document.getElementById('why1').value;
-            appState.analysis.why2 = document.getElementById('why2').value;
-            appState.analysis.why3 = document.getElementById('why3').value;
-            appState.analysis.why4 = document.getElementById('why4').value;
-            appState.analysis.why5 = document.getElementById('why5').value;
-
-            renderMindmap();
-            renderHorizontalMindmap();
-        }
-
-        // STEP 3: ACTIONS
-        function addNewAction() {
-            const actionId = Date.now();
-            const actionObj = {
-                id: actionId,
-                text: "",
-                framework: "scamper",
-                subMethod: "S - Thay thế",
-                details: ""
+        // --- EXCEL FILE IMPORTER STAGE ---
+        function processExcelFiles(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const binaryStr = evt.target.result;
+                    const workbook = XLSX.read(binaryStr, { type: 'binary' });
+                    pendingImportData = { scenarios: [], methods: [], rules: [] };
+                    workbook.SheetNames.forEach(sheetName => {
+                        const rawRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+                        if(rawRows.length === 0) return;
+                        const findField = (row, alternatives) => {
+                            const keys = Object.keys(row);
+                            for (let alt of alternatives) {
+                                const matchedKey = keys.find(k => k.toLowerCase().trim().replace(/\s+/g, '') === alt.toLowerCase().trim().replace(/\s+/g, ''));
+                                if (matchedKey) return row[matchedKey];
+                            }
+                            return "";
+                        };
+                        const sheetNormalizedKey = sheetName.toLowerCase().trim();
+                        if (sheetNormalizedKey.includes("tình huống") || sheetNormalizedKey.includes("scenario")) {
+                            pendingImportData.scenarios = rawRows.map(r => ({
+                                id: parseInt(findField(r, ["STT", "id"])) || Math.random(),
+                                name: findField(r, ["Tên tình huống", "têntìnhhuống", "scenario name", "name"]),
+                                keywords: findField(r, ["Keywords", "keywords", "từ khóa"])
+                            })).filter(x => x.name);
+                        } else if (sheetNormalizedKey.includes("phương pháp") || sheetNormalizedKey.includes("method")) {
+                            pendingImportData.methods = rawRows.map(r => ({
+                                type: findField(r, ["Loại phương pháp", "loaiphươngpháp", "method type", "type"]),
+                                id: parseInt(findField(r, ["STT", "id"])) || Math.random(),
+                                name: findField(r, ["Tên phương pháp", "tênphươngpháp", "method name"]),
+                                content: findField(r, ["Nội dung", "nộidung", "content"]),
+                                condition: findField(r, ["Điều kiện", "điềukiện", "condition"])
+                            })).filter(x => x.name);
+                        } else if (sheetNormalizedKey.includes("quy luật") || sheetNormalizedKey.includes("rule")) {
+                            pendingImportData.rules = rawRows.map(r => ({
+                                type: findField(r, ["Loại quy luật", "loạiquyluật", "rule type"]),
+                                id: parseInt(findField(r, ["STT", "id"])) || Math.random(),
+                                name: findField(r, ["Tên quy luật", "tênquyluật", "rule name"]),
+                                content: findField(r, ["Nội dung", "nộidung", "content"]),
+                                if_condition: findField(r, ["Nếu", "Nếu (Điều kiện kích hoạt)", "if"]),
+                                then_effect: findField(r, ["Thì", "Thì (Hệ quả tất yếu)", "then"])
+                            })).filter(x => x.name);
+                        }
+                    });
+                    showFilePreviewTabsUI();
+                } catch (err) { alert("Lỗi phân rã cấu trúc Excel."); }
             };
-            appState.actions.push(actionObj);
-            appState.impacts[actionId] = []; // initialize empty impact array for this action
-            
-            renderActionList();
-            renderImpactEvaluators();
-            renderMindmap();
-            renderHorizontalMindmap();
-            updateHeaderStats();
+            reader.readAsBinaryString(file);
         }
 
-        function removeAction(id) {
-            if (appState.actions.length <= 1) {
-                alert("Hãy giữ lại ít nhất 1 kế hoạch hành động!");
-                return;
-            }
-            appState.actions = appState.actions.filter(act => act.id !== id);
-            delete appState.impacts[id];
-            
-            renderActionList();
-            renderImpactEvaluators();
-            renderMindmap();
-            renderHorizontalMindmap();
-            updateHeaderStats();
-        }
-
-        function updateActionField(id, field, value) {
-            const action = appState.actions.find(act => act.id === id);
-            if (action) {
-                action[field] = value;
-                // auto update sub-methods if framework changes
-                if (field === 'framework') {
-                    if (value === 'scamper') action.subMethod = 'S - Thay thế';
-                    else if (value === 'motivation') action.subMethod = 'Trigger - Gợi nhắc';
-                    else action.subMethod = 'Kế 1: Phao chuyên dẫn ngọc';
-                }
-                renderMindmap();
-                renderHorizontalMindmap();
-                updateActionBadge(id);
-            }
-        }
-
-        function updateActionBadge(id) {
-            const action = appState.actions.find(act => act.id === id);
-            const badge = document.getElementById(`badge-act-${id}`);
-            if (badge && action) {
-                badge.innerText = `${action.framework.toUpperCase()} - ${action.subMethod}`;
-            }
-        }
-
-        function renderActionList() {
-            const container = document.getElementById('actions-creator-wrapper');
-            container.innerHTML = '';
-
-            appState.actions.forEach((act, idx) => {
-                const card = document.createElement('div');
-                card.className = "bg-slate-950 border border-slate-800 p-4 rounded-lg space-y-3 relative";
-                card.innerHTML = `
-                    <div class="flex justify-between items-center">
-                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">HÀNH ĐỘNG #${idx + 1}</span>
-                        <div class="flex items-center gap-2">
-                            <span id="badge-act-${act.id}" class="text-[10px] bg-indigo-900/30 text-indigo-400 font-semibold px-2 py-0.5 rounded">
-                                ${act.framework.toUpperCase()} - ${act.subMethod || 'Chưa chọn'}
-                            </span>
-                            <button onclick="removeAction(${act.id})" class="text-slate-500 hover:text-rose-400 transition-all text-xs">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Input: Short Title -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tiêu Đề Hành Động</label>
-                            <input type="text" oninput="updateActionField(${act.id}, 'text', this.value)" value="${act.text}" placeholder="Ví dụ: Triệt tiêu chi phí mặt bằng của Lộc Phát..." class="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        </div>
-
-                        <!-- Choose Mưu lược system -->
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Chọn Hệ Mưu Lược</label>
-                            <select onchange="updateActionField(${act.id}, 'framework', this.value); renderActionList();" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                                <option value="scamper" ${act.framework === 'scamper' ? 'selected' : ''}>SCAMPER (Cải cách sáng tạo)</option>
-                                <option value="motivation" ${act.framework === 'motivation' ? 'selected' : ''}>Thiết kế hành vi (Động lực)</option>
-                                <option value="36ke" ${act.framework === '36ke' ? 'selected' : ''}>36 Kế Sách (Chiến thuật cổ đại)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Framework Sub-selection -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Kỹ Thuật Cụ Thể</label>
-                            <select onchange="updateActionField(${act.id}, 'subMethod', this.value); renderActionList();" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                                ${renderSubOptions(act.framework, act.subMethod)}
-                            </select>
-                        </div>
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Mô tả hành động thực tế</label>
-                            <textarea oninput="updateActionField(${act.id}, 'details', this.value)" placeholder="Chi tiết cách thức thực hiện hành động này là gì?" class="w-full h-8 bg-slate-900 border border-slate-800 rounded px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 transition-all">${act.details}</textarea>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function renderSubOptions(framework, selected) {
-            if (framework === 'scamper') {
-                return `
-                    <option value="S - Thay thế" ${selected === 'S - Thay thế' ? 'selected' : ''}>S - Substitute (Thay thế)</option>
-                    <option value="C - Kết hợp" ${selected === 'C - Kết hợp' ? 'selected' : ''}>C - Combine (Kết hợp)</option>
-                    <option value="A - Thích nghi" ${selected === 'A - Thích nghi' ? 'selected' : ''}>A - Adapt (Thích nghi)</option>
-                    <option value="M - Phóng đại" ${selected === 'M - Phóng đại' ? 'selected' : ''}>M - Modify (Phóng đại)</option>
-                    <option value="P - Công năng khác" ${selected === 'P - Công năng khác' ? 'selected' : ''}>P - Put to other uses</option>
-                    <option value="E - Loại bỏ" ${selected === 'E - Loại bỏ' ? 'selected' : ''}>E - Eliminate (Loại bỏ)</option>
-                    <option value="R - Đảo ngược" ${selected === 'R - Đảo ngược' ? 'selected' : ''}>R - Reverse (Đảo ngược)</option>
-                `;
-            } else if (framework === 'motivation') {
-                return `
-                    <option value="Trigger - Gợi nhắc" ${selected === 'Trigger - Gợi nhắc' ? 'selected' : ''}>I. Trigger (Tác động/Gợi nhắc)</option>
-                    <option value="Ability - Khả năng" ${selected === 'Ability - Khả năng' ? 'selected' : ''}>II. Ability (Đơn giản hóa hành vi)</option>
-                    <option value="Motivation - Kích thích" ${selected === 'Motivation - Kích thích' ? 'selected' : ''}>III. Motivation (Kích thích tâm lý)</option>
-                    <option value="Reinforcement - Củng cố" ${selected === 'Reinforcement - Củng cố' ? 'selected' : ''}>IV. Reinforcement (Củng cố)</option>
-                    <option value="Environment - Môi trường" ${selected === 'Environment - Môi trường' ? 'selected' : ''}>V. Môi trường kích thích</option>
-                    <option value="Maintenance - Duy trì" ${selected === 'Maintenance - Duy trì' ? 'selected' : ''}>VI. Duy trì thói quen bền vững</option>
-                `;
-            } else {
-                return `
-                    <option value="Kế 1: Phao chuyên dẫn ngọc" ${selected === 'Kế 1: Phao chuyên dẫn ngọc' ? 'selected' : ''}>Kế 1: Phao chuyên dẫn ngọc (Đưa đá đổi ngọc)</option>
-                    <option value="Kế 2: Mỹ nhân kế" ${selected === 'Kế 2: Mỹ nhân kế' ? 'selected' : ''}>Kế 2: Mỹ nhân kế (Kế dùng sắc dụ/cảm xúc)</option>
-                    <option value="Kế 3: Không thành kế" ${selected === 'Kế 3: Không thành kế' ? 'selected' : ''}>Kế 3: Không thành kế (Trống thành dưỡng nghi)</option>
-                    <option value="Kế 12: Phủ đề trừu tân" ${selected === 'Kế 12: Phủ đề trừu tân' ? 'selected' : ''}>Kế 12: Phủ đề trừu tân (Rút củi đáy nồi)</option>
-                    <option value="Kế 15: Vây Ngụy cứu Triệu" ${selected === 'Kế 15: Vây Ngụy cứu Triệu' ? 'selected' : ''}>Kế 15: Vây Ngụy cứu Triệu (Đánh điểm cốt lõi)</option>
-                    <option value="Kế 22: Dĩ dật đãi lao" ${selected === 'Kế 22: Dĩ dật đãi lao' ? 'selected' : ''}>Kế 22: Dĩ dật đãi lao (Lấy khỏe địch mệt mỏi)</option>
-                    <option value="Kế 23: Tẩu vi thượng sách" ${selected === 'Kế 23: Tẩu vi thượng sách' ? 'selected' : ''}>Kế 23: Tẩu vi thượng sách (Chạy rút lui bảo toàn)</option>
-                `;
-            }
-        }
-
-        // STEP 4: IMPACT EVALUATORS & CRISIS RESOLUTION LOOP
-        function renderImpactEvaluators() {
-            const container = document.getElementById('impacts-evaluator-area');
-            container.innerHTML = '';
-
-            appState.actions.forEach((act, idx) => {
-                if (!act.text) return; // skip untitled actions for display cleanliness
-
-                const actionWrapper = document.createElement('div');
-                actionWrapper.className = "bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-4";
-                
-                // Header of Evaluator
-                actionWrapper.innerHTML = `
-                    <div class="border-b border-slate-800 pb-2 flex justify-between items-center">
-                        <div>
-                            <span class="text-[10px] font-bold text-indigo-400">HÀNH ĐỘNG #${idx + 1}</span>
-                            <h3 class="text-xs font-bold text-white mt-0.5">${act.text}</h3>
-                        </div>
-                        <button onclick="addNewImpact(${act.id})" class="text-[11px] font-bold text-emerald-400 bg-emerald-950/30 border border-emerald-900/40 px-2 py-1 rounded hover:bg-emerald-900/20 transition-all">
-                            <i class="fa-solid fa-plus-circle mr-1"></i> Gieo Đối Tượng Tác Động
-                        </button>
-                    </div>
-
-                    <!-- Dynamic list of impacts for this action -->
-                    <div id="impacts-list-${act.id}" class="space-y-4">
-                        <!-- Loaded dynamically -->
-                    </div>
-                `;
-
-                container.appendChild(actionWrapper);
-                renderImpactCardsForAction(act.id);
-            });
-
-            if(container.innerHTML === '') {
-                container.innerHTML = `
-                    <div class="text-center py-12 text-xs text-slate-500 bg-slate-900 border border-slate-850 rounded-xl">
-                        <i class="fa-solid fa-triangle-exclamation text-3xl text-amber-500 mb-2"></i>
-                        <p>Vui lòng khai báo ít nhất một Tiêu đề Hành Động tại Bước 3 để bắt đầu thiết lập tác động Bát Dịch.</p>
-                    </div>
-                `;
-            }
-        }
-
-        function addNewImpact(actionId) {
-            const impactId = Date.now();
-            const newImpact = {
-                id: impactId,
-                target: "Bản thân",
-                dimension: "Lợi ích",
-                type: "beneficial",
-                details: "",
-                // nested mitigation cycle (Crisis Loop)
-                mitigationAnalysis: {
-                    swot_w: "",
-                    why5: ""
-                },
-                mitigationAction: {
-                    text: "",
-                    framework: "scamper",
-                    subMethod: "E - Loại bỏ",
-                    details: ""
-                }
-            };
-            appState.impacts[actionId].push(newImpact);
-            
-            renderImpactCardsForAction(actionId);
-            renderMindmap();
-            renderHorizontalMindmap();
-            updateHeaderStats();
-        }
-
-        function removeImpact(actionId, impactId) {
-            appState.impacts[actionId] = appState.impacts[actionId].filter(imp => imp.id !== impactId);
-            renderImpactCardsForAction(actionId);
-            renderMindmap();
-            renderHorizontalMindmap();
-            updateHeaderStats();
-        }
-
-        function updateImpactField(actionId, impactId, field, value) {
-            const impact = appState.impacts[actionId].find(imp => imp.id === impactId);
-            if (impact) {
-                impact[field] = value;
-                renderMindmap();
-                renderHorizontalMindmap();
-                updateHeaderStats();
-            }
-        }
-
-        function updateNestedMitigation(actionId, impactId, section, field, value) {
-            const impact = appState.impacts[actionId].find(imp => imp.id === impactId);
-            if (impact) {
-                impact[section][field] = value;
-                renderMindmap();
-                renderHorizontalMindmap();
-            }
-        }
-
-        function renderImpactCardsForAction(actionId) {
-            const wrapper = document.getElementById(`impacts-list-${actionId}`);
-            if (!wrapper) return;
-
-            const impactsList = appState.impacts[actionId] || [];
-            wrapper.innerHTML = '';
-
-            if (impactsList.length === 0) {
-                wrapper.innerHTML = `
-                    <p class="text-[11px] text-slate-500 italic py-2">Chưa gieo đối tượng ảnh hưởng nào cho hành động này. Hãy nhấn nút để thiết lập.</p>
-                `;
-                return;
-            }
-
-            impactsList.forEach((imp, idx) => {
-                const card = document.createElement('div');
-                card.className = "bg-slate-950 border border-slate-850 p-3.5 rounded-lg space-y-3 relative";
-                
-                const isHarmful = imp.type === 'harmful';
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-800/50 pb-2">
-                        <span>ĐỐI TƯỢNG TÁC ĐỘNG SỐ ${idx + 1}</span>
-                        <button onclick="removeImpact(${actionId}, ${imp.id})" class="text-rose-500 hover:text-rose-400 transition-all">
-                            <i class="fa-solid fa-xmark-circle text-xs"></i> Xóa
-                        </button>
-                    </div>
-
-                    <!-- Row 1: Target Selector and Dimension Selector -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Đối Tượng Chịu Tác Động</label>
-                            <select onchange="updateImpactField(${actionId}, ${imp.id}, 'target', this.value)" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
-                                <option value="Bản thân" ${imp.target === 'Bản thân' ? 'selected' : ''}>Bản thân (Tôi / Doanh nghiệp ta)</option>
-                                <option value="Người khác" ${imp.target === 'Người khác' ? 'selected' : ''}>Người khác (Đối tác / Nhân viên)</option>
-                                <option value="Xã hội" ${imp.target === 'Xã hội' ? 'selected' : ''}>Xã hội (Cộng đồng mạng / Khách hàng)</option>
-                                <option value="Quốc gia" ${imp.target === 'Quốc gia' ? 'selected' : ''}>Quốc gia (Chính trị / Pháp lý)</option>
-                                <option value="Danh tiếng" ${imp.target === 'Danh tiếng' ? 'selected' : ''}>Danh tiếng thương hiệu</option>
-                                <option value="Tương lai" ${imp.target === 'Tương lai' ? 'selected' : ''}>Tương lai phát triển dài hạn</option>
-                            </select>
-                        </div>
-
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Khía Cạnh Bát Dịch</label>
-                            <select onchange="updateImpactField(${actionId}, ${imp.id}, 'dimension', this.value)" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
-                                <option value="Lợi ích" ${imp.dimension === 'Lợi ích' ? 'selected' : ''}>Lợi ích cốt lõi</option>
-                                <option value="Kinh tế" ${imp.dimension === 'Kinh tế' ? 'selected' : ''}>Kinh tế / Tài chính / Dòng tiền</option>
-                                <option value="Chính trị" ${imp.dimension === 'Chính trị' ? 'selected' : ''}>Chính trị / Quyền thế pháp lý</option>
-                                <option value="Quyền lực" ${imp.dimension === 'Quyền lực' ? 'selected' : ''}>Quyền lực kiểm soát</option>
-                                <option value="Động lực" ${imp.dimension === 'Động lực' ? 'selected' : ''}>Động lực tinh thần</option>
-                                <option value="Thói quen" ${imp.dimension === 'Thói quen' ? 'selected' : ''}>Thói quen hành vi người dùng</option>
-                                <option value="Phụ thuộc" ${imp.dimension === 'Phụ thuộc' ? 'selected' : ''}>Phụ thuộc chuỗi cung ứng</option>
-                                <option value="Lan truyền" ${imp.dimension === 'Lan truyền' ? 'selected' : ''}>Lan truyền hiệu ứng đám đông</option>
-                                <option value="Leo thang" ${imp.dimension === 'Leo thang' ? 'selected' : ''}>Leo thang mâu thuẫn đối đầu</option>
-                            </select>
-                        </div>
-
-                        <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tính Chất Tác Động</label>
-                            <div class="grid grid-cols-2 gap-2 mt-0.5">
-                                <button onclick="updateImpactField(${actionId}, ${imp.id}, 'type', 'beneficial'); renderImpactCardsForAction(${actionId});" class="py-1 text-xs font-semibold rounded ${!isHarmful ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' : 'bg-slate-900 text-slate-400 border border-slate-800'}">
-                                    Có Lợi
-                                </button>
-                                <button onclick="updateImpactField(${actionId}, ${imp.id}, 'type', 'harmful'); renderImpactCardsForAction(${actionId});" class="py-1 text-xs font-semibold rounded ${isHarmful ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' : 'bg-slate-900 text-slate-400 border border-slate-800'}">
-                                    Có Hại
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Row 2: Basic description of impact -->
-                    <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Diễn giải tác động chi tiết</label>
-                        <input type="text" oninput="updateImpactField(${actionId}, ${imp.id}, 'details', this.value)" value="${imp.details}" placeholder="Diễn đạt tác động có lợi hay có hại đó biểu hiện thực tế ra sao?" class="w-full bg-slate-900 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                    </div>
-
-                    <!-- CRISIS LOOP (VÒNG LẶP HÓA GIẢI) - ONLY TRIGGERS ON "CÓ HẠI" -->
-                    ${isHarmful ? `
-                        <div class="mt-3 bg-rose-950/10 border border-rose-900/40 rounded-lg p-3 space-y-3">
-                            <div class="flex items-center gap-2 text-[10px] font-bold text-rose-400 uppercase tracking-widest">
-                                <i class="fa-solid fa-triangle-exclamation animate-pulse"></i>
-                                <span>VÒNG LẶP HÓA GIẢI KHỦNG HOẢNG (CRISIS LOOP)</span>
-                            </div>
-                            <p class="text-[10px] text-rose-300">Tính chất Có Hại phát sinh buộc bạn phải tái phân tích (SWOT/5Why con) và thiết kế hành động phụ trợ để biến nó thành Có Lợi.</p>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <!-- Nested analysis -->
-                                <div class="space-y-1">
-                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">1. Nhận Diện Vết Nứt (Weakness/Root-Cause)</span>
-                                    <input type="text" oninput="updateNestedMitigation(${actionId}, ${imp.id}, 'mitigationAnalysis', 'swot_w', this.value)" value="${imp.mitigationAnalysis.swot_w}" placeholder="Điểm yếu / Why 5 cốt lõi gây ra tác hại này?" class="w-full bg-slate-900 border border-slate-850 rounded px-2 py-1 text-xs text-slate-200">
-                                </div>
-                                <!-- Nested Action text -->
-                                <div class="space-y-1">
-                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">2. Tiêu đề Hành Động Khắc Phục</span>
-                                    <input type="text" oninput="updateNestedMitigation(${actionId}, ${imp.id}, 'mitigationAction', 'text', this.value)" value="${imp.mitigationAction.text}" placeholder="Hành động dập lửa khẩn cấp..." class="w-full bg-slate-900 border border-slate-850 rounded px-2 py-1 text-xs text-slate-200">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <!-- Nested Method choice -->
-                                <div class="space-y-1">
-                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">3. Hệ Thống Tra Cứu Hóa Giải</span>
-                                    <select onchange="updateNestedMitigation(${actionId}, ${imp.id}, 'mitigationAction', 'subMethod', this.value)" class="w-full bg-slate-900 border border-slate-850 rounded px-2 py-1 text-xs text-slate-200">
-                                        <option value="S - Thay thế" ${imp.mitigationAction.subMethod === 'S - Thay thế' ? 'selected' : ''}>SCAMPER - Thay thế bối cảnh</option>
-                                        <option value="E - Loại bỏ" ${imp.mitigationAction.subMethod === 'E - Loại bỏ' ? 'selected' : ''}>SCAMPER - Loại bỏ rào cản</option>
-                                        <option value="Kế 3: Không thành kế" ${imp.mitigationAction.subMethod === 'Kế 3: Không thành kế' ? 'selected' : ''}>36 Kế - Kế Không Thành</option>
-                                        <option value="Kế 23: Tẩu vi thượng sách" ${imp.mitigationAction.subMethod === 'Kế 23: Tẩu vi thượng sách' ? 'selected' : ''}>36 Kế - Rút lui bảo toàn</option>
-                                        <option value="Ability - Đơn giản hóa" ${imp.mitigationAction.subMethod === 'Ability - Đơn giản hóa' ? 'selected' : ''}>Hành vi - Tăng năng lực/checklist</option>
-                                    </select>
-                                </div>
-                                <!-- Nested details -->
-                                <div class="space-y-1">
-                                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">4. Thuyết minh cách thức giải phóng rủi ro</span>
-                                    <textarea oninput="updateNestedMitigation(${actionId}, ${imp.id}, 'mitigationAction', 'details', this.value)" placeholder="Cách giải pháp này trung hòa tác hại để biến thành cơ hội có lợi?" class="w-full h-8 bg-slate-900 border border-slate-850 rounded px-2 py-1 text-xs text-slate-200 transition-all">${imp.mitigationAction.details}</textarea>
-                                </div>
-                            </div>
-                        </div>
-                    ` : ''}
-                `;
-                wrapper.appendChild(card);
-            });
-        }
-
-        // RESET SYSTEM
-        function resetWholeSystem() {
-            if (confirm("Bạn có chắc chắn muốn xóa sạch toàn bộ tiến trình và làm lại từ đầu không?")) {
-                appState = {
-                    currentStep: 1,
-                    selectedScenarioId: null,
-                    analysis: {
-                        context: "",
-                        swot_s: "", swot_w: "", swot_o: "", swot_t: "",
-                        why1: "", why2: "", why3: "", why4: "", why5: ""
-                    },
-                    actions: [],
-                    impacts: {}
+        function showFilePreviewTabsUI() {
+            const panel = document.getElementById('file-preview-panel');
+            const tabsContainer = document.getElementById('file-preview-tabs');
+            tabsContainer.innerHTML = "";
+            let sheetsFound = [];
+            if (pendingImportData.methods.length > 0) sheetsFound.push('methods');
+            if (pendingImportData.rules.length > 0) sheetsFound.push('rules');
+            if (pendingImportData.scenarios.length > 0) sheetsFound.push('scenarios');
+            if (sheetsFound.length === 0) { alert("Không trích xuất được dữ liệu phù hợp."); panel.classList.add('hidden'); return; }
+            panel.classList.remove('hidden');
+            activeFilePreviewSheet = sheetsFound[0];
+            sheetsFound.forEach(sheetKey => {
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-1 rounded text-xs font-bold transition-all ${sheetKey === activeFilePreviewSheet ? 'bg-amber-500 text-gray-950' : 'text-gray-400 hover:text-white'}`;
+                btn.innerText = sheetKey === 'methods' ? 'Sheet Phương Pháp' : sheetKey === 'rules' ? 'Sheet Quy Luật' : 'Sheet Tình Huống';
+                btn.onclick = () => {
+                    activeFilePreviewSheet = sheetKey;
+                    document.querySelectorAll('#file-preview-tabs button').forEach(b => b.className = 'px-3 py-1 text-gray-400 hover:text-white text-xs font-bold transition-all');
+                    btn.className = 'px-3 py-1 bg-amber-500 text-gray-950 text-xs font-bold rounded';
+                    renderFilePreviewTableRows();
                 };
-                
-                // Reset inputs
-                document.getElementById('input-context').value = '';
-                document.getElementById('swot-s').value = '';
-                document.getElementById('swot-w').value = '';
-                document.getElementById('swot-o').value = '';
-                document.getElementById('swot-t').value = '';
-                
-                document.getElementById('why1').value = '';
-                document.getElementById('why2').value = '';
-                document.getElementById('why3').value = '';
-                document.getElementById('why4').value = '';
-                document.getElementById('why5').value = '';
+                tabsContainer.appendChild(btn);
+            });
+            renderFilePreviewTableRows();
+        }
 
-                document.getElementById('stat-scenario').innerText = 'Chưa chọn';
+        function renderFilePreviewTableRows() {
+            const table = document.getElementById('file-preview-table');
+            let data = pendingImportData[activeFilePreviewSheet] || [];
+            let html = "";
+            if (activeFilePreviewSheet === 'methods') {
+                html += `<thead class="bg-gray-950 text-amber-400 border-b border-gray-800"><tr><th class="p-2">Loại</th><th class="p-2">STT</th><th class="p-2">Tên Phương Pháp</th><th class="p-2">Nội Dung</th><th class="p-2">Điều Kiện</th></tr></thead><tbody>`;
+                data.forEach(r => { html += `<tr class="border-b border-gray-800/40 bg-gray-900/10"><td class="p-2 font-bold">${r.type}</td><td class="p-2">${r.id}</td><td class="p-2 font-semibold text-white">${r.name}</td><td class="p-2 text-gray-300">${r.content}</td><td class="p-2 text-gray-400">${r.condition}</td></tr>`; });
+            } else if (activeFilePreviewSheet === 'rules') {
+                html += `<thead class="bg-gray-950 text-amber-400 border-b border-gray-800"><tr><th class="p-2">Loại</th><th class="p-2">STT</th><th class="p-2">Tên Quy Luật</th><th class="p-2">Nội Dung</th><th class="p-2">Nếu</th><th class="p-2">Thì</th></tr></thead><tbody>`;
+                data.forEach(r => { html += `<tr class="border-b border-gray-800/40 bg-gray-900/10"><td class="p-2 font-bold">${r.type}</td><td class="p-2">${r.id}</td><td class="p-2 font-semibold text-white">${r.name}</td><td class="p-2 text-gray-300">${r.content}</td><td class="p-2 text-gray-400">${r.if_condition}</td><td class="p-2 text-gray-400">${r.then_effect}</td></tr>`; });
+            } else {
+                html += `<thead class="bg-gray-950 text-amber-400 border-b border-gray-800"><tr><th class="p-2">STT</th><th class="p-2">Tên Tình Huống</th><th class="p-2">Keywords</th></tr></thead><tbody>`;
+                data.forEach(r => { html += `<tr class="border-b border-gray-800/40 bg-gray-900/10"><td class="p-2">${r.id}</td><td class="p-2 font-semibold text-white">${r.name}</td><td class="p-2 text-gray-300">${r.keywords}</td></tr>`; });
+            }
+            table.innerHTML = html + `</tbody>`;
+        }
 
-                renderScenarios();
-                updateStepUI();
-                addNewAction();
-                renderMindmap();
-                renderHorizontalMindmap();
-                updateHeaderStats();
+        function commitPendingImportData() {
+            if (pendingImportData.scenarios.length > 0) appDataStore.scenarios = [...pendingImportData.scenarios];
+            if (pendingImportData.methods.length > 0) appDataStore.methods = [...appDataStore.methods, ...pendingImportData.methods];
+            if (pendingImportData.rules.length > 0) appDataStore.rules = [...appDataStore.rules, ...pendingImportData.rules];
+            alert("Nạp dữ liệu bổ sung hoàn tất!");
+            document.getElementById('file-preview-panel').classList.add('hidden');
+            recalculateFooterMetrics(); syncScenarioSelectMenu(); refreshQuizFilterOptions(); renderActivePreviewGrid(activePreviewTabKey);
+        }
+
+        function switchPreviewGridTab(tabKey) {
+            activePreviewTabKey = tabKey;
+            document.querySelectorAll('#preview-tab-triggers button').forEach(b => b.className = 'px-3 py-1 text-gray-400 text-xs font-semibold rounded-md transition-all');
+            document.getElementById(`btn-view-${tabKey}`).className = 'px-3 py-1 bg-blue-600 text-white text-xs font-semibold rounded-md transition-all';
+            renderActivePreviewGrid(tabKey);
+        }
+
+        function deleteRowElement(tabKey, elementId) {
+            appDataStore[tabKey] = appDataStore[tabKey].filter(x => x.id !== elementId);
+            recalculateFooterMetrics(); if(tabKey === 'scenarios') syncScenarioSelectMenu(); refreshQuizFilterOptions(); renderActivePreviewGrid(tabKey);
+        }
+
+        function clearCompleteDatabase() {
+            if(confirm("Xóa sạch kho dữ liệu cục bộ?")) {
+                appDataStore.methods = []; appDataStore.rules = []; appDataStore.scenarios = [];
+                recalculateFooterMetrics(); syncScenarioSelectMenu(); refreshQuizFilterOptions(); renderActivePreviewGrid(activePreviewTabKey);
             }
         }
 
-        function updateHeaderStats() {
-            // Count Actions
-            document.getElementById('stat-actions').innerText = appState.actions.filter(a => a.text !== "").length;
+        function renderActivePreviewGrid(tabKey) {
+            const table = document.getElementById('grid-view-table');
+            let pool = appDataStore[tabKey] || [];
+            if(pool.length === 0) { table.innerHTML = `<tr><td class="p-4 text-center text-gray-500 italic">Bảng lưu trữ trống.</td></tr>`; return; }
+            let html = "";
+            if(tabKey === 'methods') {
+                html += `<thead class="bg-gray-950 text-gray-400 border-b border-gray-800"><tr><th class="p-2">Loại</th><th class="p-2">STT</th><th class="p-2">Tên Phương Pháp</th><th class="p-2">Nội Dung</th><th class="p-2">Điều Kiện</th><th class="p-2 text-center">Xóa</th></tr></thead><tbody>`;
+                pool.forEach(r => { html += `<tr class="border-b border-gray-800/50 hover:bg-gray-900/30"><td class="p-2 text-blue-400 font-bold">${r.type}</td><td class="p-2">${r.id}</td><td class="p-2 text-white font-semibold">${r.name}</td><td class="p-2 text-gray-400">${r.content}</td><td class="p-2 text-gray-500">${r.condition}</td><td class="p-2 text-center"><button onclick="deleteRowElement('methods', ${r.id})" class="text-rose-500 hover:text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button></td></tr>`; });
+            } else if(tabKey === 'rules') {
+                html += `<thead class="bg-gray-950 text-gray-400 border-b border-gray-800"><tr><th class="p-2">Loại</th><th class="p-2">STT</th><th class="p-2">Tên Quy Luật</th><th class="p-2">Nội Dung</th><th class="p-2">Nếu</th><th class="p-2">Thì</th><th class="p-2 text-center">Xóa</th></tr></thead><tbody>`;
+                pool.forEach(r => { html += `<tr class="border-b border-gray-800/50 hover:bg-gray-900/30"><td class="p-2 text-purple-400 font-bold">${r.type}</td><td class="p-2">${r.id}</td><td class="p-2 text-white font-semibold">${r.name}</td><td class="p-2 text-gray-400">${r.content}</td><td class="p-2 text-gray-500">${r.if_condition}</td><td class="p-2 text-gray-500">${r.then_effect}</td><td class="p-2 text-center"><button onclick="deleteRowElement('rules', ${r.id})" class="text-rose-500 hover:text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button></td></tr>`; });
+            } else {
+                html += `<thead class="bg-gray-950 text-gray-400 border-b border-gray-800"><tr><th class="p-2">STT</th><th class="p-2">Tên Tình Huống</th><th class="p-2">Keywords</th><th class="p-2 text-center">Xóa</th></tr></thead><tbody>`;
+                pool.forEach(r => { html += `<tr class="border-b border-gray-800/50 hover:bg-gray-900/30"><td class="p-2">${r.id}</td><td class="p-2 text-white font-semibold">${r.name}</td><td class="p-2 text-gray-400">${r.keywords}</td><td class="p-2 text-center"><button onclick="deleteRowElement('scenarios', ${r.id})" class="text-rose-500 hover:text-rose-400 cursor-pointer"><i class="fa-solid fa-trash"></i></button></td></tr>`; });
+            }
+            table.innerHTML = html + `</tbody>`;
+        }
+
+        // --- DYNAMIC TRẮC NGHIỆM FIX FOR BLANK OPTION SELECTION BUG ---
+        function toggleQuizCoreMode(mode) {
+            quizState.activeCoreMode = mode;
+            document.getElementById('learn-btn-methods').className = mode === 'methods' ? 'px-2.5 py-1 rounded bg-blue-600 text-white font-medium' : 'px-2.5 py-1 rounded text-gray-400 font-medium';
+            document.getElementById('learn-btn-rules').className = mode === 'rules' ? 'px-2.5 py-1 rounded bg-blue-600 text-white font-medium' : 'px-2.5 py-1 rounded text-gray-400 font-medium';
+            refreshQuizFilterOptions();
+        }
+
+        function refreshQuizFilterOptions() {
+            const select = document.getElementById('learn-type-selector');
+            let pool = quizState.activeCoreMode === 'methods' ? appDataStore.methods : appDataStore.rules;
+            let uniqueTypes = [...new Set(pool.map(x => x.type).filter(t => t))];
+
+            if(uniqueTypes.length === 0) { select.innerHTML = `<option value="">(Trống)</option>`; return; }
+            select.innerHTML = uniqueTypes.map(t => `<option value="${t.trim()}">${t.trim()}</option>`).join('');
+            triggerQuizGeneration();
+        }
+
+        function triggerQuizGeneration() {
+            const container = document.getElementById('quiz-choices-container');
+            container.innerHTML = "";
+            const selectedType = document.getElementById('learn-type-selector').value.trim();
+            let basePool = quizState.activeCoreMode === 'methods' ? appDataStore.methods : appDataStore.rules;
             
-            // Count active harmful risks that don't have mitigation action yet
-            let activeRisks = 0;
-            appState.actions.forEach(act => {
-                const imps = appState.impacts[act.id] || [];
-                imps.forEach(imp => {
-                    if (imp.type === 'harmful' && !imp.mitigationAction.text) {
-                        activeRisks++;
+            // Sửa lỗi so khớp chuỗi (String comparison fallback fix)
+            let filtered = basePool.filter(x => x.type && x.type.trim() === selectedType);
+            if(filtered.length === 0 && basePool.length > 0) { filtered = [basePool[0]]; } // Khóa bảo vệ chống sập DOM
+            if(filtered.length === 0) {
+                document.getElementById('quiz-lbl-category').innerText = "N/A";
+                document.getElementById('quiz-question-txt').innerText = "Vui lòng kiểm tra kho dữ liệu.";
+                return;
+            }
+
+            const chosen = filtered[Math.floor(Math.random() * filtered.length)];
+            quizState.currentItem = chosen;
+            document.getElementById('quiz-lbl-category').innerText = chosen.type;
+            document.getElementById('quiz-question-txt').innerText = chosen.name;
+
+            let answerChoices = [chosen.content];
+            let loopGuard = 0;
+            while(answerChoices.length < Math.min(4, basePool.length) && loopGuard < 150) {
+                let randomContent = basePool[Math.floor(Math.random() * basePool.length)].content;
+                if(!answerChoices.includes(randomContent) && randomContent) answerChoices.push(randomContent);
+                loopGuard++;
+            }
+            answerChoices.sort(() => Math.random() - 0.5);
+
+            answerChoices.forEach(ans => {
+                const b = document.createElement('button');
+                b.className = "w-full text-left p-3 bg-gray-950 border border-gray-800 rounded-xl hover:border-blue-500 hover:bg-gray-900 text-xs text-gray-300 leading-relaxed transition-all cursor-pointer";
+                b.innerHTML = boldStringKeywords(ans);
+                b.onclick = () => {
+                    quizState.totalCount++;
+                    const correct = ans === quizState.currentItem.content;
+                    if(correct) quizState.correctCount++;
+                    document.getElementById('quiz-lbl-accuracy').innerText = `Tỉ lệ: ${Math.round((quizState.correctCount/quizState.totalCount)*100)}% (${quizState.correctCount}/${quizState.totalCount})`;
+                    document.querySelectorAll('#quiz-choices-container button').forEach(x => x.style.pointerEvents = 'none');
+                    b.className = correct ? "w-full text-left p-3 bg-emerald-950/40 border border-emerald-700 rounded-xl text-xs text-emerald-300" : "w-full text-left p-3 bg-rose-950/40 border border-rose-700 rounded-xl text-xs text-rose-300";
+                    setTimeout(triggerQuizGeneration, 1500);
+                };
+                container.appendChild(b);
+            });
+        }
+
+        // --- STEP 3.5: 10 AXIS PROFILE ANALYSIS ---
+        function addContextStakeholderProfile() {
+            const selectVal = document.getElementById('stk-bctx-select').value;
+            const customVal = document.getElementById('stk-bctx-custom').value.trim();
+            const finalName = customVal || selectVal;
+            const node = { id: Date.now(), name: finalName, axes: {} };
+            STAKEHOLDER_AXES.forEach(ax => { node.axes[ax] = { type: "Lợi", desc: "" }; });
+            runtimeSession.contextStakeholders.push(node);
+            document.getElementById('stk-bctx-custom').value = "";
+            renderContextStakeholdersForms(); compileLiveRenderTree();
+        }
+
+        function removeContextStakeholderProfile(id) {
+            runtimeSession.contextStakeholders = runtimeSession.contextStakeholders.filter(s => s.id !== id);
+            renderContextStakeholdersForms(); compileLiveRenderTree();
+        }
+
+        function updateContextStakeholderData(stkId, axKey, field, val) {
+            const stk = runtimeSession.contextStakeholders.find(s => s.id === stkId);
+            if(stk && stk.axes[axKey]) { stk.axes[axKey][field] = val; compileLiveRenderTree(); }
+        }
+
+        function renderContextStakeholdersForms() {
+            const wrap = document.getElementById('context-stakeholders-layout-box'); wrap.innerHTML = "";
+            runtimeSession.contextStakeholders.forEach(stk => {
+                const card = document.createElement('div'); card.className = "bg-gray-950 border border-gray-800 rounded-xl p-3 space-y-3 relative";
+                let html = `<div class="flex items-center justify-between border-b border-gray-900 pb-1.5"><span class="text-xs font-bold text-pink-400 flex items-center"><i class="fa-solid fa-user-tag mr-2"></i>Đối tượng bối cảnh: ${stk.name}</span><button onclick="removeContextStakeholderProfile(${stk.id})" class="text-[10px] text-gray-500 hover:text-red-400 cursor-pointer"><i class="fa-solid fa-circle-minus mr-1"></i>Xóa</button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2">`;
+                STAKEHOLDER_AXES.forEach(ax => {
+                    html += `<div class="flex items-center gap-1 bg-gray-900/30 p-1.5 rounded border border-gray-900/50"><span class="text-[10px] font-bold text-gray-400 uppercase w-18 shrink-0 capitalize truncate">${ax}:</span><select onchange="updateContextStakeholderData(${stk.id}, '${ax}', 'type', this.value)" class="bg-gray-950 text-[10px] p-1 rounded font-bold ${stk.axes[ax].type==='Lợi'?'text-emerald-400':'text-rose-400'} focus:outline-none"><option value="Lợi" ${stk.axes[ax].type==='Lợi'?'selected':''}>Lợi</option><option value="Hại" ${stk.axes[ax].type==='Hại'?'selected':''}>Hại</option></select><input type="text" value="${stk.axes[ax].desc}" oninput="updateContextStakeholderData(${stk.id}, '${ax}', 'desc', this.value)" class="flex-1 bg-gray-950 border border-gray-800/80 rounded px-1.5 py-0.5 text-xs text-gray-300 focus:outline-none" placeholder="Chi tiết ảnh hưởng..."></div>`;
+                });
+                card.innerHTML = html + `</div>`; wrap.appendChild(card);
+            });
+        }
+
+        // --- STEP 4: SOLUTIONS ACTIONS INTERACTION CORE ---
+        function insertNewBlankActionBlock() {
+            const blockId = Date.now();
+            const actionNode = { id: blockId, text: "", methodName: appDataStore.methods[0] ? appDataStore.methods[0].name : "Mặc định", conscStakeholders: [] };
+            runtimeSession.actionsList.push(actionNode); renderActionInputBlocksStack(); compileLiveRenderTree();
+        }
+
+        function deleteActionBlockNode(id) {
+            runtimeSession.actionsList = runtimeSession.actionsList.filter(a => a.id !== id); renderActionInputBlocksStack(); compileLiveRenderTree();
+        }
+
+        function editActionNodeMainValue(id, key, val) {
+            const act = runtimeSession.actionsList.find(a => a.id === id); if(act) { act[key] = val; compileLiveRenderTree(); }
+        }
+
+        function appendActionStakeholderProfile(actId) {
+            const act = runtimeSession.actionsList.find(a => a.id === actId);
+            if(act) {
+                const nameSelect = document.getElementById(`stk-act-sel-${actId}`).value;
+                const nameCustom = document.getElementById(`stk-act-cust-${actId}`).value.trim();
+                const finalName = nameCustom || nameSelect;
+                const stkNode = { id: Date.now(), name: finalName, axes: {} };
+                STAKEHOLDER_AXES.forEach(ax => { stkNode.axes[ax] = { type: "Lợi", desc: "" }; });
+                act.conscStakeholders.push(stkNode); document.getElementById(`stk-act-cust-${actId}`).value = ""; renderActionInputBlocksStack(); compileLiveRenderTree();
+            }
+        }
+
+        function removeActionStakeholderProfile(actId, stkId) {
+            const act = runtimeSession.actionsList.find(a => a.id === actId); if(act) { act.conscStakeholders = act.conscStakeholders.filter(s => s.id !== stkId); renderActionInputBlocksStack(); compileLiveRenderTree(); }
+        }
+
+        function editActionStakeholderAxis(actId, stkId, axKey, field, val) {
+            const act = runtimeSession.actionsList.find(a => a.id === actId);
+            if(act) { const stk = act.conscStakeholders.find(s => s.id === stkId); if(stk && stk.axes[axKey]) { stk.axes[axKey][field] = val; compileLiveRenderTree(); } }
+        }
+
+        function renderActionInputBlocksStack() {
+            const container = document.getElementById('prc-actions-stack-container'); container.innerHTML = "";
+            runtimeSession.actionsList.forEach((act, idx) => {
+                const card = document.createElement('div'); card.className = "bg-gray-950 border border-gray-800 rounded-xl p-3.5 space-y-4 relative shadow-inner";
+                let dropdownOptions = appDataStore.methods.map(m => `<option value="${m.name}" ${act.methodName === m.name ? 'selected':''}>[${m.type}] ${m.name}</option>`).join('');
+                let cardHeader = `<div class="flex items-center justify-between border-b border-gray-900 pb-2"><span class="text-[10px] bg-gray-900 text-gray-400 px-2 py-0.5 rounded font-bold font-mono">KHỐI HÀNH ĐỘNG GIẢI PHÁP #${idx+1}</span><button onclick="deleteActionBlockNode(${act.id})" class="text-xs text-gray-500 hover:text-red-400 cursor-pointer"><i class="fa-solid fa-trash mr-1"></i>Xóa</button></div>`;
+                let cardBody = `<div class="grid grid-cols-1 sm:grid-cols-3 gap-2"><div><label class="text-[9px] font-bold text-gray-500 block mb-0.5">Phương pháp áp dụng:</label><select onchange="editActionNodeMainValue(${act.id}, 'methodName', this.value)" class="w-full bg-gray-900 border border-gray-800 rounded px-2 py-1 text-xs text-white focus:outline-none">${dropdownOptions}</select></div><div class="sm:col-span-2"><label class="text-[9px] font-bold text-gray-500 block mb-0.5">Mô tả hành động giải pháp:</label><input type="text" value="${act.text}" oninput="editActionNodeMainValue(${act.id}, 'text', this.value)" class="w-full bg-gray-900 border border-gray-800 rounded px-2.5 py-1 text-xs text-white focus:outline-none focus:border-blue-600" placeholder="Chi tiết bước đi chiến thuật..."></div></div>`;
+                let stkLoopControlHeader = `<div class="border-t border-gray-900/60 pt-3 space-y-3"><div class="flex flex-wrap items-center justify-between gap-2"><label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block"><i class="fa-solid fa-arrows-spin mr-1 text-blue-500"></i>Chuỗi tác động & Phản hồi đối tượng (10 Khía cạnh):</label><div class="flex gap-1 items-center"><select id="stk-act-sel-${act.id}" class="bg-gray-900 border border-gray-800 rounded px-1.5 py-0.5 text-[11px] text-gray-300 focus:outline-none"><option value="Bản thân">Bản thân</option><option value="Người khác">Người khác</option><option value="Xã hội">Xã hội</option><option value="Quốc gia">Quốc gia</option><option value="Danh tiếng">Danh tiếng</option><option value="Tương lai">Tương lai</option></select><input type="text" id="stk-act-cust-${act.id}" class="w-16 bg-gray-900 border border-gray-800 rounded px-1.5 py-0.5 text-[11px] focus:outline-none" placeholder="Tự điền..."><button onclick="appendActionStakeholderProfile(${act.id})" class="px-2 py-0.5 bg-blue-600 text-white text-[11px] font-bold rounded hover:bg-blue-700 cursor-pointer">Thêm</button></div></div><div class="space-y-3">`;
+                
+                act.conscStakeholders.forEach(stk => {
+                    stkLoopControlHeader += `<div class="p-2.5 bg-gray-900/40 border border-gray-900 rounded-xl space-y-2"><div class="flex items-center justify-between border-b border-gray-900/50 pb-1"><span class="text-[11px] font-bold text-blue-400"><i class="fa-solid fa-user-circle mr-1"></i>Đối tượng hệ quả: ${stk.name}</span><button onclick="removeActionStakeholderProfile(${act.id}, ${stk.id})" class="text-gray-600 hover:text-red-400 cursor-pointer"><i class="fa-solid fa-circle-xmark"></i></button></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2">`;
+                    STAKEHOLDER_AXES.forEach(ax => {
+                        stkLoopControlHeader += `<div class="flex items-center gap-1 bg-gray-950 p-1 rounded border border-gray-900"><span class="text-[9px] font-bold text-gray-500 uppercase w-16 shrink-0 truncate capitalize">${ax}:</span><select onchange="editActionStakeholderAxis(${act.id}, ${stk.id}, '${ax}', 'type', this.value); renderActionInputBlocksStack();" class="bg-gray-900 text-[10px] p-0.5 font-bold focus:outline-none ${stk.axes[ax].type==='Lợi'?'text-emerald-400':'text-red-400'}"><option value="Lợi" ${stk.axes[ax].type==='Lợi'?'selected':''}>Có Lợi</option><option value="Hại" ${stk.axes[ax].type==='Hại'?'selected':''}>Có Hại</option></select><input type="text" value="${stk.axes[ax].desc}" oninput="editActionStakeholderAxis(${act.id}, ${stk.id}, '${ax}', 'desc', this.value)" class="flex-1 bg-gray-900 border border-gray-800/80 rounded px-1 text-[11px] text-gray-300 focus:outline-none" placeholder="Tác động..."></div>`;
+                    });
+                    stkLoopControlHeader += `</div></div>`;
+                });
+                card.innerHTML = cardHeader + cardBody + stkLoopControlHeader + `</div></div>`; container.appendChild(card);
+            });
+        }
+
+        // --- GRAPH COMPILING ENGINE ---
+        function compileLiveRenderTree() {
+            const canvas = document.getElementById('tree-live-canvas'); canvas.innerHTML = "";
+            const select = document.getElementById('prc-scenario-dropdown');
+            const scenText = select.options[select.selectedIndex] ? select.options[select.selectedIndex].text : "Kịch bản trống";
+            let treeHTML = `<div class="relative pl-2"><div class="flex items-center space-x-2"><span class="w-4 h-4 bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold rounded shadow-md"><i class="fa-solid fa-crosshairs"></i></span><span class="font-extrabold text-white text-xs tracking-wide">${scenText}</span></div><div class="pl-4 border-l border-gray-800 mt-2 space-y-3.5 relative">`;
+
+            const contextNotes = document.getElementById('prc-textarea-context').value.trim();
+            if(contextNotes) treeHTML += `<div class="pl-2 border-l border-amber-500/50 bg-amber-950/5 p-2 rounded"><span class="text-[9px] text-amber-500 font-bold uppercase block mb-0.5">Bối Cảnh Trận Pháp:</span><p class="text-[11px] text-gray-400">${contextNotes}</p></div>`;
+
+            let whyAccumulator = "";
+            for (let i=1; i<=5; i++) {
+                let cellVal = document.getElementById(`why-cell-${i}`) ? document.getElementById(`why-cell-${i}`).value.trim() : "";
+                if (cellVal) whyAccumulator += `<div class="text-[11px] text-gray-400"><b class="text-gray-600 font-mono">W${i}:</b> ${cellVal}</div>`;
+            }
+            if(whyAccumulator) treeHTML += `<div class="pl-2 border-l border-blue-500/50 bg-blue-950/5 p-2 rounded"><span class="text-[9px] text-blue-400 font-bold uppercase block mb-0.5">Xâu Chuỗi Căn Nguyên (5Why):</span><div class="space-y-0.5">${whyAccumulator}</div></div>`;
+
+            let swotAccumulator = [];
+            if(document.getElementById('swot-cell-s') && document.getElementById('swot-cell-s').value.trim()) swotAccumulator.push(`<span class="text-emerald-400 font-bold">[S] Strengths:</span> ${document.getElementById('swot-cell-s').value.trim()}`);
+            if(document.getElementById('swot-cell-w') && document.getElementById('swot-cell-w').value.trim()) swotAccumulator.push(`<span class="text-rose-400 font-bold">[W] Weaknesses:</span> ${document.getElementById('swot-cell-w').value.trim()}`);
+            if(document.getElementById('swot-cell-o') && document.getElementById('swot-cell-o').value.trim()) swotAccumulator.push(`<span class="text-blue-400 font-bold">[O] Opportunities:</span> ${document.getElementById('swot-cell-o').value.trim()}`);
+            if(document.getElementById('swot-cell-t') && document.getElementById('swot-cell-t').value.trim()) swotAccumulator.push(`<span class="text-amber-500 font-bold">[T] Threats:</span> ${document.getElementById('swot-cell-t').value.trim()}`);
+            if(swotAccumulator.length > 0) treeHTML += `<div class="pl-2 border-l border-purple-500/50 bg-purple-950/5 p-2 rounded"><span class="text-[9px] text-purple-400 font-bold uppercase block mb-0.5">Cấu Hình Vị Thế SWOT:</span><div class="space-y-1">${swotAccumulator.join('<br>')}</div></div>`;
+
+            let ctxStkHTML = "";
+            runtimeSession.contextStakeholders.forEach(stk => {
+                let lines = [];
+                STAKEHOLDER_AXES.forEach(ax => {
+                    if(stk.axes[ax].desc.trim()) {
+                        const isLoi = stk.axes[ax].type === 'Lợi';
+                        lines.push(`<div class="text-[10px] text-gray-400 capitalize"><b class="text-gray-500 font-normal">${ax}:</b> <span class="${isLoi?'text-emerald-400':'text-rose-400'} font-bold">[${stk.axes[ax].type}]</span> ${stk.axes[ax].desc.trim()}</div>`);
                     }
                 });
+                if(lines.length > 0) ctxStkHTML += `<div class="bg-gray-900/60 border border-gray-800 p-2 rounded-lg space-y-0.5"><div class="text-[11px] font-bold text-pink-400 flex items-center"><i class="fa-solid fa-users mr-1.5"></i>${stk.name}</div><div class="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-0.5">${lines.join('')}</div></div>`;
             });
-            document.getElementById('stat-risks').innerText = activeRisks;
+            if(ctxStkHTML) treeHTML += `<div class="pl-2 border-l border-pink-500/50 bg-pink-950/5 p-2 rounded-xl space-y-1.5"><span class="text-[9px] text-pink-400 font-bold uppercase block">Đối tượng trong Bối cảnh gốc (10 Khía cạnh):</span>${ctxStkHTML}</div>`;
+
+            runtimeSession.actionsList.forEach((act, aIdx) => {
+                if(act.text || act.methodName) {
+                    let insideStkHTML = "";
+                    act.conscStakeholders.forEach(stk => {
+                        let lines = [];
+                        STAKEHOLDER_AXES.forEach(ax => {
+                            if(stk.axes[ax].desc.trim()) {
+                                const isLoi = stk.axes[ax].type === 'Lợi';
+                                lines.push(`<div class="text-[10px] text-gray-400 capitalize"><b class="text-gray-500 font-normal">${ax}:</b> <span class="${isLoi?'text-emerald-400':'text-rose-400'} font-bold">[${isLoi?'LỢI':'HẠI'}]</span> ${stk.axes[ax].desc.trim()}</div>`);
+                            }
+                        });
+                        if(lines.length > 0) {
+                            let hasHai = stk.axes[STAKEHOLDER_AXES.find(x => stk.axes[x].type=='Hại' && stk.axes[x].desc.trim())] !== undefined;
+                            insideStkHTML += `<div class="p-2 bg-gray-950 border border-gray-900 rounded-lg space-y-1 flex flex-col"><div class="text-[11px] font-bold text-gray-300 flex items-center justify-between"><span><i class="fa-solid fa-user-tag mr-1 text-blue-400"></i>${stk.name}</span>${hasHai?`<span class="px-1 bg-rose-500/10 border border-rose-950 text-rose-400 font-black text-[9px] rounded">PHÁT SINH NGUY CƠ</span>`:''}</div><div class="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-0.5">${lines.join('')}</div>${hasHai?`<div class="mt-1 pl-2 border-l-2 border-dashed border-rose-800 bg-rose-950/5 p-1 text-[10px] text-rose-400/80"><i class="fa-solid fa-circle-exclamation mr-1"></i>Hệ quả tiêu cực phát hiện! Yêu cầu giải pháp phụ hóa giải.</div>`:''}</div>`;
+                        }
+                    });
+                    treeHTML += `<div class="pl-2 border-l-2 border-emerald-500/60 bg-emerald-950/5 p-2 rounded-xl"><span class="text-[9px] text-emerald-400 font-bold uppercase block">Phương Án Hành Động Đột Phá #${aIdx+1}:</span><div class="text-[11px] text-white font-bold mt-0.5">[${act.methodName}]</div><p class="text-gray-300 mt-1 text-[11px]">${act.text || 'Chưa lập đề xuất hành động...'}</p>${insideStkHTML ? `<div class="mt-2.5 space-y-2 pl-2 border-l border-gray-800">${insideStkHTML}</div>` : ''}</div>`;
+                }
+            });
+            canvas.innerHTML = treeHTML + `</div></div>`;
         }
 
-        // MOBILE TABS TOGGLE SYSTEM
-        function toggleMobileView(view) {
-            const workspace = document.getElementById('workspace-panel');
-            const mindmap = document.getElementById('mindmap-panel');
-            const btnWorkspace = document.getElementById('btn-tab-workspace');
-            const btnMindmap = document.getElementById('btn-tab-mindmap');
-
-            if (view === 'workspace') {
-                workspace.classList.remove('hidden');
-                workspace.classList.add('flex');
-                mindmap.classList.add('hidden');
-                mindmap.classList.remove('flex');
-
-                btnWorkspace.className = "px-3 py-1.5 text-xs font-medium rounded-md bg-indigo-600 text-white transition-all";
-                btnMindmap.className = "px-3 py-1.5 text-xs font-medium rounded-md text-slate-400 transition-all";
-            } else {
-                workspace.classList.add('hidden');
-                workspace.classList.remove('flex');
-                mindmap.classList.remove('hidden');
-                mindmap.classList.add('flex');
-
-                btnWorkspace.className = "px-3 py-1.5 text-xs font-medium rounded-md text-slate-400 transition-all";
-                btnMindmap.className = "px-3 py-1.5 text-xs font-medium rounded-md bg-indigo-600 text-white transition-all";
-                
-                // Force mindmap recalculation and centering upon view
-                setTimeout(() => {
-                    renderMindmap();
-                }, 100);
-            }
-        }
-    </script>
-
-    <!-- LIVE INTERACTIVE MINDMAP RENDERING ENGINE -->
-    <script>
-        let zoomLevel = 1;
-        function zoomMindmap(amount) {
-            zoomLevel += amount;
-            if (zoomLevel < 0.4) zoomLevel = 0.4;
-            if (zoomLevel > 1.8) zoomLevel = 1.8;
-            document.getElementById('mindmap-canvas').style.transform = `scale(${zoomLevel})`;
+        // --- SIDE DRAWER COMPONENT FOR READING DATASETS ---
+        function invokeSideSearchDrawer(type) {
+            const panel = document.getElementById('side-search-drawer-panel'); const title = document.getElementById('drawer-panel-title'); const container = document.getElementById('drawer-nodes-target-box');
+            title.innerText = type === 'methods' ? 'TRA CỨU PHƯƠNG PHÁP LUẬN (100% TỪ HỆ THỐNG MẶC ĐỊNH)' : 'TRA CỨU QUY LUẬT HỆ THỐNG (100% TỪ HỆ THỐNG MẶC ĐỊNH)';
+            container.innerHTML = "";
+            let pool = type === 'methods' ? appDataStore.methods : appDataStore.rules;
+            if(pool.length === 0) { container.innerHTML = `<div class="text-xs text-gray-500 italic text-center py-6">Kho dữ liệu trống.</div>`; panel.classList.remove('translate-x-full'); return; }
+            pool.forEach(it => {
+                const node = document.createElement('div'); node.className = "p-3 bg-gray-950 border border-gray-800 rounded-xl space-y-1.5 search-drawer-item-card";
+                node.setAttribute('data-search-tags', `${it.name} ${it.type} ${it.content}`.toLowerCase());
+                if (type === 'methods') {
+                    node.innerHTML = `<div class="flex items-center justify-between"><b class="text-blue-400 text-xs">${it.name}</b><span class="px-1.5 py-0.5 bg-gray-900 border border-gray-800 rounded text-[9px] text-gray-500 font-bold uppercase">${it.type}</span></div><p class="text-[11px] text-gray-400 leading-relaxed"><b class="text-gray-500">Bản chất:</b> ${it.content}</p><div class="p-2 bg-gray-900/60 border border-gray-900 rounded text-[10px] text-gray-500 leading-normal"><b class="text-gray-400 block mb-0.5">Thời cơ kích hoạt:</b>${it.condition}</div>`;
+                } else {
+                    node.innerHTML = `<div class="flex items-center justify-between"><b class="text-purple-400 text-xs">${it.name}</b><span class="px-1.5 py-0.5 bg-gray-900 border border-gray-800 rounded text-[9px] text-gray-500 font-bold uppercase">${it.type}</span></div><p class="text-[11px] text-gray-400 leading-relaxed"><b class="text-gray-500">Lý thuyết:</b> ${it.content}</p><div class="space-y-1 p-2 bg-purple-950/5 border border-purple-900/10 rounded text-[10px]"><div><span class="text-emerald-400 font-bold">NẾU:</span> <span class="text-gray-400">${it.if_condition}</span></div><div><span class="text-purple-400 font-bold">THÌ:</span> <span class="text-gray-400">${it.then_effect}</span></div></div>`;
+                }
+                container.appendChild(node);
+            });
+            panel.classList.remove('translate-x-full');
         }
 
-        function centerMindmap() {
-            zoomLevel = 1;
-            document.getElementById('mindmap-canvas').style.transform = `scale(1)`;
-            const vp = document.getElementById('mindmap-viewport');
-            vp.scrollLeft = (vp.scrollWidth - vp.clientWidth) / 2;
-            vp.scrollTop = (vp.scrollHeight - vp.clientHeight) / 2;
+        function dismissSideSearchDrawer() { document.getElementById('side-search-drawer-panel').classList.add('translate-x-full'); document.getElementById('drawer-search-box').value = ""; }
+        function filterDrawerListItems() {
+            const q = document.getElementById('drawer-search-box').value.toLowerCase().trim();
+            document.querySelectorAll('.search-drawer-item-card').forEach(card => { const tags = card.getAttribute('data-search-tags') || ""; card.style.display = tags.includes(q) ? "block" : "none"; });
         }
-
-        // DRAG SCROLL LOGIC FOR MAIN MINDMAP
-        let isDown = false;
-        let startX, startY, scrollLeft, scrollTop;
-
-        function startDrag(e) {
-            isDown = true;
-            document.getElementById('mindmap-viewport').classList.add('active');
-            startX = e.pageX - document.getElementById('mindmap-viewport').offsetLeft;
-            startY = e.pageY - document.getElementById('mindmap-viewport').offsetTop;
-            scrollLeft = document.getElementById('mindmap-viewport').scrollLeft;
-            scrollTop = document.getElementById('mindmap-viewport').scrollTop;
-        }
-
-        function endDrag() {
-            isDown = false;
-            document.getElementById('mindmap-viewport').classList.remove('active');
-        }
-
-        function drag(e) {
-            if(!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - document.getElementById('mindmap-viewport').offsetLeft;
-            const y = e.pageY - document.getElementById('mindmap-viewport').offsetTop;
-            const walkX = (x - startX) * 1.5;
-            const walkY = (y - startY) * 1.5;
-            document.getElementById('mindmap-viewport').scrollLeft = scrollLeft - walkX;
-            document.getElementById('mindmap-viewport').scrollTop = scrollTop - walkY;
-        }
-
-        // DRAG SCROLL LOGIC FOR TOP PERSISTENT HORIZONTAL MINDMAP
-        let isDownH = false;
-        let startXH, scrollLeftH;
-
-        function startHorizontalDrag(e) {
-            isDownH = true;
-            startXH = e.pageX - document.getElementById('top-horizontal-mindmap').offsetLeft;
-            scrollLeftH = document.getElementById('top-horizontal-mindmap').scrollLeft;
-        }
-
-        function endHorizontalDrag() {
-            isDownH = false;
-        }
-
-        function horizontalDrag(e) {
-            if(!isDownH) return;
-            e.preventDefault();
-            const x = e.pageX - document.getElementById('top-horizontal-mindmap').offsetLeft;
-            const walk = (x - startXH) * 1.5;
-            document.getElementById('top-horizontal-mindmap').scrollLeft = scrollLeftH - walk;
-        }
-
-        // PERSISTENT HORIZONTAL MINDMAP TIMELINE GENERATOR
-        function renderHorizontalMindmap() {
-            const container = document.getElementById('top-horizontal-mindmap');
-            const scen = SCENARIOS.find(s => s.id === appState.selectedScenarioId);
-
-            if (!scen) {
-                container.innerHTML = `
-                    <div class="flex items-center gap-2 text-xs text-slate-500 justify-center h-full py-1">
-                        <i class="fa-solid fa-circle-nodes text-indigo-500 animate-pulse"></i>
-                        <span>Chưa thiết lập đấu trường. Hãy chọn kịch bản ở Bước 1 để bắt đầu kết nối Sơ Đồ Bát Dịch Trực Tuyến!</span>
-                    </div>
-                `;
-                return;
-            }
-
-            // Build simplified inline list representing horizontal timeline map
-            let html = `
-                <div class="inline-flex items-center gap-4 text-xs">
-                    <!-- NODE 1: SCENARIO -->
-                    <div class="bg-indigo-950/40 border border-indigo-500/50 px-3 py-1.5 rounded-lg flex items-center gap-2 max-w-[200px] shrink-0">
-                        <i class="fa-solid fa-mountain text-indigo-400"></i>
-                        <div class="truncate">
-                            <span class="text-[8px] block text-indigo-400 uppercase tracking-wider font-extrabold">KỊCH BẢN</span>
-                            <span class="font-bold text-white text-[11px]">${scen.title}</span>
-                        </div>
-                    </div>
-
-                    <i class="fa-solid fa-arrow-right text-slate-700 shrink-0"></i>
-
-                    <!-- NODE 2: SWOT / 5WHY BRIDGE -->
-                    <div class="bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg flex items-center gap-2 shrink-0">
-                        <i class="fa-solid fa-magnifying-glass-chart text-emerald-400"></i>
-                        <div>
-                            <span class="text-[8px] block text-emerald-400 uppercase tracking-wider font-extrabold">PHÂN TÍCH</span>
-                            <span class="text-white text-[11px]">
-                                SWOT (${appState.analysis.swot_s ? 'S' : '-'}${appState.analysis.swot_w ? 'W' : '-'}${appState.analysis.swot_o ? 'O' : '-'}${appState.analysis.swot_t ? 'T' : '-'}) 
-                                ${appState.analysis.why5 ? '&bull; Why5: ' + appState.analysis.why5.substring(0, 15) + '...' : ''}
-                            </span>
-                        </div>
-                    </div>
-            `;
-
-            // Loop actions
-            const activeActions = appState.actions.filter(a => a.text !== "");
-            if (activeActions.length > 0) {
-                activeActions.forEach(act => {
-                    const impactsList = appState.impacts[act.id] || [];
-                    const harmfulCount = impactsList.filter(i => i.type === 'harmful').length;
-                    const resolvedCount = impactsList.filter(i => i.type === 'harmful' && i.mitigationAction.text !== "").length;
-
-                    html += `
-                        <i class="fa-solid fa-arrow-right text-slate-700 shrink-0"></i>
-
-                        <!-- ACTION NODE -->
-                        <div class="bg-slate-950 border border-slate-850 px-3 py-1.5 rounded-lg flex flex-col shrink-0 min-w-[180px]">
-                            <div class="flex justify-between items-center gap-2">
-                                <span class="text-[8px] text-indigo-400 uppercase tracking-wider font-extrabold">${act.framework.toUpperCase()}</span>
-                                <span class="text-[9px] bg-slate-900 px-1 py-0.5 rounded text-slate-400 font-semibold">${act.subMethod}</span>
-                            </div>
-                            <span class="font-bold text-white text-[11px] truncate mt-0.5">${act.text}</span>
-                            
-                            <!-- Nested indicators -->
-                            <div class="flex items-center gap-2 mt-1 text-[9px]">
-                                <span class="text-emerald-400 font-semibold">Tác động: ${impactsList.length}</span>
-                                ${harmfulCount > 0 ? `
-                                    <span class="text-rose-400 font-semibold flex items-center gap-0.5">
-                                        <i class="fa-solid fa-circle-exclamation text-[8px]"></i>
-                                        Rủi ro: ${resolvedCount}/${harmfulCount} đã giải
-                                    </span>
-                                ` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-            } else {
-                html += `
-                    <i class="fa-solid fa-arrow-right text-slate-700 shrink-0"></i>
-                    <div class="border border-dashed border-slate-800 px-3 py-1.5 rounded-lg text-slate-500 italic shrink-0">
-                        Chưa gieo hành động...
-                    </div>
-                `;
-            }
-
-            html += `</div>`;
-            container.innerHTML = html;
-        }
-
-        // MAIN VERTICAL/DETAILED MINDMAP TREE GENERATION
-        function renderMindmap() {
-            const root = document.getElementById('mindmap-tree-root');
-            const scen = SCENARIOS.find(s => s.id === appState.selectedScenarioId);
-
-            if (!scen) {
-                root.innerHTML = `
-                    <div class="text-center text-xs text-slate-500 py-12">
-                        <i class="fa-solid fa-yin-yang text-4xl mb-3 text-indigo-500 animate-spin-slow"></i>
-                        <p class="font-semibold text-slate-300">Vui lòng chọn kịch bản ở Bước 1 trước</p>
-                        <p class="text-[11px] mt-1 text-slate-500">Sơ đồ sẽ tự động kích hoạt và phát triển thành hình hài sơ đồ tư duy đa phương tại đây.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            // Build Hierarchical HTML Structure matching SaaS standards
-            let html = `
-                <div class="flex flex-col items-center gap-6 w-full px-4">
-                    
-                    <!-- LEVEL 1: SCENARIO ROOT NODE -->
-                    <div class="max-w-md bg-gradient-to-r from-indigo-950 to-slate-900 border-2 border-indigo-500 p-4 rounded-xl text-center shadow-lg shadow-indigo-500/10 pulse-node shrink-0 z-10">
-                        <span class="text-[9px] font-bold text-indigo-400 uppercase tracking-widest bg-indigo-900/30 px-2.5 py-1 rounded">Kịch bản Gốc</span>
-                        <h4 class="text-xs font-bold text-white mt-2">${scen.title}</h4>
-                        <p class="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">${scen.description}</p>
-                    </div>
-
-                    <!-- Connective Vertical Line -->
-                    <div class="w-0.5 h-6 bg-indigo-500/30 shrink-0"></div>
-
-                    <!-- LEVEL 2: DIAGNOSTIC SWOT / 5WHY BRIDGE -->
-                    <div class="w-full flex flex-col md:flex-row justify-center gap-4 max-w-4xl shrink-0">
-                        <!-- SWOT Node -->
-                        <div class="flex-1 bg-slate-950 border border-slate-800 p-3 rounded-lg space-y-2 text-left z-10">
-                            <span class="text-[9px] font-bold text-indigo-400 uppercase tracking-wider block border-b border-slate-850 pb-1">Giải phẫu SWOT</span>
-                            <div class="grid grid-cols-2 gap-1.5 text-[10px]">
-                                <div class="bg-indigo-950/10 p-1 rounded text-slate-300"><strong class="text-indigo-400">S:</strong> ${appState.analysis.swot_s ? appState.analysis.swot_s.substring(0, 30) + '...' : 'Chưa nhập'}</div>
-                                <div class="bg-rose-950/10 p-1 rounded text-slate-300"><strong class="text-rose-400">W:</strong> ${appState.analysis.swot_w ? appState.analysis.swot_w.substring(0, 30) + '...' : 'Chưa nhập'}</div>
-                                <div class="bg-emerald-950/10 p-1 rounded text-slate-300"><strong class="text-emerald-400">O:</strong> ${appState.analysis.swot_o ? appState.analysis.swot_o.substring(0, 30) + '...' : 'Chưa nhập'}</div>
-                                <div class="bg-amber-950/10 p-1 rounded text-slate-300"><strong class="text-amber-400">T:</strong> ${appState.analysis.swot_t ? appState.analysis.swot_t.substring(0, 30) + '...' : 'Chưa nhập'}</div>
-                            </div>
-                        </div>
-
-                        <!-- 5WHY Node -->
-                        <div class="flex-1 bg-slate-950 border border-slate-800 p-3 rounded-lg text-left space-y-2 z-10">
-                            <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-wider block border-b border-slate-850 pb-1">Hành trình 5 WHYs</span>
-                            <div class="space-y-1 text-[10px] text-slate-400">
-                                <div><strong class="text-slate-600">Why 1:</strong> ${appState.analysis.why1 || '...'}</div>
-                                <div><strong class="text-slate-600">Why 5:</strong> <span class="text-emerald-400 font-medium">${appState.analysis.why5 || '...'}</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Connective Vertical Line -->
-                    <div class="w-0.5 h-6 bg-indigo-500/30 shrink-0"></div>
-
-                    <!-- LEVEL 3: ACTIONS BRANCHES (Dynamic Horizontal Columns Flow) -->
-                    <div class="w-full flex flex-wrap justify-center gap-6 max-w-6xl shrink-0">
-                        ${renderActionNodesHTML()}
-                    </div>
-
-                </div>
-            `;
-
-            root.innerHTML = html;
-        }
-
-        function renderActionNodesHTML() {
-            if (appState.actions.length === 0 || appState.actions.every(a => !a.text)) {
-                return `
-                    <div class="text-center text-xs text-slate-500 py-6 border border-dashed border-slate-800 w-full rounded-xl">
-                        <i class="fa-solid fa-wand-magic-sparkles text-lg text-indigo-400 mb-1 animate-pulse"></i>
-                        <p>Hành động chưa được thiết lập hoặc chưa viết tiêu đề ở Bước 3.</p>
-                    </div>
-                `;
-            }
-
-            return appState.actions.map(act => {
-                if (!act.text) return ''; // ignore blank actions for visualization cleaner look
-
-                const impactsList = appState.impacts[act.id] || [];
-
-                return `
-                    <div class="flex flex-col items-center min-w-[280px] max-w-[340px] bg-slate-950/60 border border-slate-800/80 p-3.5 rounded-xl space-y-3 shrink-0 relative hover:border-slate-700 transition-all">
-                        <span class="text-[9px] font-bold text-indigo-400 bg-indigo-950/40 px-2 py-0.5 rounded tracking-wide align-self-start">
-                            ${act.framework.toUpperCase()} - ${act.subMethod || 'Mưu'}
-                        </span>
-                        
-                        <div class="text-left w-full space-y-1">
-                            <h5 class="text-xs font-bold text-white line-clamp-2">${act.text}</h5>
-                            <p class="text-[10px] text-slate-500 line-clamp-2">${act.details || 'Chưa thuyết minh chi tiết.'}</p>
-                        </div>
-
-                        <!-- Level 4: Node Connections (Impact Nodes directly attached below) -->
-                        <div class="w-full border-t border-slate-850/60 pt-3 space-y-2.5">
-                            <div class="text-[9px] font-bold text-slate-500 uppercase tracking-wider text-left">ĐỐI TƯỢNG BỊ ẢNH HƯỞNG</div>
-                            
-                            ${impactsList.length === 0 ? `
-                                <p class="text-[9px] text-slate-600 italic text-left">Chưa gieo đối tượng tác động (Thiết lập ở Bước 4).</p>
-                            ` : impactsList.map(imp => {
-                                const isHarmful = imp.type === 'harmful';
-                                return `
-                                    <div class="p-2.5 rounded border text-left space-y-1 ${
-                                        isHarmful 
-                                            ? 'bg-rose-950/10 border-rose-900/40 text-rose-300' 
-                                            : 'bg-emerald-950/10 border-emerald-900/40 text-emerald-300'
-                                    }">
-                                        <div class="flex justify-between items-center text-[10px] font-bold uppercase">
-                                            <span>${imp.target} &bull; ${imp.dimension}</span>
-                                            <span class="px-1.5 py-0.5 rounded text-[8px] ${
-                                                isHarmful ? 'bg-rose-900/30 text-rose-400' : 'bg-emerald-900/30 text-emerald-400'
-                                            }">${isHarmful ? 'Có hại' : 'Có lợi'}</span>
-                                        </div>
-                                        <p class="text-[10px] text-slate-300 leading-relaxed">${imp.details || 'Chưa mô tả tác động.'}</p>
-
-                                        <!-- Nested Mitigation Node inside Mindmap -->
-                                        ${isHarmful && imp.mitigationAction.text ? `
-                                            <div class="mt-2 pt-2 border-t border-rose-900/30 pl-2 space-y-1 bg-rose-950/20 rounded p-1.5">
-                                                <div class="flex items-center gap-1 text-[9px] font-extrabold text-emerald-400">
-                                                    <i class="fa-solid fa-shield-halved animate-pulse"></i>
-                                                    <span>HÓA GIẢI: ${imp.mitigationAction.subMethod}</span>
-                                                </div>
-                                                <h6 class="text-[10px] font-bold text-white">${imp.mitigationAction.text}</h6>
-                                                <p class="text-[9px] text-slate-300 leading-normal">${imp.mitigationAction.details || 'Chưa mô tả mưu kế hóa giải.'}</p>
-                                            </div>
-                                        ` : isHarmful ? `
-                                            <div class="text-[9px] text-rose-400/80 italic font-medium pt-1">
-                                                <i class="fa-solid fa-triangle-exclamation"></i> Chưa lập mưu hóa giải rủi ro!
-                                            </div>
-                                        ` : ''}
-                                    </div>
-                                `;
-                            }).join('')}
-                        </div>
-                    </div>
-                `;
-            }).join('');
+        function downloadJsonStateBlueprint() {
+            const blob = new Blob([JSON.stringify({ schemaVersion: "8.6", data: runtimeSession }, null, 2)], { type: "application/json" });
+            const anchor = document.createElement('a'); anchor.href = URL.createObjectURL(blob); anchor.download = `mindmatrix_blueprint_${Date.now()}.json`; anchor.click();
         }
     </script>
-
 </body>
 </html>
