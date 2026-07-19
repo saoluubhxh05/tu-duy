@@ -66,7 +66,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
 
-  <!-- TOAST NOTIFICATION -->
   <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm"></div>
 
   <!-- NAVIGATION BAR -->
@@ -78,7 +77,7 @@
             <i data-lucide="brain-circuit" class="w-6 h-6 text-white"></i>
           </div>
           <span class="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
-            MindGym <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full ml-1 font-normal">v2.0</span>
+            MindGym <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full ml-1 font-normal">v2.1</span>
           </span>
         </div>
         
@@ -226,7 +225,6 @@
         </div>
       </div>
 
-      <!-- Upload Section -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Situations Card -->
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -328,31 +326,37 @@
         <h2 class="text-2xl font-bold tracking-tight text-slate-900 mb-2">Học Thuộc Phản Xạ Nhanh</h2>
         <p class="text-slate-500 text-sm mb-6">Trắc nghiệm bẻ khóa từ khóa và nhận diện giọng nói nâng cao để rèn phản xạ tự nhiên.</p>
 
-        <!-- Quiz Settings Selector -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-8">
-          <div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200 mb-8">
+          <div class="md:col-span-3">
             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mục tiêu luyện tập</label>
-            <select id="quiz-target-type" onchange="onQuizTargetChange()" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <select id="quiz-target-type" onchange="onQuizTargetChange()" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
               <option value="methods">Bảng Phương Pháp</option>
               <option value="rules">Bảng Quy Luật</option>
             </select>
           </div>
-          <div>
+          <div class="md:col-span-3">
             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Phân loại cụ thể</label>
-            <select id="quiz-category" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <select id="quiz-category" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
               <!-- Dynamically populated categories -->
             </select>
           </div>
-          <div>
+          <div class="md:col-span-3">
             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Trình tự câu hỏi</label>
-            <select id="quiz-order" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-              <option value="random">Lựa chọn ngẫu nhiên</option>
+            <select id="quiz-order" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs sm:text-sm font-semibold focus:ring-2 focus:ring-indigo-500 focus:outline-none">
               <option value="sequential">Theo thứ tự định sẵn</option>
+              <option value="random">Lựa chọn ngẫu nhiên</option>
             </select>
           </div>
-          <div class="flex items-end">
-            <button onclick="startQuiz()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-lg transition-all shadow-md flex items-center justify-center gap-2">
-              <i data-lucide="play" class="w-4 h-4"></i> Bắt Đầu Luyện Tập
+          <div class="md:col-span-3 flex items-end gap-2">
+            <button onclick="startQuiz()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-3 rounded-lg text-xs transition-all shadow-md flex items-center justify-center gap-1.5 h-[42px]">
+              <i data-lucide="play" class="w-4 h-4"></i> Bắt Đầu
+            </button>
+            <button id="mic-btn" onclick="toggleSpeechRecognition()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-3 rounded-lg text-xs transition-all flex items-center justify-center gap-1 shadow-md h-[42px]">
+              <i data-lucide="mic" class="w-4 h-4"></i> <span id="mic-text">Bật Mic</span>
+              <span class="relative flex h-2 w-2 hidden" id="mic-pulse">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
             </button>
           </div>
         </div>
@@ -371,30 +375,11 @@
           <!-- Question Box -->
           <div class="bg-slate-900 text-white rounded-xl p-6 mb-6 shadow-sm">
             <div class="text-xs uppercase tracking-wider text-indigo-400 font-bold mb-1" id="quiz-question-type-badge">PHƯƠNG PHÁP / QUY LUẬT</div>
-            <h3 class="text-xl sm:text-2xl font-extrabold" id="quiz-question-title">Tên Phương Pháp / Quy luật?</h3>
-            <p class="text-slate-400 text-xs mt-2">Nhiệm vụ: Hãy chọn phương án tương ứng với định nghĩa/nội dung đúng nhất bên dưới.</p>
+            <h3 class="text-lg sm:text-2xl font-extrabold leading-snug" id="quiz-question-title">Tên Phương Pháp / Quy luật?</h3>
+            <p class="text-slate-400 text-[11px] mt-2">Nhiệm vụ: Hãy chọn phương án hoặc đọc to cụm từ tương ứng với định nghĩa/nội dung đúng bên dưới.</p>
           </div>
 
-          <!-- Speech Control Area -->
-          <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-              <div class="p-2.5 bg-amber-100 text-amber-700 rounded-lg">
-                <i data-lucide="mic" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h4 class="font-bold text-sm text-amber-800">Đọc To Phương Án Đúng Để Trả Lời</h4>
-                <p class="text-xs text-amber-600">Bấm nút mic và đọc to cụm từ trong đáp án của bạn. Hệ thống khớp từ 50% sẽ chấp nhận.</p>
-              </div>
-            </div>
-            <button id="mic-btn" onclick="toggleSpeechRecognition()" class="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-md">
-              <span id="mic-text">Bật Mic</span>
-              <span class="relative flex h-2 w-2 hidden" id="mic-pulse">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-              </span>
-            </button>
-          </div>
-          <div id="speech-preview" class="hidden mb-6 p-3 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-xl text-center font-semibold text-sm">
+          <div id="speech-preview" class="hidden mb-6 p-3 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-xl text-center font-semibold text-xs sm:text-sm">
             Đang nghe...
           </div>
 
@@ -406,349 +391,346 @@
 
         <div id="quiz-placeholder" class="text-center py-12 text-slate-400">
           <i data-lucide="book-marked" class="w-16 h-16 mx-auto text-slate-300 mb-3"></i>
-          <p>Thiết lập lựa chọn ở trên và bấm nút "Bắt Đầu Luyện Tập".</p>
+          <p class="text-sm">Thiết lập lựa chọn ở trên và bấm nút "Bắt Đầu".</p>
         </div>
       </div>
     </section>
 
     <!-- ==================== TRANG LUYỆN TẬP TƯ DUY ==================== -->
     <section id="tab-practice" class="space-y-6 hidden animate-fade-in flex-grow flex flex-col">
-      <!-- 1/ HỆ THỐNG GỢI Ý CỐ ĐỊNH PHÍA TRÊN -->
-      <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col shrink-0">
-        <div class="bg-slate-900 text-white px-6 py-3 flex justify-between items-center">
-          <div class="flex items-center gap-2">
-            <i data-lucide="search" class="w-5 h-5 text-emerald-400"></i>
-            <span class="font-bold text-sm sm:text-base">Tra Cứu Nhanh Thư Viện Tri Thức</span>
+      
+      <div class="flex flex-wrap border-b border-slate-200 gap-1 bg-slate-100 p-1.5 rounded-xl">
+        <button onclick="switchPracticeSubTab('workflow')" id="psubtab-workflow" class="flex-1 min-w-[140px] py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm text-center transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5">
+          <i data-lucide="compass" class="w-4 h-4"></i> 1. Quy Trình Tư Duy
+        </button>
+        <button onclick="switchPracticeSubTab('tree')" id="psubtab-tree" class="flex-1 min-w-[140px] py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm text-center transition-all text-slate-600 hover:bg-white flex items-center justify-center gap-1.5">
+          <i data-lucide="folder-tree" class="w-4 h-4"></i> 2. Sơ Đồ Kết Quả (Live)
+        </button>
+        <button onclick="switchPracticeSubTab('suggest')" id="psubtab-suggest" class="flex-1 min-w-[140px] py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm text-center transition-all text-slate-600 hover:bg-white flex items-center justify-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4"></i> 3. Gợi Ý Giải Pháp
+        </button>
+        <button onclick="switchPracticeSubTab('lookup')" id="psubtab-lookup" class="flex-1 min-w-[140px] py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm text-center transition-all text-slate-600 hover:bg-white flex items-center justify-center gap-1.5">
+          <i data-lucide="search" class="w-4 h-4"></i> 4. Tra Cứu Thư Viện
+        </button>
+      </div>
+
+
+      <!-- TAB 1: QUY TRÌNH TƯ DUY TỪ TRÊN XUỐNG -->
+      <div id="practice-subtab-workflow-content" class="space-y-6">
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 space-y-8 shadow-sm">
+          <div class="border-b border-slate-200 pb-4">
+            <h2 class="text-xl sm:text-2xl font-bold text-slate-950 flex items-center gap-2">
+              <span class="bg-indigo-600 text-white text-xs h-6 w-6 rounded-full flex items-center justify-center font-extrabold">Q</span>
+              Quy Trình Tư Duy Chi Tiết
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Kết quả nhập liệu sẽ tự động được đồng bộ tức thời tại Tab "2. Sơ Đồ Kết Quả (Live)".</p>
           </div>
-          <div class="flex gap-2">
-            <select id="quick-look-type" onchange="renderQuickLook()" class="bg-slate-800 text-white border border-slate-700 rounded text-xs px-2.5 py-1 focus:ring-1 focus:ring-emerald-500 focus:outline-none">
-              <option value="methods">Phương Pháp</option>
-              <option value="rules">Quy Luật</option>
-            </select>
-            <select id="quick-look-category" onchange="renderQuickLook()" class="bg-slate-800 text-white border border-slate-700 rounded text-xs px-2.5 py-1 focus:ring-1 focus:ring-emerald-500 focus:outline-none">
-              <!-- Dynamically populated categories -->
-            </select>
+
+          <!-- PHẦN A: HIỆN TRẠNG -->
+          <div class="space-y-6">
+            <div class="flex items-center gap-2 border-l-4 border-slate-800 pl-3">
+              <span class="text-xs font-black text-slate-500 uppercase">Phần A</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-800">Khảo Sát Hiện Trạng</h3>
+            </div>
+
+            <!-- a/ Tình huống -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <label class="block text-xs sm:text-sm font-bold text-slate-700 flex justify-between">
+                <span>a) Tình huống: Hành động của đối phương</span>
+                <span class="text-[10px] text-indigo-500 hover:underline cursor-pointer" onclick="switchPracticeSubTab('lookup')">Tra cứu thư viện</span>
+              </label>
+              <select id="p-situation-picker" onchange="onSituationSelect(this.value)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                <option value="">-- Chọn tình huống mẫu từ thư viện --</option>
+                <!-- Dynamically populated -->
+              </select>
+              <textarea id="p-situation-text" oninput="syncLiveResult()" rows="3" placeholder="Nhập hành động chi tiết của đối thủ (Toàn bộ nội dung sẽ được bao bọc tự động)..." class="w-full bg-white border border-slate-200 rounded-lg p-3 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none leading-relaxed"></textarea>
+            </div>
+
+            <!-- b/ Tại sao 5WHY -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <label class="block text-xs sm:text-sm font-bold text-slate-700">b) Phân tích 5-WHY (Khám phá mong muốn, lo sợ, tính cách thực tế)</label>
+              <div class="space-y-2">
+                <div class="flex gap-2 items-center">
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 1:</span>
+                  <input type="text" id="p-why-1" oninput="syncLiveResult()" placeholder="Lý do tức thời..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div class="flex gap-2 items-center">
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 2:</span>
+                  <input type="text" id="p-why-2" oninput="syncLiveResult()" placeholder="Nguyên nhân sâu hơn tí..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div class="flex gap-2 items-center">
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 3:</span>
+                  <input type="text" id="p-why-3" oninput="syncLiveResult()" placeholder="Động lực/Tâm lý thúc đẩy..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div class="flex gap-2 items-center">
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 4:</span>
+                  <input type="text" id="p-why-4" oninput="syncLiveResult()" placeholder="Nỗi lo sợ thầm kín..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+                <div class="flex gap-2 items-center">
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 5:</span>
+                  <input type="text" id="p-why-5" oninput="syncLiveResult()" placeholder="Tính cách/Bản chất cốt lõi của đối phương..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                </div>
+              </div>
+            </div>
+
+            <!-- c/ Khảo sát Bối Cảnh Toàn Diện và Đo lường Ảnh Hưởng Lợi và Hại -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+              <div>
+                <h4 class="text-xs sm:text-sm font-bold text-slate-700 mb-1">c) Khảo Sát Bối Cảnh Toàn Diện và Đo lường Ảnh Hưởng Lợi/Hại</h4>
+                <p class="text-[10px] sm:text-xs text-slate-500 italic leading-relaxed">
+                  Được quyền chọn một hoặc nhiều trong 26 đối tượng: (Lịch sử hình thành, quê quán, văn hóa, tầng lớp, tín ngưỡng, niềm tin, gia đình, Kỹ năng, tài sản, địa vị, người thân, bạn bè, cấp trên, cấp dưới, người xem, xã hội, quốc gia, tiền bạc, thời gian, thông tin, danh tiếng, tương lai, luật pháp, truyền thống, quy định, khác).
+                </p>
+              </div>
+
+              <!-- Add Object Panel -->
+              <div class="bg-white p-3 sm:p-4 rounded-xl border border-slate-200 space-y-3 shadow-inner">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 mb-1">1. Lựa chọn Đối Tượng</label>
+                    <select id="p-add-object" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs focus:ring-1 focus:ring-indigo-500">
+                      <!-- 26 Objects Options -->
+                      <option value="Lịch sử hình thành">Lịch sử hình thành</option>
+                      <option value="Quê quán">Quê quán</option>
+                      <option value="Văn hóa">Văn hóa</option>
+                      <option value="Tầng lớp">Tầng lớp</option>
+                      <option value="Tín ngưỡng">Tín ngưỡng</option>
+                      <option value="Niềm tin">Niềm tin</option>
+                      <option value="Gia đình">Gia đình</option>
+                      <option value="Kỹ năng">Kỹ năng</option>
+                      <option value="Tài sản">Tài sản</option>
+                      <option value="Địa vị">Địa vị</option>
+                      <option value="Người thân">Người thân</option>
+                      <option value="Bạn bè">Bạn bè</option>
+                      <option value="Cấp trên">Cấp trên</option>
+                      <option value="Cấp dưới">Cấp dưới</option>
+                      <option value="Người xem">Người xem</option>
+                      <option value="Xã hội">Xã hội</option>
+                      <option value="Quốc gia">Quốc gia</option>
+                      <option value="Tiền bạc">Tiền bạc</option>
+                      <option value="Thời gian">Thời gian</option>
+                      <option value="Thông tin">Thông tin</option>
+                      <option value="Danh tiếng">Danh tiếng</option>
+                      <option value="Tương lai">Tương lai</option>
+                      <option value="Luật pháp">Luật pháp</option>
+                      <option value="Truyền thống">Truyền thống</option>
+                      <option value="Quy định">Quy định</option>
+                      <option value="Khác">Khác</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-500 mb-1">2. Lựa chọn Khía Cạnh (Có thể chọn nhiều)</label>
+                    <div class="grid grid-cols-2 gap-1" id="p-add-aspects">
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="lợi ích" checked class="rounded border-slate-300"> Lợi ích</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="kinh tế" class="rounded border-slate-300"> Kinh tế</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="chính trị" class="rounded border-slate-300"> Chính trị</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="quyền lực" class="rounded border-slate-300"> Quyền lực</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="động lực" class="rounded border-slate-300"> Động lực</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="thói quen" class="rounded border-slate-300"> Thói quen</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="phụ thuộc" class="rounded border-slate-300"> Phụ thuộc</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="lan truyền" class="rounded border-slate-300"> Lan truyền</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="leo thang" class="rounded border-slate-300"> Leo thang</label>
+                      <label class="flex items-center gap-1 text-[10px] sm:text-[11px]"><input type="checkbox" value="tâm lý" class="rounded border-slate-300"> Tâm lý</label>
+                    </div>
+                  </div>
+                </div>
+                <button onclick="addContextObject()" class="w-full mt-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded text-xs transition-all flex items-center justify-center gap-1">
+                  <i data-lucide="plus" class="w-4 h-4"></i> Thêm Đối Tượng Phân Tích
+                </button>
+              </div>
+
+              <!-- List Context Objects -->
+              <div class="space-y-3" id="context-objects-container"></div>
+            </div>
+
+            <!-- d/ SWOT -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <label class="block text-xs sm:text-sm font-bold text-slate-700">d) Phân tích SWOT</label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                  <span class="text-xs font-bold text-indigo-600 flex items-center gap-1 mb-1"><i data-lucide="zap" class="w-3.5 h-3.5"></i> Điểm mạnh (Strengths)</span>
+                  <textarea id="p-swot-s" oninput="syncLiveResult()" rows="2" placeholder="Năng lực nội tại..." class="w-full text-xs p-1 focus:outline-none"></textarea>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                  <span class="text-xs font-bold text-rose-500 flex items-center gap-1 mb-1"><i data-lucide="trending-down" class="w-3.5 h-3.5"></i> Điểm yếu (Weaknesses)</span>
+                  <textarea id="p-swot-w" oninput="syncLiveResult()" rows="2" placeholder="Lỗ hổng dễ bị khai thác..." class="w-full text-xs p-1 focus:outline-none"></textarea>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                  <span class="text-xs font-bold text-emerald-600 flex items-center gap-1 mb-1"><i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Cơ hội (Opportunities)</span>
+                  <textarea id="p-swot-o" oninput="syncLiveResult()" rows="2" placeholder="Yếu tố ngoại cảnh thuận lợi..." class="w-full text-xs p-1 focus:outline-none"></textarea>
+                </div>
+                <div class="bg-white p-3 rounded-lg border border-slate-200">
+                  <span class="text-xs font-bold text-amber-600 flex items-center gap-1 mb-1"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Thách thức (Threats)</span>
+                  <textarea id="p-swot-t" oninput="syncLiveResult()" rows="2" placeholder="Rủi ro tiềm ẩn..." class="w-full text-xs p-1 focus:outline-none"></textarea>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="p-4 bg-slate-50 max-h-36 overflow-y-auto" id="quick-look-content">
-          <!-- Live Lookup Cards -->
+
+          <!-- PHẦN B: MỤC TIÊU -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-emerald-500 pl-3">
+              <span class="text-xs font-black text-emerald-600 uppercase">Phần B</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-800">Mục Tiêu Nhất Quán</h3>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <label class="block text-xs sm:text-sm font-bold text-slate-700">Mục tiêu đạt được (Có thể tạo nhiều mục tiêu)</label>
+              <div class="flex gap-2">
+                <input type="text" id="p-new-goal" placeholder="Nhập một mục tiêu cụ thể..." class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                <button onclick="addGoal()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 rounded-lg font-bold text-xs sm:text-sm transition-all flex items-center gap-1">
+                  <i data-lucide="plus" class="w-4 h-4"></i> Thêm
+                </button>
+              </div>
+              <ul class="space-y-2 max-h-36 overflow-y-auto" id="goals-list-container"></ul>
+            </div>
+          </div>
+
+          <!-- PHẦN C: KHOẢNG CÁCH VÀ GIẢI PHÁP -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-amber-500 pl-3">
+              <span class="text-xs font-black text-amber-600 uppercase">Phần C</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-800">Khoảng Cách & Giải Pháp</h3>
+            </div>
+
+            <!-- a/ Khoảng cách -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <label class="block text-xs sm:text-sm font-bold text-slate-700">a) Khoảng cách</label>
+              <textarea id="p-gap-text" oninput="syncLiveResult()" rows="2" placeholder="Muốn đạt mục tiêu thì phải có gì hoặc làm gì trung gian?..." class="w-full bg-white border border-slate-200 rounded-lg p-3 text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+            </div>
+
+            <!-- b/ Giải pháp -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+              <div class="flex flex-wrap justify-between items-center gap-2">
+                <label class="block text-xs sm:text-sm font-bold text-slate-700">b) Giải pháp chiến đấu</label>
+                <span class="text-[10px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full font-bold cursor-pointer" onclick="switchPracticeSubTab('suggest')">
+                  Mẹo: Chọn gợi ý tại Tab 3 để áp dụng nhanh
+                </span>
+              </div>
+
+              <!-- Custom solution entry -->
+              <div class="bg-white p-3 sm:p-4 rounded-xl border border-slate-200 space-y-3 shadow-inner">
+                <input type="text" id="p-new-solution-title" placeholder="Tên phương án giải quyết (Ví dụ: Thỏa hiệp thông minh)..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs sm:text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none font-bold">
+                <textarea id="p-new-solution-desc" rows="2" placeholder="Nội dung/Cách thức thực hiện giải pháp..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs sm:text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none"></textarea>
+                
+                <div class="bg-slate-50 p-3 rounded border border-slate-200 space-y-2">
+                  <span class="text-[10px] sm:text-xs font-bold text-slate-500 block">Đo lường / Thêm bước tác động đối tượng:</span>
+                  <div class="grid grid-cols-2 gap-2">
+                    <select id="p-sol-object" class="bg-white border rounded p-1.5 text-xs">
+                      <!-- Automatically Populated from 26 Objects -->
+                    </select>
+                    <select id="p-sol-impact-type" class="bg-white border rounded p-1.5 text-xs w-full">
+                      <option value="Trừ hại">Trừ hại (-)</option>
+                      <option value="Tăng lợi">Tăng lợi (+)</option>
+                    </select>
+                  </div>
+                </div>
+                <button onclick="addSolution()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 rounded text-xs transition-all flex items-center justify-center gap-1">
+                  <i data-lucide="plus" class="w-4 h-4"></i> Thêm Giải Pháp
+                </button>
+              </div>
+
+              <!-- Solutions List -->
+              <div class="space-y-3" id="solutions-list-container"></div>
+            </div>
+          </div>
+
+          <!-- PHẦN D: KẾ HOẠCH -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-2 border-l-4 border-indigo-500 pl-3">
+              <span class="text-xs font-black text-indigo-600 uppercase">Phần D</span>
+              <h3 class="text-base sm:text-lg font-bold text-slate-800">Kế Hoạch Chi Tiết</h3>
+            </div>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+              <div class="flex justify-between items-center">
+                <label class="block text-xs sm:text-sm font-bold text-slate-700">Danh sách hành động cụ thể từ giải pháp</label>
+                <button onclick="generatePlan()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition-all flex items-center gap-1 shadow-md">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Đồng bộ Kế Hoạch
+                </button>
+              </div>
+              <p class="text-[10px] sm:text-xs text-slate-400 italic">Click vào nút đồng bộ trên để tự động tạo kế hoạch hành động dựa theo các Giải pháp ở trên.</p>
+              <div class="space-y-2 max-h-56 overflow-y-auto" id="plan-list-container"></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Main Workout Area: Split screen Layout for Practice Workflow and Live Result Tree -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow items-stretch">
-        
-        <!-- WORKFLOW SECTION (LEFT - 8/12 Columns) -->
-        <div class="lg:col-span-8 flex flex-col space-y-6 overflow-y-auto max-h-[85vh] pr-1">
-          
-          <div class="bg-white rounded-2xl border border-slate-200 p-6 space-y-8 shadow-sm">
-            <div class="border-b border-slate-200 pb-4">
-              <h2 class="text-2xl font-bold text-slate-950 flex items-center gap-2">
-                <span class="bg-indigo-600 text-white text-xs h-6 w-6 rounded-full flex items-center justify-center font-extrabold">Q</span>
-                Quy Trình Tư Duy Từ Trên Xuống
-              </h2>
-              <p class="text-xs text-slate-400 mt-1">Vui lòng điền chi tiết từng mục. Kết quả của bạn sẽ được đồng bộ theo thời gian thực tại bảng điều khiển.</p>
-            </div>
-
-            <!-- PHẦN A: HIỆN TRẠNG -->
-            <div class="space-y-6">
-              <div class="flex items-center gap-2 border-l-4 border-slate-800 pl-3">
-                <span class="text-xs font-black text-slate-500 uppercase">Phần A</span>
-                <h3 class="text-lg font-bold text-slate-800">Khảo Sát Hiện Trạng</h3>
-              </div>
-
-              <!-- a/ Tình huống -->
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-                <label class="block text-sm font-bold text-slate-700 flex justify-between">
-                  <span>a) Tình huống: Hành động của đối phương</span>
-                  <span class="text-xs font-normal text-slate-400">Tự nhập hoặc chọn mẫu dữ liệu đã nạp</span>
-                </label>
-                <select id="p-situation-picker" onchange="onSituationSelect(this.value)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                  <option value="">-- Chọn tình huống mẫu từ thư viện --</option>
-                  <!-- Dynamically populated from situations database -->
-                </select>
-                <textarea id="p-situation-text" oninput="syncLiveResult()" rows="3" placeholder="Nhập hành động chi tiết của đối thủ (Toàn bộ nội dung sẽ được bao bọc tại đây)..." class="w-full bg-white border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none leading-relaxed"></textarea>
-              </div>
-
-              <!-- b/ Tại sao 5WHY -->
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-                <label class="block text-sm font-bold text-slate-700">b) Phân tích 5-WHY (Khám phá mong muốn, lo sợ, tính cách thực tế)</label>
-                <div class="space-y-2">
-                  <div class="flex gap-2 items-center">
-                    <span class="text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 1:</span>
-                    <input type="text" id="p-why-1" oninput="syncLiveResult()" placeholder="Lý do tức thời..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <span class="text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 2:</span>
-                    <input type="text" id="p-why-2" oninput="syncLiveResult()" placeholder="Nguyên nhân sâu hơn tí..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <span class="text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 3:</span>
-                    <input type="text" id="p-why-3" oninput="syncLiveResult()" placeholder="Động lực/Tâm lý thúc đẩy..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <span class="text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 4:</span>
-                    <input type="text" id="p-why-4" oninput="syncLiveResult()" placeholder="Nỗi lo sợ thầm kín..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                  </div>
-                  <div class="flex gap-2 items-center">
-                    <span class="text-xs font-bold text-slate-400 w-16 shrink-0">Tại sao 5:</span>
-                    <input type="text" id="p-why-5" oninput="syncLiveResult()" placeholder="Tính cách/Bản chất cốt lõi của đối phương..." class="w-full bg-white border border-slate-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                  </div>
-                </div>
-              </div>
-
-              <!-- c/ Khảo sát Bối Cảnh Toàn Diện và Đo lường Ảnh Hưởng Lợi và Hại -->
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-                <div>
-                  <h4 class="text-sm font-bold text-slate-700 mb-1">c) Khảo Sát Bối Cảnh Toàn Diện và Đo lường Ảnh Hưởng Lợi/Hại</h4>
-                  <p class="text-xs text-slate-500 italic leading-relaxed">
-                    Được quyền chọn một hoặc nhiều trong 26 đối tượng: (Lịch sử hình thành, quê quán, văn hóa, tầng lớp, tín ngưỡng, niềm tin, gia đình, Kỹ năng, tài sản, địa vị, người thân, bạn bè, cấp trên, cấp dưới, người xem, xã hội, quốc gia, tiền bạc, thời gian, thông tin, danh tiếng, tương lai, luật pháp, truyền thống, quy định, khác).
-                  </p>
-                </div>
-
-                <!-- Add Object and Aspect Panel -->
-                <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-3 shadow-inner">
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <label class="block text-xs font-bold text-slate-500 mb-1">1. Lựa chọn Đối Tượng</label>
-                      <select id="p-add-object" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-xs focus:ring-1 focus:ring-indigo-500">
-                        <option value="Lịch sử hình thành">Lịch sử hình thành</option>
-                        <option value="Quê quán">Quê quán</option>
-                        <option value="Văn hóa">Văn hóa</option>
-                        <option value="Tầng lớp">Tầng lớp</option>
-                        <option value="Tín ngưỡng">Tín ngưỡng</option>
-                        <option value="Niềm tin">Niềm tin</option>
-                        <option value="Gia đình">Gia đình</option>
-                        <option value="Kỹ năng">Kỹ năng</option>
-                        <option value="Tài sản">Tài sản</option>
-                        <option value="Địa vị">Địa vị</option>
-                        <option value="Người thân">Người thân</option>
-                        <option value="Bạn bè">Bạn bè</option>
-                        <option value="Cấp trên">Cấp trên</option>
-                        <option value="Cấp dưới">Cấp dưới</option>
-                        <option value="Người xem">Người xem</option>
-                        <option value="Xã hội">Xã hội</option>
-                        <option value="Quốc gia">Quốc gia</option>
-                        <option value="Tiền bạc">Tiền bạc</option>
-                        <option value="Thời gian">Thời gian</option>
-                        <option value="Thông tin">Thông tin</option>
-                        <option value="Danh tiếng">Danh tiếng</option>
-                        <option value="Tương lai">Tương lai</option>
-                        <option value="Luật pháp">Luật pháp</option>
-                        <option value="Truyền thống">Truyền thống</option>
-                        <option value="Quy định">Quy định</option>
-                        <option value="Khác">Khác</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label class="block text-xs font-bold text-slate-500 mb-1">2. Lựa chọn Khía Cạnh (Có thể chọn nhiều)</label>
-                      <div class="grid grid-cols-2 gap-1" id="p-add-aspects">
-                        <!-- Aspects checkboxes -->
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="lợi ích" checked class="rounded border-slate-300"> Lợi ích</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="kinh tế" class="rounded border-slate-300"> Kinh tế</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="chính trị" class="rounded border-slate-300"> Chính trị</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="quyền lực" class="rounded border-slate-300"> Quyền lực</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="động lực" class="rounded border-slate-300"> Động lực</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="thói quen" class="rounded border-slate-300"> Thói quen</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="phụ thuộc" class="rounded border-slate-300"> Phụ thuộc</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="lan truyền" class="rounded border-slate-300"> Lan truyền</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="leo thang" class="rounded border-slate-300"> Leo thang</label>
-                        <label class="flex items-center gap-1 text-[11px]"><input type="checkbox" value="tâm lý" class="rounded border-slate-300"> Tâm lý</label>
-                      </div>
-                    </div>
-                  </div>
-                  <button onclick="addContextObject()" class="w-full mt-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1.5 rounded text-xs transition-all flex items-center justify-center gap-1">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Thêm Đối Tượng Phân Tích
-                  </button>
-                </div>
-
-                <!-- Context Objects Inputs Container -->
-                <div class="space-y-3" id="context-objects-container">
-                  <!-- Generated input fields per object -->
-                </div>
-              </div>
-
-              <!-- d/ SWOT -->
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-                <label class="block text-sm font-bold text-slate-700">d) Phân tích SWOT</label>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div class="bg-white p-3 rounded-lg border border-slate-200">
-                    <span class="text-xs font-bold text-indigo-600 flex items-center gap-1 mb-1"><i data-lucide="zap" class="w-3.5 h-3.5"></i> Điểm mạnh (Strengths)</span>
-                    <textarea id="p-swot-s" oninput="syncLiveResult()" rows="2" placeholder="Năng lực nội tại..." class="w-full text-xs p-1 focus:outline-none"></textarea>
-                  </div>
-                  <div class="bg-white p-3 rounded-lg border border-slate-200">
-                    <span class="text-xs font-bold text-rose-500 flex items-center gap-1 mb-1"><i data-lucide="trending-down" class="w-3.5 h-3.5"></i> Điểm yếu (Weaknesses)</span>
-                    <textarea id="p-swot-w" oninput="syncLiveResult()" rows="2" placeholder="Lỗ hổng dễ bị khai thác..." class="w-full text-xs p-1 focus:outline-none"></textarea>
-                  </div>
-                  <div class="bg-white p-3 rounded-lg border border-slate-200">
-                    <span class="text-xs font-bold text-emerald-600 flex items-center gap-1 mb-1"><i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Cơ hội (Opportunities)</span>
-                    <textarea id="p-swot-o" oninput="syncLiveResult()" rows="2" placeholder="Yếu tố ngoại cảnh thuận lợi..." class="w-full text-xs p-1 focus:outline-none"></textarea>
-                  </div>
-                  <div class="bg-white p-3 rounded-lg border border-slate-200">
-                    <span class="text-xs font-bold text-amber-600 flex items-center gap-1 mb-1"><i data-lucide="shield-alert" class="w-3.5 h-3.5"></i> Thách thức (Threats)</span>
-                    <textarea id="p-swot-t" oninput="syncLiveResult()" rows="2" placeholder="Rủi ro tiềm ẩn..." class="w-full text-xs p-1 focus:outline-none"></textarea>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- PHẦN B: MỤC TIÊU -->
-            <div class="space-y-4">
-              <div class="flex items-center gap-2 border-l-4 border-emerald-500 pl-3">
-                <span class="text-xs font-black text-emerald-600 uppercase">Phần B</span>
-                <h3 class="text-lg font-bold text-slate-800">Mục Tiêu Nhất Quán</h3>
-              </div>
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-                <label class="block text-sm font-bold text-slate-700">Mục tiêu đạt được (Cho phép tạo nhiều mục tiêu)</label>
-                <div class="flex gap-2">
-                  <input type="text" id="p-new-goal" placeholder="Nhập một mục tiêu cụ thể..." class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                  <button onclick="addGoal()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 rounded-lg font-bold text-sm transition-all flex items-center gap-1">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Thêm
-                  </button>
-                </div>
-                <ul class="space-y-2 max-h-36 overflow-y-auto" id="goals-list-container">
-                  <!-- Goal list item rendering -->
-                </ul>
-              </div>
-            </div>
-
-            <!-- PHẦN C: KHOẢNG CÁCH VÀ GIẢI PHÁP -->
-            <div class="space-y-4">
-              <div class="flex items-center gap-2 border-l-4 border-amber-500 pl-3">
-                <span class="text-xs font-black text-amber-600 uppercase">Phần C</span>
-                <h3 class="text-lg font-bold text-slate-800">Khoảng Cách & Giải Pháp</h3>
-              </div>
-
-              <!-- a/ Khoảng cách -->
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-                <label class="block text-sm font-bold text-slate-700">a) Khoảng cách</label>
-                <textarea id="p-gap-text" oninput="syncLiveResult()" rows="2" placeholder="Muốn đạt mục tiêu thì phải có gì hoặc làm gì trung gian?..." class="w-full bg-white border border-slate-200 rounded-lg p-3 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
-              </div>
-
-              <!-- b/ Giải pháp -->
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-                <div class="flex justify-between items-center">
-                  <label class="block text-sm font-bold text-slate-700">b) Giải pháp chiến đấu</label>
-                  <span class="text-xs text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full font-bold">Mẹo: Chọn gợi ý bên cột phải để áp dụng nhanh</span>
-                </div>
-
-                <!-- Custom solution entry -->
-                <div class="bg-white p-4 rounded-xl border border-slate-200 space-y-3 shadow-inner">
-                  <input type="text" id="p-new-solution-title" placeholder="Tên phương án giải quyết (Ví dụ: Thỏa hiệp thông minh)..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none font-bold">
-                  <textarea id="p-new-solution-desc" rows="2" placeholder="Nội dung/Cách thức thực hiện giải pháp..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-sm focus:ring-1 focus:ring-indigo-500 focus:outline-none"></textarea>
-                  
-                  <!-- Object/Aspect Impact measurement for this solution -->
-                  <div class="bg-slate-50 p-3 rounded border border-slate-200 space-y-2">
-                    <span class="text-xs font-bold text-slate-500 block">Đo lường / Thêm bước tác động đối tượng:</span>
-                    <div class="grid grid-cols-2 gap-2">
-                      <select id="p-sol-object" class="bg-white border rounded p-1.5 text-xs">
-                        <!-- Options populated from 26 objects -->
-                      </select>
-                      <div class="flex items-center gap-2">
-                        <select id="p-sol-impact-type" class="bg-white border rounded p-1.5 text-xs w-full">
-                          <option value="Trừ hại">Trừ hại (-)</option>
-                          <option value="Tăng lợi">Tăng lợi (+)</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <button onclick="addSolution()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 rounded text-xs transition-all flex items-center justify-center gap-1">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Thêm Giải Pháp
-                  </button>
-                </div>
-
-                <!-- Solutions List -->
-                <div class="space-y-3" id="solutions-list-container">
-                  <!-- Array of generated solutions -->
-                </div>
-              </div>
-            </div>
-
-            <!-- PHẦN D: KẾ HOẠCH -->
-            <div class="space-y-4">
-              <div class="flex items-center gap-2 border-l-4 border-indigo-500 pl-3">
-                <span class="text-xs font-black text-indigo-600 uppercase">Phần D</span>
-                <h3 class="text-lg font-bold text-slate-800">Kế Hoạch Chi Tiết</h3>
-              </div>
-              <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
-                <div class="flex justify-between items-center">
-                  <label class="block text-sm font-bold text-slate-700">Danh sách hành động cụ thể từ giải pháp</label>
-                  <button onclick="generatePlan()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-md">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Đồng bộ Kế Hoạch
-                  </button>
-                </div>
-                <p class="text-xs text-slate-400 italic">Click vào nút đồng bộ trên để tự động tạo kế hoạch hành động cụ thể cho từng giải pháp bên trên.</p>
-                <div class="space-y-2 max-h-56 overflow-y-auto" id="plan-list-container">
-                  <!-- Generates a table/list of action plans based on Solutions -->
-                </div>
-              </div>
-            </div>
-
+      <!-- TAB 2: SƠ ĐỒ KẾT QUẢ (LIVE) -->
+      <div id="practice-subtab-tree-content" class="hidden">
+        <div class="bg-slate-900 text-slate-100 rounded-2xl p-4 sm:p-6 border border-slate-800 flex flex-col min-h-[450px]">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+            <span class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center gap-1.5">
+              <i data-lucide="folder-tree" class="w-4 h-4"></i> CÂY THƯ MỤC LIVE RESULTS
+            </span>
+            <span class="text-[10px] bg-slate-800 px-2.5 py-1 rounded text-slate-400 font-mono">Tự động đồng bộ</span>
+          </div>
+          <div class="flex-grow overflow-y-auto overflow-x-auto text-xs space-y-3 font-mono leading-relaxed max-h-[600px]" id="live-tree-body">
+            <!-- Dynamically populated -->
           </div>
         </div>
+      </div>
 
-        <!-- SIDE PANEL (RIGHT - 4/12 Columns for Tree Result and Search Suggestion) -->
-        <div class="lg:col-span-4 flex flex-col space-y-6">
-          
-          <!-- TAB SWITCH FOR SIDE PANEL (Suggestion vs Tree Preview) -->
-          <div class="flex p-1 bg-slate-200 rounded-xl">
-            <button onclick="setSideTab('tree')" id="sbtn-tree" class="flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm">
-              Sơ Đồ Kết Quả (Live)
-            </button>
-            <button onclick="setSideTab('suggest')" id="sbtn-suggest" class="flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
-              Gợi Ý Giải Pháp
+      <!-- TAB 3: GỢI Ý GIẢI PHÁP -->
+      <div id="practice-subtab-suggest-content" class="hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm min-h-[450px] flex flex-col">
+          <div class="border-b border-slate-200 pb-3 mb-4 flex justify-between items-center flex-wrap gap-2">
+            <span class="text-xs sm:text-sm font-bold text-indigo-600 flex items-center gap-1.5">
+              <i data-lucide="help-circle" class="w-4 h-4"></i> TRỢ GIÚP GỢI Ý TÌNH HUỐNG (Từ khóa điều kiện)
+            </span>
+            <button onclick="triggerQuickSuggestion()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-3 py-1 rounded text-xs flex items-center gap-1 transition-all">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Quét Lại
             </button>
           </div>
 
-          <!-- TAB CONTENT 1: TREE RESULT -->
-          <div id="side-tab-tree" class="bg-slate-900 text-slate-100 rounded-2xl p-4 border border-slate-800 flex-grow flex flex-col min-h-[400px]">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-4">
-              <span class="text-xs font-bold text-emerald-400 flex items-center gap-1">
-                <i data-lucide="folder-tree" class="w-4 h-4"></i> CÂY THƯ MỤC LIVE RESULTS
-              </span>
-              <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400">Tự động lưu</span>
-            </div>
-            <!-- Tree Body -->
-            <div class="flex-grow overflow-y-auto overflow-x-auto text-xs space-y-3 font-mono leading-relaxed" id="live-tree-body">
-              <!-- Dynamically rendered structured tree view -->
-            </div>
-          </div>
-
-          <!-- TAB CONTENT 2: SUGGESTION & MATCHING -->
-          <div id="side-tab-suggest" class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex-grow flex flex-col min-h-[400px] hidden">
-            <div class="border-b border-slate-200 pb-2 mb-4 flex justify-between items-center">
-              <span class="text-xs font-bold text-indigo-600 flex items-center gap-1">
-                <i data-lucide="help-circle" class="w-4 h-4"></i> TRỢ GIÚP GỢI Ý TÌNH HUỐNG
-              </span>
-              <button onclick="triggerQuickSuggestion()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-2 py-1 rounded text-[10px] flex items-center gap-1 transition-all">
-                <i data-lucide="refresh-cw" class="w-3 h-3"></i> Quét Lại
-              </button>
-            </div>
-
-            <!-- Filters -->
-            <div class="grid grid-cols-2 gap-1 mb-3">
-              <select id="sug-filter-type" onchange="renderSuggestions()" class="bg-slate-50 border rounded text-[11px] p-1">
+          <!-- Filters -->
+          <div class="grid grid-cols-2 gap-2 mb-4">
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Tìm kiếm theo</label>
+              <select id="sug-filter-type" onchange="renderSuggestions()" class="w-full bg-slate-50 border rounded text-xs p-2 focus:ring-1 focus:ring-indigo-500">
                 <option value="all">Tất cả</option>
                 <option value="methods">Phương Pháp</option>
                 <option value="rules">Quy Luật</option>
               </select>
-              <select id="sug-filter-cat" onchange="renderSuggestions()" class="bg-slate-50 border rounded text-[11px] p-1">
-                <option value="all">Mọi Nhóm</option>
-                <!-- Dynamic categories -->
-              </select>
             </div>
-
-            <!-- Suggestion Results -->
-            <div class="flex-grow overflow-y-auto space-y-3" id="suggestions-box-content">
-              <p class="text-xs text-slate-400 text-center py-8">Vui lòng bấm nút "Quét Lại" hoặc nhập văn bản tại phần Hiện Trạng để khớp từ khóa.</p>
+            <div>
+              <label class="block text-[10px] font-bold text-slate-400 uppercase mb-0.5">Nhóm tri thức</label>
+              <select id="sug-filter-cat" onchange="renderSuggestions()" class="w-full bg-slate-50 border rounded text-xs p-2 focus:ring-1 focus:ring-indigo-500">
+                <option value="all">Mọi Nhóm</option>
+                <!-- Dynamic categories populated via JS -->
+              </select>
             </div>
           </div>
 
+          <!-- Suggestion Results Box -->
+          <div class="flex-grow overflow-y-auto space-y-3 max-h-[500px]" id="suggestions-box-content">
+            <p class="text-xs text-slate-400 text-center py-12">Bấm nút "Quét Lại" hoặc nhập văn bản tại phần Hiện Trạng để đối sánh từ khóa động.</p>
+          </div>
         </div>
-
       </div>
-    </section>
 
+      <!-- TAB 4: TRA CỨU NHANH THƯ VIỆN THƯ VIỆN -->
+      <div id="practice-subtab-lookup-content" class="hidden">
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm flex flex-col min-h-[450px]">
+          <div class="bg-slate-900 text-white px-4 py-3 flex justify-between items-center flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <i data-lucide="search" class="w-4 h-4 text-emerald-400"></i>
+              <span class="font-bold text-xs sm:text-sm">Tra Cứu Tri Thức Nền Tảng</span>
+            </div>
+            <div class="flex gap-2">
+              <select id="quick-look-type" onchange="renderQuickLook()" class="bg-slate-800 text-white border border-slate-700 rounded text-xs px-2.5 py-1 focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                <option value="methods">Phương Pháp</option>
+                <option value="rules">Quy Luật</option>
+              </select>
+              <select id="quick-look-category" onchange="renderQuickLook()" class="bg-slate-800 text-white border border-slate-700 rounded text-xs px-2.5 py-1 focus:ring-1 focus:ring-emerald-500 focus:outline-none">
+                <!-- Dynamically populated categories -->
+              </select>
+            </div>
+          </div>
+          <div class="p-4 bg-slate-50 overflow-y-auto flex-grow max-h-[500px]" id="quick-look-content">
+            <!-- Tra cứu nhanh -->
+          </div>
+        </div>
+      </div>
+
+    </section>
   </main>
 
   <!-- FOOTER -->
@@ -761,7 +743,6 @@
 
   <!-- ==================== LOGIC JAVASCRIPT ==================== -->
   <script>
-    // ---------------- STATE KHỞI TẠO ----------------
     let db = {
       situations: [],
       methods: [],
@@ -770,25 +751,25 @@
 
     let activeTab = 'home';
     let currentPreviewTab = 'situations';
-    let currentSideTab = 'tree';
+    let activePracticeSubTab = 'workflow';
 
-    // State cho phần Quiz Học Thuộc
+    // Trạng thái Trắc nghiệm Học thuộc
     let quizState = {
       pool: [],
       questions: [],
       currentIndex: 0,
       correctCount: 0,
       totalAsked: 0,
-      answersOrder: [], // index mapping
+      answersOrder: [],
       isListening: false
     };
 
-    // State cho phần Luyện Tư Duy
+    // Trạng thái Luyện tập tư duy
     let practiceState = {
-      contextObjects: [], // [{id, name, note, content, aspects: [{name, content, impact}]}]
-      goals: [], // [string]
-      solutions: [], // [{id, title, desc, objectName, impactType}]
-      plan: [] // [{id, stepNumber, solutionTitle, actionDetails, done: false}]
+      contextObjects: [], 
+      goals: [], 
+      solutions: [], 
+      plan: [] 
     };
 
     // 26 Đối tượng & 10 Khía cạnh bối cảnh cố định
@@ -803,7 +784,7 @@
       'lợi ích', 'kinh tế', 'chính trị', 'quyền lực', 'động lực', 'thói quen', 'phụ thuộc', 'lan truyền', 'leo thang', 'tâm lý'
     ];
 
-    // Dữ liệu mẫu (Vừa nạp trực tiếp vừa tạo cơ sở ban đầu để app chạy luôn)
+    // Dữ liệu mẫu chuẩn của hệ thống
     const SAMPLE_DATA = {
       situations: [
         { STT: 1, "tình huống": "Đối phương đơn phương đề xuất tăng chi phí kho bãi lên 25%, dọa hủy bỏ quyền ưu tiên phân phối sản phẩm vào tuần sau.", keywords: "tăng chi phí, ép giá, đe dọa, hủy bỏ, kho bãi" },
@@ -812,18 +793,16 @@
       ],
       methods: [
         { "Loại phương pháp": "Đàm Phán Tác Chiến", STT: 1, "Tên phương pháp": "Dịch chuyển trọng tâm lợi ích (Nhượng bộ gia tăng)", "Nội dung": "Chấp nhận nhượng bộ một phần nhỏ về giá kho bãi để bắt buộc đối tác cam kết chặt chẽ hơn về thời hạn thanh toán hoặc tỷ trọng chiết khấu sản phẩm.", "Điều kiện": "Có rủi ro đứt gãy cao nhưng vẫn giữ được lợi ích lõi.", keywords: "nhượng bộ, chiết khấu, thời hạn thanh toán", "Từ khóa điều kiện": "chi phí, ép giá, kho bãi, đe dọa" },
-        { "Loại phương pháp": "Quản Trị Khủng Hoảng", STT: 2, "Tên phương pháp": "Đối mặt chủ động bằng kiểm chứng khoa học độc lập", "Nội dung": "Tuyên bố công khai giấy kiểm định an toàn độc lập từ các viện tiêu chuẩn hàng đầu, thiết lập đường dây nóng minh bạch để xoa dịu đám đông.", "Điều kiện": "Dư luận xã hội đang dao động nhưng ta có bằng chứng pháp lý sạch.", keywords: "kiểm định, minh bạch, xoa dịu, an toàn", "Từ khóa điều kiện": "tin đồn, độc hại, hoang mang, xã hội, dư luận" },
+        { "Loại phương pháp": "Quản Trị Khủng Hoảng", STT: 2, "Tên phương pháp": "Đối mặt chủ động bằng kiểm chứng khoa học độc lập", "Nội dung": "Tuyên bố công khai giấy kiểm định an toàn độc lập từ các viện tiêu chuẩn hàng đầu, thiết lập đường dây nóng minh bạch để xoa dịch đám đông.", "Điều kiện": "Dư luận xã hội đang dao động nhưng ta có bằng chứng pháp lý sạch.", keywords: "kiểm định, minh bạch, xoa dịu, an toàn", "Từ khóa điều kiện": "tin đồn, độc hại, hoang mang, xã hội, dư luận" },
         { "Loại phương pháp": "Nhân Sự Chiến Lược", STT: 3, "Tên phương pháp": "Mua thêm thời gian - Khai phóng quyền thế chân", "Nội dung": "Đề xuất tăng trợ cấp tạm thời 3 tháng để nhân sự hoàn tất bàn giao dự án, đồng thời thúc đẩy cấp dưới tiềm năng đảm nhận vị trí dự phòng.", "Điều kiện": "Nhân sự cốt lõi ra đi đột ngột, công tác dự phòng yếu.", keywords: "bàn giao, dự phòng, thăng chức, tăng lương", "Từ khóa điều kiện": "thôi việc, cấp dưới, dự án, nhân sự" }
       ],
       rules: [
         { "Loại quy luật": "Quy Luật Tâm Lý", STT: 1, "Tên quy luật": "Phản ứng chống lại tổn thất (Loss Aversion)", "Nội dung": "Bản chất con người có xu hướng sợ mất mát một lợi ích sẵn có gấp 2 lần ham muốn giành lấy một lợi ích có giá trị tương đương.", "Nếu": "Nếu người học chỉ ra rõ rệt tổn thất khủng khiếp về mặt tài chính và danh tiếng khi đối phương từ bỏ hợp tác", "Thì": "Thì tỷ lệ đối phương hạ giọng đàm phán và phục tùng yêu cầu cũ sẽ gia tăng nhanh chóng", keywords: "sợ mất mát, tổn thất, hợp tác", "Từ khóa điều kiện": "hủy bỏ, đe dọa, tổn thất, kho bãi" },
-        { "Loại quy luật": "Quy Luật Xã Hội", STT: 2, "Tên quy luật": "Hiệu ứng lây lan hoài nghi", "Nội dung": "Trong bối cảnh thiếu hụt thông tin, một thông tin tiêu cực dù mờ nhạt sẽ lập tức bùng nổ theo cấp số nhân nhờ cơ chế chia sẻ của đám đông truyền thông xã hội.", "Nếu": "Nếu không khẩn trương dập tắt tâm lý hoang mang bằng tiếng nói của bên thứ ba uy tín", "Thì": "Thì tin đồn thất thiệt sẽ trở thành sự thật mặc định trong mắt khách hàng và luật pháp", keywords: "truyền thông, tin đồn, xã hội, đám đông", "Từ khóa điều kiện": "hoang mang, tin đồn, độc hại, xã hội" }
+        { "Loại quy luật": "Quy Luật Xã Hội", STT: 2, "Tên quy luật": "Hiệu ứng lây lan hoài nghi", "Nội dung": "Trong bối cảnh thiếu hụt thông tin, một thông tin tiêu cực dù mờ nhạt sẽ lập tức bùng nổ theo cấp số nhân nhờ cơ chế chia sẻ của đám đông truyền thông xã hội.", "Nếu": "Nếu không khẩn trương dập tắt tâm lý hoang mang bằng tiếng nói của bên thứ ba uy tín", "Thì": "Thì tin đồn thất thất sẽ trở thành sự thật mặc định trong mắt khách hàng và luật pháp", keywords: "truyền thông, tin đồn, xã hội, đám đông", "Từ khóa điều kiện": "hoang mang, tin đồn, độc hại, xã hội" }
       ]
     };
 
-    // ---------------- HOẠT ĐỘNG KHỞI CHẠY ----------------
     window.addEventListener('DOMContentLoaded', () => {
-      // Load dữ liệu từ localStorage nếu có, không có thì dùng SAMPLE_DATA làm mặc định ban đầu
       const savedDb = localStorage.getItem('mindgym_database');
       if (savedDb) {
         try {
@@ -859,19 +838,16 @@
       document.getElementById('badge-rules-count').innerText = db.rules.length + " mục";
     }
 
-    // ---------------- THIẾT KẾ ĐIỀU HƯỚNG TABS ----------------
+    // ---------------- THIẾT KẾ ĐIỀU HƯỚNG TABS CHÍNH ----------------
     function switchTab(tabId) {
       activeTab = tabId;
-      // Ẩn tất cả các sections
       document.getElementById('tab-home').classList.add('hidden');
       document.getElementById('tab-import').classList.add('hidden');
       document.getElementById('tab-memorize').classList.add('hidden');
       document.getElementById('tab-practice').classList.add('hidden');
 
-      // Hiện section mong muốn
       document.getElementById(`tab-${tabId}`).classList.remove('hidden');
 
-      // Cập nhật phong cách nút Nav trên Desktop
       const navIds = ['home', 'import', 'memorize', 'practice'];
       navIds.forEach(id => {
         const btn = document.getElementById(`nav-${id}`);
@@ -886,10 +862,8 @@
         }
       });
 
-      // Ẩn Mobile menu
       document.getElementById('mobile-menu').classList.add('hidden');
 
-      // Rerender/refresh tab cụ thể nếu cần
       if (tabId === 'import') {
         renderPreviewTable();
       } else if (tabId === 'memorize') {
@@ -906,11 +880,50 @@
       menu.classList.toggle('hidden');
     }
 
+    // ---------------- ĐIỀU HƯỚNG 4 TAB TRONG LUYỆN TẬP TƯ DUY ----------------
+    function switchPracticeSubTab(subTabId) {
+      activePracticeSubTab = subTabId;
+
+      // Ẩn tất cả các nội dung Sub-tab
+      document.getElementById('practice-subtab-workflow-content').classList.add('hidden');
+      document.getElementById('practice-subtab-tree-content').classList.add('hidden');
+      document.getElementById('practice-subtab-suggest-content').classList.add('hidden');
+      document.getElementById('practice-subtab-lookup-content').classList.add('hidden');
+
+      // Hiện nội dung tương ứng
+      document.getElementById(`practice-subtab-${subTabId}-content`).classList.remove('hidden');
+
+      // Thiết lập trạng thái class cho các Button
+      const subTabs = ['workflow', 'tree', 'suggest', 'lookup'];
+      subTabs.forEach(tab => {
+        const btn = document.getElementById(`psubtab-${tab}`);
+        if (btn) {
+          if (tab === subTabId) {
+            btn.className = "flex-1 min-w-[140px] py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm text-center transition-all bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+          } else {
+            btn.className = "flex-1 min-w-[140px] py-2.5 px-3 rounded-lg font-bold text-xs sm:text-sm text-center transition-all text-slate-600 hover:bg-white flex items-center justify-center gap-1.5";
+          }
+        }
+      });
+
+      // Tự cập nhật dữ liệu khi nhảy tab
+      if (subTabId === 'tree') {
+        syncLiveResult();
+      } else if (subTabId === 'suggest') {
+        // Tự động populate categories vào bộ lọc của Suggestion Tab
+        populateSuggestCategories();
+        triggerQuickSuggestion();
+      } else if (subTabId === 'lookup') {
+        populateQuickLookCategories();
+        renderQuickLook();
+      }
+    }
+
     // ---------------- TOAST THÔNG BÁO ----------------
     function showToast(message, type = 'success') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      toast.className = `flex items-center p-4 rounded-xl text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 text-sm font-semibold max-w-sm ${
+      toast.className = `flex items-center p-4 rounded-xl text-white shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 text-xs sm:text-sm font-semibold max-w-sm ${
         type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-indigo-600'
       }`;
       
@@ -920,12 +933,10 @@
       container.appendChild(toast);
       lucide.createIcons({attrs: {class: 'w-5 h-5 mr-2 shrink-0'}});
 
-      // Hiệu ứng mở rộng
       setTimeout(() => {
         toast.classList.remove('translate-y-2', 'opacity-0');
       }, 50);
 
-      // Tự hủy sau 3 giây
       setTimeout(() => {
         toast.classList.add('translate-y-2', 'opacity-0');
         setTimeout(() => toast.remove(), 300);
@@ -957,16 +968,13 @@
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
-        
-        // Trích xuất JSON từ Excel
         const rawJson = XLSX.utils.sheet_to_json(worksheet);
 
         if (!rawJson || rawJson.length === 0) {
-          showToast("File rỗng hoặc không đúng định dạng!", "error");
+          showToast("File rỗng hoặc sai định dạng!", "error");
           return;
         }
 
-        // Kiểm tra hợp lệ các cột
         const headers = Object.keys(rawJson[0]);
         let requiredColumns = [];
         if (targetKey === 'situations') {
@@ -977,7 +985,6 @@
           requiredColumns = ['Loại quy luật', 'STT', 'Tên quy luật', 'Nội dung', 'Nếu', 'Thì', 'keywords', 'Từ khóa điều kiện'];
         }
 
-        // Chuẩn hóa kiểm tra cột (không phân biệt chữ hoa, chữ thường hoặc khoảng trắng thừa)
         const missing = [];
         requiredColumns.forEach(col => {
           const match = headers.find(h => h.trim().toLowerCase() === col.trim().toLowerCase());
@@ -989,14 +996,13 @@
 
         if (missing.length > 0) {
           errorBox.classList.remove('hidden');
-          errorText.innerHTML = `File nhập cho <strong>${targetKey}</strong> thiếu các cột: ${missing.join(', ')}. Hãy rà soát lại tiêu đề cột trong file Excel của bạn.`;
+          errorText.innerHTML = `File nhập cho <strong>${targetKey}</strong> thiếu các cột: ${missing.join(', ')}. Hãy rà soát lại tiêu đề cột.`;
           showToast("Lỗi định dạng cột Excel!", "error");
           return;
         }
 
         errorBox.classList.add('hidden');
 
-        // Khớp dữ liệu đã chuẩn hóa vào database của chúng ta
         const processedData = rawJson.map((row) => {
           let mappedRow = {};
           requiredColumns.forEach(col => {
@@ -1006,7 +1012,6 @@
           return mappedRow;
         });
 
-        // Ghi đè hoặc nối thêm
         db[targetKey] = processedData;
         saveDbToLocal();
         showToast(`Import thành công ${processedData.length} dòng cho mục ${targetKey}!`, "success");
@@ -1025,14 +1030,12 @@
       const currentData = db[currentPreviewTab];
 
       if (!currentData || currentData.length === 0) {
-        tbody.innerHTML = `<tr><td class="p-8 text-center text-slate-400" colspan="10">Chưa có dữ liệu nào trong bảng này. Vui lòng tải dữ liệu mẫu hoặc chọn file Excel để import.</td></tr>`;
+        tbody.innerHTML = `<tr><td class="p-8 text-center text-slate-400" colspan="10">Chưa có dữ liệu nào trong bảng này.</td></tr>`;
         return;
       }
 
-      // Lấy danh sách key
       const keys = Object.keys(currentData[0]);
 
-      // Render Header
       keys.forEach(k => {
         const th = document.createElement('th');
         th.className = "p-3 font-semibold text-slate-700 border-b border-slate-200 text-xs uppercase tracking-wider";
@@ -1040,7 +1043,6 @@
         thead.appendChild(th);
       });
 
-      // Render Rows
       currentData.forEach(row => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-slate-50 transition-colors";
@@ -1108,7 +1110,6 @@
       const category = document.getElementById('quiz-category').value;
       const order = document.getElementById('quiz-order').value;
 
-      // Xác định hồ chứa dữ liệu
       let sourcePool = targetType === 'methods' ? db.methods : db.rules;
 
       if (!sourcePool || sourcePool.length === 0) {
@@ -1116,7 +1117,6 @@
         return;
       }
 
-      // Lọc theo Category
       if (category !== 'all') {
         const keyField = targetType === 'methods' ? 'Loại phương pháp' : 'Loại quy luật';
         quizState.pool = sourcePool.filter(item => item[keyField] === category);
@@ -1129,7 +1129,6 @@
         return;
       }
 
-      // Sinh danh sách câu hỏi
       quizState.questions = [...quizState.pool];
       if (order === 'random') {
         quizState.questions.sort(() => Math.random() - 0.5);
@@ -1145,12 +1144,10 @@
       renderQuizQuestion();
     }
 
-    // Helper tạo bôi đậm tất cả các từ khóa trong câu trả lời
     function highlightKeywords(text, keywordsArray) {
       if (!keywordsArray || keywordsArray.length === 0) return text;
       
       let highlighted = text;
-      // Trích xuất các từ khóa riêng lẻ bằng cách phân tách bằng dấu phẩy
       let keys = [];
       keywordsArray.forEach(kStr => {
         if (kStr) {
@@ -1161,7 +1158,6 @@
         }
       });
 
-      // Loại bỏ trùng lặp và sắp xếp theo độ dài giảm dần để tránh bôi đậm đè lên nhau
       keys = [...new Set(keys)].sort((a, b) => b.length - a.length);
 
       keys.forEach(key => {
@@ -1169,7 +1165,7 @@
           const regex = new RegExp(`(${key})`, 'gi');
           highlighted = highlighted.replace(regex, `<span class="keyword-highlight">$1</span>`);
         } catch (e) {
-          // Bỏ qua nếu có ký tự đặc biệt của regex
+          // No-op
         }
       });
 
@@ -1178,8 +1174,7 @@
 
     function renderQuizQuestion() {
       if (quizState.currentIndex >= quizState.questions.length) {
-        // Hết câu hỏi
-        showToast(`Bạn đã hoàn thành lượt luyện tập! Đúng ${quizState.correctCount}/${quizState.totalAsked}`, "success");
+        showToast(`Bạn đã hoàn thành! Đúng ${quizState.correctCount}/${quizState.totalAsked}`, "success");
         document.getElementById('quiz-arena').classList.add('hidden');
         document.getElementById('quiz-placeholder').classList.remove('hidden');
         return;
@@ -1188,7 +1183,6 @@
       const item = quizState.questions[quizState.currentIndex];
       const targetType = document.getElementById('quiz-target-type').value;
 
-      // Cập nhật giao diện câu hỏi
       document.getElementById('quiz-progress-text').innerText = `Câu hỏi ${quizState.currentIndex + 1}/${quizState.questions.length}`;
       
       const rate = quizState.totalAsked > 0 ? Math.round((quizState.correctCount / quizState.totalAsked) * 100) : 100;
@@ -1200,29 +1194,22 @@
       document.getElementById('quiz-question-type-badge').innerText = typeBadge;
       document.getElementById('quiz-question-title').innerText = `"${item[titleField]}"`;
 
-      // Tạo 4 phương án lựa chọn dựa trên cột "Nội dung"
       const correctAnswer = item['Nội dung'];
       
-      // Tập hợp tất cả "Nội dung" từ Pool để làm đáp án nhiễu
       let distractors = quizState.pool
         .map(x => x['Nội dung'])
         .filter(content => content !== correctAnswer);
 
-      // Xáo trộn đáp án nhiễu và lấy ra tối đa 3 cái
       distractors.sort(() => Math.random() - 0.5);
       const chosenDistractors = distractors.slice(0, 3);
 
-      // Nếu không đủ 3 đáp án nhiễu (ví dụ pool quá ít), lấy tạm từ SAMPLE_DATA
       while (chosenDistractors.length < 3) {
         chosenDistractors.push("Giải pháp chiến thuật phụ thuộc vào thực tế hoàn cảnh để tối ưu.");
       }
 
-      // Ghép đáp án đúng vào
       const finalOptions = [correctAnswer, ...chosenDistractors];
-      finalOptions.sort(() => Math.random() - 0.5); // Xáo trộn vị trí đáp án đúng
+      finalOptions.sort(() => Math.random() - 0.5);
 
-      // Thu thập tất cả keywords từ cả 4 phương án có sẵn trong database để bôi đậm đồng loạt
-      // "chọn từ khóa trong cột keywords trong bảng Phương pháp và bảng Quy luật để tô đậm những từ khóa trong cả 4 phương án chứ không chỉ tô đậm từ khóa của đáp án đúng."
       const allKeywordsInDb = [];
       db.methods.forEach(m => { if (m.keywords) allKeywordsInDb.push(m.keywords); });
       db.rules.forEach(r => { if (r.keywords) allKeywordsInDb.push(r.keywords); });
@@ -1232,31 +1219,26 @@
 
       finalOptions.forEach((optText, index) => {
         const isCorrect = optText === correctAnswer;
-        
-        // Tiến hành bôi đậm từ khóa
         const richHTML = highlightKeywords(optText, allKeywordsInDb);
 
         const btn = document.createElement('button');
-        btn.className = "bg-white border border-slate-200 text-left p-5 rounded-xl hover:border-indigo-500 hover:bg-indigo-50/10 transition-all text-xs sm:text-sm leading-relaxed relative group";
+        btn.className = "bg-white border border-slate-200 text-left p-5 rounded-xl hover:border-indigo-50 hover:bg-indigo-50/10 transition-all text-xs sm:text-sm leading-relaxed relative group";
         btn.innerHTML = `
           <div class="flex items-start gap-3">
             <span class="bg-slate-100 group-hover:bg-indigo-100 group-hover:text-indigo-600 text-slate-500 font-bold text-xs h-6 w-6 rounded-full flex items-center justify-center shrink-0 transition-colors">${index + 1}</span>
-            <div class="flex-grow">${richHTML}</div>
+            <div class="flex-grow text-xs sm:text-sm">${richHTML}</div>
           </div>
         `;
         
-        // Hành vi chọn
         btn.onclick = () => submitQuizAnswer(isCorrect);
         container.appendChild(btn);
       });
 
-      // Lưu trữ thứ tự đáp án cho nhận diện giọng nói
       quizState.currentAnswers = finalOptions;
       quizState.correctAnswerText = correctAnswer;
     }
 
     function submitQuizAnswer(isCorrect) {
-      // Dừng mic nếu đang bật
       if (quizState.isListening) {
         toggleSpeechRecognition();
       }
@@ -1266,10 +1248,9 @@
         quizState.correctCount++;
         showToast("Chính xác! Bạn đã hiểu sâu sắc bản chất.", "success");
       } else {
-        showToast("Sai rồi! Hãy xem xét kỹ bối cảnh điều kiện áp dụng.", "error");
+        showToast("Sai rồi! Hãy xem xét kỹ bối cảnh.", "error");
       }
 
-      // Tự động chuyển câu sau 1 giây
       setTimeout(() => {
         quizState.currentIndex++;
         renderQuizQuestion();
@@ -1288,13 +1269,13 @@
 
       recognition.onstart = function() {
         document.getElementById('mic-pulse').classList.remove('hidden');
-        document.getElementById('mic-text').innerText = "Đang lắng nghe...";
+        document.getElementById('mic-text').innerText = "Nghe...";
         document.getElementById('speech-preview').classList.remove('hidden');
-        document.getElementById('speech-preview').innerText = "Vui lòng đọc to một vài từ trong đáp án đúng...";
+        document.getElementById('speech-preview').innerText = "Mời đọc to các từ khóa nằm trong phương án bạn chọn...";
       };
 
       recognition.onerror = function(event) {
-        showToast("Lỗi nhận diện giọng nói hoặc chưa được cấp quyền!", "error");
+        showToast("Không thể nhận diện giọng nói hoặc chưa cấp quyền mic!", "error");
         stopListeningState();
       };
 
@@ -1304,18 +1285,16 @@
 
       recognition.onresult = function(event) {
         const spokenText = event.results[0][0].transcript;
-        document.getElementById('speech-preview').innerText = `Bạn vừa nói: "${spokenText}"`;
+        document.getElementById('speech-preview').innerText = `Bạn vừa phát âm: "${spokenText}"`;
         
-        // Tiến hành so khớp với đáp án đúng
         const similarity = checkSpeechSimilarity(spokenText, quizState.correctAnswerText);
         
-        showToast(`Độ khớp: ${Math.round(similarity)}%`, similarity >= 50 ? 'success' : 'error');
+        showToast(`Độ chính xác khớp: ${Math.round(similarity)}%`, similarity >= 50 ? 'success' : 'error');
 
         setTimeout(() => {
           if (similarity >= 50) {
             submitQuizAnswer(true);
           } else {
-            // Kiểm tra xem có khớp với các phương án sai không
             let matchedAlternative = false;
             quizState.currentAnswers.forEach(opt => {
               if (opt !== quizState.correctAnswerText) {
@@ -1328,7 +1307,7 @@
             if (matchedAlternative) {
               submitQuizAnswer(false);
             } else {
-              showToast("Chưa rõ đáp án. Xin hãy thử lại hoặc click trực tiếp!", "info");
+              showToast("Vui lòng phát âm rõ hơn hoặc nhấp chọn trực tiếp!", "info");
             }
           }
         }, 1500);
@@ -1343,7 +1322,7 @@
 
     function toggleSpeechRecognition() {
       if (!recognition) {
-        showToast("Trình duyệt không hỗ trợ Web Speech API!", "error");
+        showToast("Trình duyệt hiện tại không hỗ trợ Web Speech API!", "error");
         return;
       }
 
@@ -1357,7 +1336,6 @@
       }
     }
 
-    // Thuật toán so khớp tương tự chuỗi từ vựng (>=50% là đạt)
     function checkSpeechSimilarity(spoken, correct) {
       const cleanText = (str) => {
         return str.toLowerCase()
@@ -1379,9 +1357,7 @@
         }
       });
 
-      // Tỷ lệ khớp tính theo số lượng từ khớp trên tổng số từ của câu nói hoặc câu đáp án tùy theo cái nào nhỏ hơn (để tối ưu cho việc đọc vắn tắt)
-      const ratio = (matchCount / Math.min(spokenWords.length, correctWords.length)) * 100;
-      return ratio;
+      return (matchCount / Math.min(spokenWords.length, correctWords.length)) * 100;
     }
 
 
@@ -1428,12 +1404,12 @@
       }
 
       if (dataPool.length === 0) {
-        container.innerHTML = `<span class="text-xs text-slate-400">Không có dữ liệu lưu trữ nào cho nhóm này.</span>`;
+        container.innerHTML = `<span class="text-xs text-slate-400">Không có dữ liệu tri thức nào.</span>`;
         return;
       }
 
       const grid = document.createElement('div');
-      grid.className = "grid grid-cols-1 md:grid-cols-3 gap-3";
+      grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3";
 
       dataPool.forEach(item => {
         const card = document.createElement('div');
@@ -1446,10 +1422,10 @@
 
         card.innerHTML = `
           <div class="flex justify-between items-start">
-            <span class="font-extrabold text-indigo-700">${item[nameField]}</span>
-            <span class="text-[9px] bg-slate-100 text-slate-500 px-1 py-0.5 rounded font-mono">STT: ${item['STT']}</span>
+            <span class="font-extrabold text-indigo-700 leading-tight">${item[nameField]}</span>
+            <span class="text-[9px] bg-slate-100 text-slate-500 px-1 py-0.5 rounded font-mono shrink-0">STT: ${item['STT']}</span>
           </div>
-          <p class="text-slate-600">${item['Nội dung']}</p>
+          <p class="text-slate-600 leading-normal">${item['Nội dung']}</p>
           <p class="text-[10px] text-slate-400 pt-1 border-t border-slate-100">${detailInfo}</p>
         `;
         grid.appendChild(card);
@@ -1458,13 +1434,12 @@
       container.appendChild(grid);
     }
 
-    // Thay đổi Loại trong bảng Tra cứu thì cập nhật lại Categories tương ứng
     document.getElementById('quick-look-type').addEventListener('change', () => {
       populateQuickLookCategories();
       renderQuickLook();
     });
 
-    // Populate dữ liệu tình huống mẫu vào trang Luyện Tập
+    // Populate dropdowns ban đầu
     function populatePracticePickers() {
       const picker = document.getElementById('p-situation-picker');
       picker.innerHTML = `<option value="">-- Chọn tình huống mẫu từ thư viện --</option>`;
@@ -1476,7 +1451,6 @@
         picker.appendChild(opt);
       });
 
-      // Đối tượng của Solution
       const solObjSelect = document.getElementById('p-sol-object');
       solObjSelect.innerHTML = "";
       ALL_OBJECTS.forEach(obj => {
@@ -1490,14 +1464,12 @@
     function onSituationSelect(val) {
       document.getElementById('p-situation-text').value = val;
       syncLiveResult();
-      triggerQuickSuggestion(); // Quét lại gợi ý tự động
+      showToast("Đã chọn tình huống từ thư viện!", "info");
     }
 
-    // Thêm đối tượng vào Khảo sát hiện trạng bối cảnh toàn diện
+    // ---------------- KHẢO SÁT BỐI CẢNH TOÀN DIỆN ----------------
     function addContextObject() {
       const objName = document.getElementById('p-add-object').value;
-      
-      // Lấy các aspects được check
       const aspectsInputs = document.getElementById('p-add-aspects').querySelectorAll('input[type="checkbox"]');
       const selectedAspects = [];
       aspectsInputs.forEach(input => {
@@ -1505,7 +1477,7 @@
           selectedAspects.push({
             name: input.value,
             content: "",
-            impact: "cả hai" // mặc định lợi/hại/cả hai
+            impact: "cả hai"
           });
         }
       });
@@ -1515,7 +1487,6 @@
         return;
       }
 
-      // Kiểm tra trùng lặp đối tượng
       const duplicate = practiceState.contextObjects.find(x => x.name === objName);
       if (duplicate) {
         showToast("Đối tượng này đã có trong danh sách phân tích!", "error");
@@ -1574,7 +1545,6 @@
         const card = document.createElement('div');
         card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3 relative";
         
-        // Remove button
         card.innerHTML = `
           <button onclick="deleteContextObject('${obj.id}')" class="absolute top-3 right-3 text-rose-500 hover:text-rose-700">
             <i data-lucide="x" class="w-4 h-4"></i>
@@ -1586,11 +1556,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
             <div>
               <label class="block font-semibold text-slate-500 mb-0.5">Ghi chú đối tượng</label>
-              <input type="text" placeholder="Ví dụ: Giám đốc đối tác..." value="${obj.note}" oninput="updateContextObjectField('${obj.id}', 'note', this.value)" class="w-full border rounded p-1">
+              <input type="text" placeholder="Ví dụ: Giám đốc đối tác..." value="${obj.note}" oninput="updateContextObjectField('${obj.id}', 'note', this.value)" class="w-full border rounded p-1 text-xs">
             </div>
             <div>
               <label class="block font-semibold text-slate-500 mb-0.5">Nội dung đối tượng</label>
-              <input type="text" placeholder="Ví dụ: Nhạy cảm, nóng tính..." value="${obj.content}" oninput="updateContextObjectField('${obj.id}', 'content', this.value)" class="w-full border rounded p-1">
+              <input type="text" placeholder="Ví dụ: Nhạy cảm, nóng tính..." value="${obj.content}" oninput="updateContextObjectField('${obj.id}', 'content', this.value)" class="w-full border rounded p-1 text-xs">
             </div>
           </div>
 
@@ -1664,7 +1634,7 @@
     }
 
 
-    // ---------------- PHẦN C: GIẢI PHÁP & GỢI Ý ----------------
+    // ---------------- PHẦN C: GIẢI PHÁP ----------------
     function addSolution() {
       const title = document.getElementById('p-new-solution-title').value.trim();
       const desc = document.getElementById('p-new-solution-desc').value.trim();
@@ -1686,7 +1656,6 @@
 
       practiceState.solutions.push(newSol);
       
-      // Reset inputs
       document.getElementById('p-new-solution-title').value = "";
       document.getElementById('p-new-solution-desc').value = "";
 
@@ -1695,14 +1664,13 @@
       showToast(`Đã thêm giải pháp "${title}"`, "success");
     }
 
-    // Chọn giải pháp từ khung gợi ý tình huống
     function selectSuggestedMethod(name, desc) {
       document.getElementById('p-new-solution-title').value = name;
       document.getElementById('p-new-solution-desc').value = desc;
       
-      // Đổi tab bên phải về Tree Kết quả để người dùng xem cấu trúc
-      setSideTab('tree');
-      showToast(`Đã chọn phương pháp "${name}". Điền tiếp tác nhân và bấm Thêm Giải Pháp.`, "info");
+      // Chuyển về Tab 1 để người dùng hoàn tất điền giải pháp
+      switchPracticeSubTab('workflow');
+      showToast(`Đã chọn phương pháp "${name}". Mời điền tác động và lưu giải pháp.`, "info");
     }
 
     function deleteSolution(id) {
@@ -1732,21 +1700,20 @@
             <span class="bg-indigo-600 text-white font-bold px-2 py-0.5 rounded text-[10px]">Giải pháp: ${sol.title}</span>
             <span class="bg-amber-50 text-amber-700 font-bold px-1.5 py-0.5 rounded text-[9px] border border-amber-200">${sol.impactType} đối tượng: ${sol.objectName}</span>
           </div>
-          <p class="text-slate-600 font-medium">${sol.desc || 'Chưa mô tả chi tiết cách thức vận dụng.'}</p>
+          <p class="text-slate-600 font-medium">${sol.desc || 'Chưa mô tả chi tiết.'}</p>
         `;
         container.appendChild(card);
         lucide.createIcons();
       });
     }
 
-    // ---------------- PHẦN D: KẾ HOẠCH HÀNH ĐỘNG CHI TIẾT ----------------
+    // ---------------- PHẦN D: KẾ HOẠCH CHI TIẾT ----------------
     function generatePlan() {
       if (practiceState.solutions.length === 0) {
         showToast("Chưa có giải pháp nào được thiết lập để đồng bộ hóa!", "error");
         return;
       }
 
-      // Khởi tạo kế hoạch chi tiết tự động dựa trên giải pháp đã nhập
       practiceState.plan = practiceState.solutions.map((sol, idx) => {
         return {
           id: crypto.randomUUID(),
@@ -1759,7 +1726,7 @@
 
       renderPlanList();
       syncLiveResult();
-      showToast("Đã đồng bộ và kiến thiết Kế hoạch hành động thành công!", "success");
+      showToast("Đã đồng bộ Kế hoạch hành động thành công!", "success");
     }
 
     function togglePlanStep(id) {
@@ -1810,33 +1777,28 @@
       });
     }
 
+    // ---------------- TRỢ GIÚP GỢI Ý ĐỘNG (DỰA TRÊN TỪ KHÓA ĐIỀU KIỆN) ----------------
+    function populateSuggestCategories() {
+      const select = document.getElementById('sug-filter-cat');
+      select.innerHTML = `<option value="all">Mọi Nhóm</option>`;
 
-    // ---------------- TRỢ GIÚP GỢI Ý ĐỘNG BÊN PHẢI (TRA CỨU TỪ KHÓA) ----------------
-    function setSideTab(tab) {
-      currentSideTab = tab;
-      const tBtn = document.getElementById('sbtn-tree');
-      const sBtn = document.getElementById('sbtn-suggest');
-      const tDiv = document.getElementById('side-tab-tree');
-      const sDiv = document.getElementById('side-tab-suggest');
+      const categories = new Set();
+      db.methods.forEach(item => {
+        if (item['Loại phương pháp']) categories.add(item['Loại phương pháp']);
+      });
+      db.rules.forEach(item => {
+        if (item['Loại quy luật']) categories.add(item['Loại quy luật']);
+      });
 
-      if (tab === 'tree') {
-        tBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";
-        sBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900";
-        tDiv.classList.remove('hidden');
-        sDiv.classList.add('hidden');
-      } else {
-        sBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg transition-all bg-white text-indigo-600 shadow-sm";
-        tBtn.className = "flex-1 text-center py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-900";
-        sDiv.classList.remove('hidden');
-        tDiv.classList.add('hidden');
-        
-        // Quét lại gợi ý giải pháp khi chuyển tab gợi ý
-        triggerQuickSuggestion();
-      }
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.innerText = cat;
+        select.appendChild(opt);
+      });
     }
 
     function triggerQuickSuggestion() {
-      // Thu thập toàn bộ nội dung người dùng đã nhập trong phần Hiện trạng, Mục tiêu, Khoảng cách
       const situation = document.getElementById('p-situation-text').value.toLowerCase();
       const why1 = document.getElementById('p-why-1').value.toLowerCase();
       const why2 = document.getElementById('p-why-2').value.toLowerCase();
@@ -1844,11 +1806,8 @@
       const why4 = document.getElementById('p-why-4').value.toLowerCase();
       const why5 = document.getElementById('p-why-5').value.toLowerCase();
       const gap = document.getElementById('p-gap-text').value.toLowerCase();
-
-      // Gom mục tiêu
       const goalsText = practiceState.goals.join(" ").toLowerCase();
 
-      // Gom bối cảnh đối tượng
       let contextText = "";
       practiceState.contextObjects.forEach(obj => {
         contextText += ` ${obj.note} ${obj.content}`;
@@ -1857,15 +1816,12 @@
 
       const combinedText = `${situation} ${why1} ${why2} ${why3} ${why4} ${why5} ${gap} ${goalsText} ${contextText}`;
 
-      // Lọc theo các khía cạnh điều kiện
       const matchingMethods = [];
       const matchingRules = [];
 
-      // Quét bảng Phương pháp
       db.methods.forEach(item => {
         const condKeywords = item['Từ khóa điều kiện'] ? item['Từ khóa điều kiện'].split(',') : [];
         let isMatch = false;
-        
         for (let i = 0; i < condKeywords.length; i++) {
           const kw = condKeywords[i].trim().toLowerCase();
           if (kw && combinedText.includes(kw)) {
@@ -1876,7 +1832,6 @@
         if (isMatch) matchingMethods.push(item);
       });
 
-      // Quét bảng Quy luật
       db.rules.forEach(item => {
         const condKeywords = item['Từ khóa điều kiện'] ? item['Từ khóa điều kiện'].split(',') : [];
         let isMatch = false;
@@ -1890,7 +1845,6 @@
         if (isMatch) matchingRules.push(item);
       });
 
-      // Đưa kết quả vào giao diện
       renderSuggestions(matchingMethods, matchingRules);
     }
 
@@ -1899,10 +1853,9 @@
       container.innerHTML = "";
 
       const filterType = document.getElementById('sug-filter-type').value;
+      const filterCat = document.getElementById('sug-filter-cat').value;
 
-      // Nếu không có tham số truyền vào (như tự chuyển filter), tự động tính toán lại
       if (matchedMethods.length === 0 && matchedRules.length === 0) {
-        // Chỉ quét nhanh không bắn thông báo
         const situation = document.getElementById('p-situation-text').value.toLowerCase();
         const why1 = document.getElementById('p-why-1').value.toLowerCase();
         const why2 = document.getElementById('p-why-2').value.toLowerCase();
@@ -1929,9 +1882,9 @@
 
       let totalResults = 0;
 
-      // Render Phương pháp
       if (filterType === 'all' || filterType === 'methods') {
         matchedMethods.forEach(m => {
+          if (filterCat !== 'all' && m['Loại phương pháp'] !== filterCat) return;
           totalResults++;
           const card = document.createElement('div');
           card.className = "bg-indigo-50 border border-indigo-100 rounded-xl p-3 text-xs space-y-1.5 relative";
@@ -1950,9 +1903,9 @@
         });
       }
 
-      // Render Quy luật
       if (filterType === 'all' || filterType === 'rules') {
         matchedRules.forEach(r => {
+          if (filterCat !== 'all' && r['Loại quy luật'] !== filterCat) return;
           totalResults++;
           const card = document.createElement('div');
           card.className = "bg-emerald-50 border border-emerald-100 rounded-xl p-3 text-xs space-y-1.5 relative";
@@ -1978,8 +1931,8 @@
         container.innerHTML = `
           <div class="text-center py-12 text-slate-400 space-y-2">
             <i data-lucide="search-code" class="w-12 h-12 mx-auto text-slate-300"></i>
-            <p class="text-xs">Không tìm thấy phương án khớp từ khóa điều kiện nào.</p>
-            <p class="text-[10px] text-slate-400">Hãy thử gõ chi tiết thêm vào mục Hiện Trạng.</p>
+            <p class="text-xs">Không tìm thấy gợi ý tự động khớp từ khóa điều kiện.</p>
+            <p class="text-[10px] text-slate-400">Hãy mô tả chi tiết hơn ở phần Hiện Trạng.</p>
           </div>
         `;
       }
@@ -1990,9 +1943,9 @@
     // ---------------- ĐỒNG BỘ CÂY THƯ MỤC KẾT QUẢ LIVE ----------------
     function syncLiveResult() {
       const treeBody = document.getElementById('live-tree-body');
+      if (!treeBody) return;
       treeBody.innerHTML = "";
 
-      // Thu thập dữ liệu input thô
       const situation = document.getElementById('p-situation-text').value.trim() || "(Trống)";
       const why1 = document.getElementById('p-why-1').value.trim();
       const why2 = document.getElementById('p-why-2').value.trim();
@@ -2006,7 +1959,6 @@
       const swot_o = document.getElementById('p-swot-o').value.trim();
       const swot_t = document.getElementById('p-swot-t').value.trim();
 
-      // Vẽ cấu trúc cây bằng text nghệ thuật và thẻ lồng nhau
       let treeHTML = "";
 
       // 1. Gốc Hiện trạng
@@ -2014,7 +1966,6 @@
       treeHTML += `<div class="pl-4 border-l border-slate-800 ml-2 space-y-1 my-1">`;
       treeHTML += `  <div class="text-slate-300">📄 <span class="text-slate-500 font-bold">Tình huống:</span> <span class="break-words italic">"${situation}"</span></div>`;
       
-      // 5 Why
       if (why1 || why2 || why3 || why4 || why5) {
         treeHTML += `  <div class="text-slate-300">📂 Chuỗi 5-WHY:</div>`;
         treeHTML += `  <div class="pl-4 border-l border-slate-800 ml-2 text-slate-400 space-y-0.5">`;
@@ -2026,7 +1977,6 @@
         treeHTML += `  </div>`;
       }
 
-      // Khảo sát Bối cảnh Toàn diện
       if (practiceState.contextObjects.length > 0) {
         treeHTML += `  <div class="text-slate-300">📂 Bối Cảnh Toàn Diện:</div>`;
         treeHTML += `  <div class="pl-4 border-l border-slate-800 ml-2 text-slate-400 space-y-1">`;
@@ -2044,7 +1994,6 @@
         treeHTML += `  </div>`;
       }
 
-      // SWOT
       if (swot_s || swot_w || swot_o || swot_t) {
         treeHTML += `  <div class="text-slate-300">📂 SWOT Matrix:</div>`;
         treeHTML += `  <div class="pl-4 border-l border-slate-800 ml-2 text-slate-400">`;
@@ -2055,7 +2004,7 @@
         treeHTML += `  </div>`;
       }
 
-      treeHTML += `</div>`; // Đóng Hiện trạng
+      treeHTML += `</div>`;
 
       // 2. Gốc Mục tiêu
       treeHTML += `<div class="font-extrabold text-emerald-400 mt-3">📂 B. MỤC TIÊU</div>`;
@@ -2092,7 +2041,7 @@
       treeHTML += `<div class="font-extrabold text-indigo-400 mt-3">📂 D. KẾ HOẠCH HÀNH ĐỘNG</div>`;
       treeHTML += `<div class="pl-4 border-l border-slate-800 ml-2 my-1 space-y-0.5 text-slate-300">`;
       if (practiceState.plan.length === 0) {
-        treeHTML += `  <div class="text-slate-500 italic">(Vui lòng bấm nút đồng bộ kế hoạch)</div>`;
+        treeHTML += `  <div class="text-slate-500 italic">(Vui lòng bấm nút đồng bộ kế hoạch tại Tab 1)</div>`;
       } else {
         practiceState.plan.forEach(step => {
           const statusIcon = step.done ? '✅' : '⏳';
