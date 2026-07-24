@@ -262,7 +262,7 @@
         <div class="space-y-1.5">
           <div class="flex items-center justify-between gap-2 flex-wrap">
             <span class="text-[10px] font-black uppercase text-indigo-400 flex items-center gap-1">
-              <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> KHU VỰC NỘI DUNG TÌNH HUỐNG / HIỆN TRẠNG SỰ CỐ (FIXED TOP)
+              <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> KHU VỰC NỘI DUNG TÌNH HUỐNG / HIỆN TRẠNG SỰ CỐ
             </span>
 
             <!-- Compact Quick Excel Picker Button & Selector -->
@@ -283,6 +283,99 @@
             <button onclick="addMainIdeaBlock()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 shadow-lg shadow-indigo-600/30 transition-all">
               <i data-lucide="plus-circle" class="w-4 h-4"></i> ➕ Tạo khung Ý chính
             </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ================= SUB-TAB 1: QUY TRÌNH TỪ TRÊN XUỐNG (TREE SIDEBAR LAYOUT) ================= -->
+      <div id="practice-subtab-workflow-content" class="flex-grow flex flex-col overflow-hidden pr-1">
+        
+        <!-- BLOCK SELECTOR BAR -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-2 mb-2 flex items-center justify-between flex-wrap gap-2 shrink-0">
+          <div class="flex items-center gap-2 overflow-x-auto" id="block-tabs-bar">
+            <!-- Dynamically populated main idea block tabs -->
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="addMainIdeaBlock()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] px-2.5 py-1 rounded-lg flex items-center gap-1">
+              ➕ Khung Ý chính mới
+            </button>
+          </div>
+        </div>
+
+        <!-- MAIN SPLIT WORKSPACE: CỘT A (20% WIDTH TREE) & CỘT B (80% WIDTH DETAILS) -->
+        <div class="grid grid-cols-1 lg:grid-cols-10 gap-3 flex-grow overflow-hidden">
+          
+          <!-- CỘT A (20% Width - 2 cols): CÂY THƯ MỤC MENU -->
+          <div class="lg:col-span-2 bg-slate-900 p-2.5 rounded-2xl border border-slate-800 shadow-xl flex flex-col overflow-y-auto custom-scroll space-y-1.5">
+            <div class="border-b border-slate-800 pb-2 mb-1 flex items-center justify-between shrink-0">
+              <span class="text-[11px] font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1">
+                <i data-lucide="folder-tree" class="w-3.5 h-3.5"></i> CỘT A (20%): DANH MỤC
+              </span>
+            </div>
+
+            <nav class="space-y-1 text-xs font-semibold" id="tree-menu-container">
+              <!-- Item 1: 5W1H - WHO -->
+              <button onclick="selectMenuSection('who')" id="menu-btn-who" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 1. 5W1H - WHO
+              </button>
+
+              <!-- Item 2: HOW, WHAT, WHEN, WHERE -->
+              <button onclick="selectMenuSection('what_where_when_how')" id="menu-btn-what_where_when_how" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="help-circle" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 2. HOW, WHAT, WHEN, WHERE
+              </button>
+
+              <!-- Item 3: WHY (DIAGNOSTIC ENGINE) -->
+              <button onclick="selectMenuSection('why')" id="menu-btn-why" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="fish" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 3. WHY (DIAGNOSTIC ENGINE)
+              </button>
+
+              <!-- Item 4: BỐI CẢNH VĨ MÔ (STEEPLED & ESG) nested tree -->
+              <div class="space-y-0.5">
+                <button onclick="selectMenuSection('macro')" id="menu-btn-macro" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                  <i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 4. BỐI CẢNH VĨ MÔ
+                </button>
+                <div class="pl-5 space-y-0.5 text-[11px]">
+                  <button onclick="selectMenuSection('macro', 'steepled')" id="menu-btn-macro-steepled" class="w-full text-left p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center gap-1.5">
+                    • STEEPLED (8 Mảng)
+                  </button>
+                  <button onclick="selectMenuSection('macro', 'esg')" id="menu-btn-macro-esg" class="w-full text-left p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 flex items-center gap-1.5">
+                    • ESG (3 Trụ Cột)
+                  </button>
+                </div>
+              </div>
+
+              <!-- Item 5: GLOW CHIPS PIPELINE -->
+              <button onclick="selectMenuSection('pipeline')" id="menu-btn-pipeline" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 5. GLOW CHIPS PIPELINE
+              </button>
+
+              <!-- Item 6: BỘ LỌC KIỂM TRA 4 LỚP -->
+              <button onclick="selectMenuSection('filter4layers')" id="menu-btn-filter4layers" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> 6. BỘ LỌC KIỂM TRA 4 LỚP
+              </button>
+
+              <!-- Item 7: MA TRẬN SWOT & ACTION PLAN -->
+              <button onclick="selectMenuSection('swot')" id="menu-btn-swot" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="grid" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 7. MA TRẬN SWOT & ACTION PLAN
+              </button>
+
+              <!-- Item 8: SÁNG TẠO GIẢI PHÁP S1 & S2 -->
+              <button onclick="selectMenuSection('solutions')" id="menu-btn-solutions" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 8. GIẢI PHÁP S₁ & OPTIMIZATION S₂
+              </button>
+
+              <!-- Item 9: COUNTERFACTUAL SIMULATOR & EXPORT -->
+              <button onclick="selectMenuSection('counterfactual')" id="menu-btn-counterfactual" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 9. SIMULATOR & XUẤT BÁO CÁO
+              </button>
+            </nav>
+          </div>
+
+          <!-- CỘT B (80% Width - 8 cols): KHUNG CHI TIẾT THỰC HÀNH TƯƠNG ỨNG MỤC ĐƯỢC CHỌN -->
+          <div class="lg:col-span-8 bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-xl flex flex-col overflow-y-auto custom-scroll max-h-[720px]" id="column-b-workspace">
+            <!-- Dynamic workplace content based on selected section from Column A -->
           </div>
 
         </div>
@@ -391,18 +484,17 @@
 
     let activeTab = 'home';
     let activePracticeSubTab = 'workflow';
+    let activeBlockIndex = 0;
+    let activeMenuSection = 'who';
+    let activeMacroSub = 'all';
 
-    const MASTER_26_STAKEHOLDERS = [
-      'Lịch sử hình thành', 'Quê quán', 'Văn hóa', 'Tầng lớp', 'Tín ngưỡng', 'Niềm tin', 'Gia đình', 
-      'Kỹ năng', 'Tài sản', 'Địa vị', 'Người thân', 'Bạn bè', 'Cấp trên', 'Cấp dưới', 'Người xem', 
-      'Xã hội', 'Quốc gia', 'Tiền bạc', 'Thời gian', 'Thông tin', 'Danh tiếng', 'Tương lai', 
-      'Luật pháp', 'Truyền thống', 'Quy định', 'Khác'
-    ];
+    const STAKEHOLDER_TYPES = ['Người thân', 'Bạn bè', 'Cấp trên', 'Cấp dưới', 'Người xem', 'Xã hội', 'Quốc gia'];
+    const BACKGROUND_OPTIONS = ['Lịch sử hình thành', 'Quê quán', 'Văn hóa', 'Tầng lớp', 'Tín ngưỡng', 'Niềm tin', 'Danh tiếng'];
+    const ASPECT_OPTIONS = ['Mong muốn', 'Tính cách', 'Kỹ năng', 'Địa vị', 'Tài sản', 'Quan hệ', 'Quy định'];
 
     const STEEPLED_KEYS = ['Social', 'Technological', 'Economic', 'Environmental', 'Political', 'Legal', 'Ethical', 'Demographic'];
     const ESG_KEYS = ['Environmental', 'Social', 'Governance'];
 
-    // Helper to create standardized Glow Chip object with built-in 4-Layer Lợi & Hại predictions
     function createChipObj(text, category) {
       return {
         id: 'chip_' + Date.now() + '_' + Math.floor(Math.random() * 100000),
@@ -413,20 +505,18 @@
       };
     }
 
-    // Practice state supporting multiple Main Idea Blocks
     let practiceState = {
       topProblem: "",
       mainIdeaBlocks: []
     };
 
-    // Factory to create clean Main Idea Block with NO pre-filled mock data
     function createNewBlockData(customTitle = "") {
       const blockId = 'block_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
       return {
         id: blockId,
-        title: customTitle || `Khung Mô Tả Ý Chính #${practiceState.mainIdeaBlocks.length + 1}`,
+        title: customTitle || `Khung Ý chính #${practiceState.mainIdeaBlocks.length + 1}`,
         sentence: "",
-        sentenceChip: null, // Chip object for sentence
+        sentenceChip: null,
         collapsed: false,
         colA: {
           stakeholders: [],
@@ -437,14 +527,12 @@
         glowChipsPipeline: [],
         colB: {
           fishboneSubcauses: {
-            // 6M Branches
             'Man (Con người)': [],
             'Machine (Máy móc / Công nghệ)': [],
             'Material (Nguyên vật liệu / Dữ liệu)': [],
             'Method (Phương pháp)': [],
             'Measurement (Đo lường / KPI)': [],
             'Milieu (Môi trường)': [],
-            // 8P Branches
             'Product (Sản phẩm / Dịch vụ)': [],
             'Price (Giá cả / Chi phí)': [],
             'Place (Kênh phân phối / Địa điểm)': [],
@@ -531,7 +619,7 @@
 
       if (tabId === 'practice') {
         populateSituationDropdown();
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
       }
     }
@@ -605,7 +693,6 @@
         try { db = JSON.parse(savedDb); } catch (e) { db = { situations: [], methods: [], rules: [] }; }
       }
 
-      // Initialize default first clean Main Idea Block
       if (practiceState.mainIdeaBlocks.length === 0) {
         practiceState.mainIdeaBlocks.push(createNewBlockData());
       }
@@ -613,17 +700,22 @@
       lucide.createIcons();
       updateStats();
       populateSituationDropdown();
-      renderAllMainIdeaBlocks();
+      renderWorkspace();
       syncLiveTree();
     });
 
-    // Add multiple Main Idea Blocks
     function addMainIdeaBlock() {
       const newBlock = createNewBlockData();
       practiceState.mainIdeaBlocks.push(newBlock);
-      renderAllMainIdeaBlocks();
+      activeBlockIndex = practiceState.mainIdeaBlocks.length - 1;
+      renderWorkspace();
       syncLiveTree();
       showToast(`Đã tạo thêm ${newBlock.title}!`, "success");
+    }
+
+    function selectBlock(idx) {
+      activeBlockIndex = idx;
+      renderWorkspace();
     }
 
     function removeMainIdeaBlock(blockId) {
@@ -632,17 +724,28 @@
         return;
       }
       practiceState.mainIdeaBlocks = practiceState.mainIdeaBlocks.filter(b => b.id !== blockId);
-      renderAllMainIdeaBlocks();
+      if (activeBlockIndex >= practiceState.mainIdeaBlocks.length) {
+        activeBlockIndex = practiceState.mainIdeaBlocks.length - 1;
+      }
+      renderWorkspace();
       syncLiveTree();
       showToast("Đã xóa Khung Ý chính!", "error");
     }
 
-    function toggleBlockCollapse(blockId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
-      if (block) {
-        block.collapsed = !block.collapsed;
-        renderAllMainIdeaBlocks();
+    function selectMenuSection(sec, sub = 'all') {
+      activeMenuSection = sec;
+      activeMacroSub = sub;
+
+      // Highlight active menu in Column A
+      document.querySelectorAll('.tree-menu-item').forEach(el => {
+        el.className = "tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800";
+      });
+      const activeBtn = document.getElementById(`menu-btn-${sec}`);
+      if (activeBtn) {
+        activeBtn.className = "tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 bg-indigo-600 text-white font-bold shadow-md";
       }
+
+      renderColumnBWorkspace();
     }
 
     function packSentenceToChip(blockId) {
@@ -658,11 +761,34 @@
       block.sentenceChip = createChipObj(`[Ý Chính]: ${val}`, 'CÂU Ý CHÍNH');
       
       syncBlockPipeline(blockId);
-      renderAllMainIdeaBlocks();
-      showToast("Đã tự động đóng gói Ý chính thành Glow Chip & đẩy vào PIPELINE!", "success");
+      renderWorkspace();
+      showToast("Đã đóng gói Ý chính thành Glow Chip!", "success");
     }
 
-    // Helper to render individual Glow Chip inside Step 2 with built-in Lợi (1, 2, 3) and Hại (1, 2, 3) sub-frames
+    function renderWorkspace() {
+      renderBlockTabsBar();
+      renderColumnBWorkspace();
+    }
+
+    function renderBlockTabsBar() {
+      const bar = document.getElementById('block-tabs-bar');
+      if (!bar) return;
+      bar.innerHTML = "";
+
+      practiceState.mainIdeaBlocks.forEach((block, idx) => {
+        const btn = document.createElement('button');
+        btn.onclick = () => selectBlock(idx);
+        btn.className = (idx === activeBlockIndex)
+          ? "px-3 py-1.5 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-md flex items-center gap-1.5 shrink-0"
+          : "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 shrink-0";
+        btn.innerHTML = `
+          <span>${block.title}</span>
+          ${practiceState.mainIdeaBlocks.length > 1 ? `<span onclick="event.stopPropagation(); removeMainIdeaBlock('${block.id}')" class="text-rose-400 hover:text-white font-bold">×</span>` : ''}
+        `;
+        bar.appendChild(btn);
+      });
+    }
+
     function renderChipImpactCardHTML(blockId, chip) {
       if (!chip) return '';
       return `
@@ -681,553 +807,788 @@
             <!-- Sub-frame LỢI (Bậc 1, 2, 3) -->
             <div class="bg-emerald-950/30 p-2 rounded-lg border border-emerald-900/50 space-y-1">
               <span class="font-black text-emerald-400 block">• Các Điểm [LỢI] Dự Báo:</span>
-              
-              <!-- Tier 1 -->
-              <div class="space-y-0.5">
-                <span class="text-emerald-300/80 font-bold text-[9px] block">Bậc 1 (Tức thì):</span>
-                <div class="flex gap-1">
-                  <input type="text" id="inp-chip-loi-1-${chip.id}" placeholder="Thêm Lợi Bậc 1..." class="flex-grow bg-slate-950 border border-emerald-800 text-emerald-200 rounded p-0.5 text-[9px]">
-                  <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'loi', 1, 'inp-chip-loi-1-${chip.id}')" class="bg-emerald-600 text-white font-bold px-1.5 rounded">+</button>
+              ${[1, 2, 3].map(tier => `
+                <div class="space-y-0.5 pt-0.5 ${tier > 1 ? 'border-t border-emerald-900/40' : ''}">
+                  <span class="text-emerald-300/80 font-bold text-[9px] block">Bậc ${tier}:</span>
+                  <div class="flex gap-1">
+                    <input type="text" id="inp-chip-loi-${tier}-${chip.id}" placeholder="Thêm Lợi Bậc ${tier}..." class="flex-grow bg-slate-950 border border-emerald-800 text-emerald-200 rounded p-0.5 text-[9px]">
+                    <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'loi', ${tier}, 'inp-chip-loi-${tier}-${chip.id}')" class="bg-emerald-600 text-white font-bold px-1.5 rounded">+</button>
+                  </div>
+                  <div class="space-y-0.5 pl-1 text-emerald-200">
+                    ${chip.loi[`tier${tier}`].map((item, idx) => `<div class="flex justify-between items-center">• B${tier}: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'loi', ${tier}, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
+                  </div>
                 </div>
-                <div class="space-y-0.5 pl-1 text-emerald-200">
-                  ${chip.loi.tier1.map((item, idx) => `<div class="flex justify-between items-center">• B1: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'loi', 1, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
-                </div>
-              </div>
-
-              <!-- Tier 2 -->
-              <div class="space-y-0.5 pt-0.5 border-t border-emerald-900/40">
-                <span class="text-emerald-300/80 font-bold text-[9px] block">Bậc 2 (Trung hạn):</span>
-                <div class="flex gap-1">
-                  <input type="text" id="inp-chip-loi-2-${chip.id}" placeholder="Thêm Lợi Bậc 2..." class="flex-grow bg-slate-950 border border-emerald-800 text-emerald-200 rounded p-0.5 text-[9px]">
-                  <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'loi', 2, 'inp-chip-loi-2-${chip.id}')" class="bg-emerald-600 text-white font-bold px-1.5 rounded">+</button>
-                </div>
-                <div class="space-y-0.5 pl-1 text-emerald-200">
-                  ${chip.loi.tier2.map((item, idx) => `<div class="flex justify-between items-center">• B2: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'loi', 2, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
-                </div>
-              </div>
-
-              <!-- Tier 3 -->
-              <div class="space-y-0.5 pt-0.5 border-t border-emerald-900/40">
-                <span class="text-emerald-300/80 font-bold text-[9px] block">Bậc 3 (Dài hạn):</span>
-                <div class="flex gap-1">
-                  <input type="text" id="inp-chip-loi-3-${chip.id}" placeholder="Thêm Lợi Bậc 3..." class="flex-grow bg-slate-950 border border-emerald-800 text-emerald-200 rounded p-0.5 text-[9px]">
-                  <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'loi', 3, 'inp-chip-loi-3-${chip.id}')" class="bg-emerald-600 text-white font-bold px-1.5 rounded">+</button>
-                </div>
-                <div class="space-y-0.5 pl-1 text-emerald-200">
-                  ${chip.loi.tier3.map((item, idx) => `<div class="flex justify-between items-center">• B3: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'loi', 3, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
-                </div>
-              </div>
+              `).join('')}
             </div>
 
             <!-- Sub-frame HẠI (Bậc 1, 2, 3) -->
             <div class="bg-rose-950/30 p-2 rounded-lg border border-rose-900/50 space-y-1">
               <span class="font-black text-rose-400 block">• Các Điểm [HẠI] Dự Báo:</span>
-              
-              <!-- Tier 1 -->
-              <div class="space-y-0.5">
-                <span class="text-rose-300/80 font-bold text-[9px] block">Bậc 1 (Tức thì):</span>
-                <div class="flex gap-1">
-                  <input type="text" id="inp-chip-hai-1-${chip.id}" placeholder="Thêm Hại Bậc 1..." class="flex-grow bg-slate-950 border border-rose-800 text-rose-200 rounded p-0.5 text-[9px]">
-                  <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'hai', 1, 'inp-chip-hai-1-${chip.id}')" class="bg-rose-600 text-white font-bold px-1.5 rounded">+</button>
+              ${[1, 2, 3].map(tier => `
+                <div class="space-y-0.5 pt-0.5 ${tier > 1 ? 'border-t border-rose-900/40' : ''}">
+                  <span class="text-rose-300/80 font-bold text-[9px] block">Bậc ${tier}:</span>
+                  <div class="flex gap-1">
+                    <input type="text" id="inp-chip-hai-${tier}-${chip.id}" placeholder="Thêm Hại Bậc ${tier}..." class="flex-grow bg-slate-950 border border-rose-800 text-rose-200 rounded p-0.5 text-[9px]">
+                    <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'hai', ${tier}, 'inp-chip-hai-${tier}-${chip.id}')" class="bg-rose-600 text-white font-bold px-1.5 rounded">+</button>
+                  </div>
+                  <div class="space-y-0.5 pl-1 text-rose-200">
+                    ${chip.hai[`tier${tier}`].map((item, idx) => `<div class="flex justify-between items-center">• B${tier}: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'hai', ${tier}, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
+                  </div>
                 </div>
-                <div class="space-y-0.5 pl-1 text-rose-200">
-                  ${chip.hai.tier1.map((item, idx) => `<div class="flex justify-between items-center">• B1: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'hai', 1, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
-                </div>
-              </div>
-
-              <!-- Tier 2 -->
-              <div class="space-y-0.5 pt-0.5 border-t border-rose-900/40">
-                <span class="text-rose-300/80 font-bold text-[9px] block">Bậc 2 (Trung hạn):</span>
-                <div class="flex gap-1">
-                  <input type="text" id="inp-chip-hai-2-${chip.id}" placeholder="Thêm Hại Bậc 2..." class="flex-grow bg-slate-950 border border-rose-800 text-rose-200 rounded p-0.5 text-[9px]">
-                  <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'hai', 2, 'inp-chip-hai-2-${chip.id}')" class="bg-rose-600 text-white font-bold px-1.5 rounded">+</button>
-                </div>
-                <div class="space-y-0.5 pl-1 text-rose-200">
-                  ${chip.hai.tier2.map((item, idx) => `<div class="flex justify-between items-center">• B2: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'hai', 2, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
-                </div>
-              </div>
-
-              <!-- Tier 3 -->
-              <div class="space-y-0.5 pt-0.5 border-t border-rose-900/40">
-                <span class="text-rose-300/80 font-bold text-[9px] block">Bậc 3 (Dài hạn):</span>
-                <div class="flex gap-1">
-                  <input type="text" id="inp-chip-hai-3-${chip.id}" placeholder="Thêm Hại Bậc 3..." class="flex-grow bg-slate-950 border border-rose-800 text-rose-200 rounded p-0.5 text-[9px]">
-                  <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'hai', 3, 'inp-chip-hai-3-${chip.id}')" class="bg-rose-600 text-white font-bold px-1.5 rounded">+</button>
-                </div>
-                <div class="space-y-0.5 pl-1 text-rose-200">
-                  ${chip.hai.tier3.map((item, idx) => `<div class="flex justify-between items-center">• B3: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'hai', 3, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
-                </div>
-              </div>
+              `).join('')}
             </div>
-
           </div>
         </div>
       `;
     }
 
-    function renderAllMainIdeaBlocks() {
-      const container = document.getElementById('main-idea-blocks-container');
+    function renderColumnBWorkspace() {
+      const container = document.getElementById('column-b-workspace');
       if (!container) return;
-      container.innerHTML = "";
 
-      practiceState.mainIdeaBlocks.forEach((block) => {
-        const blockEl = document.createElement('div');
-        blockEl.className = "bg-slate-950 border border-indigo-900/80 rounded-2xl p-3 sm:p-4 space-y-4 shadow-2xl transition-all";
-        
-        // Collect chips for 3 Khung in Step 2
-        const chips5w1hWho = [];
-        Object.keys(block.colA.chips5w1h).forEach(k => {
-          block.colA.chips5w1h[k].forEach(cObj => chips5w1hWho.push(cObj));
-        });
-        block.colA.stakeholders.forEach(s => {
-          if (s.chipObj) chips5w1hWho.push(s.chipObj);
-        });
+      const block = practiceState.mainIdeaBlocks[activeBlockIndex] || practiceState.mainIdeaBlocks[0];
+      if (!block) return;
 
-        const chipsMacro = [];
-        STEEPLED_KEYS.forEach(k => {
-          block.colA.chipsSteepled[k].forEach(cObj => chipsMacro.push(cObj));
-        });
-        ESG_KEYS.forEach(k => {
-          block.colA.chipsESG[k].forEach(cObj => chipsMacro.push(cObj));
-        });
-
-        blockEl.innerHTML = `
-          <!-- KHUNG MÔ TẢ Ý CHÍNH HEADER -->
-          <div class="flex items-center justify-between border-b border-indigo-900/60 pb-2">
-            <span class="text-xs font-black text-indigo-300 uppercase tracking-wider flex items-center gap-2">
-              <i data-lucide="file-text" class="w-4 h-4 text-indigo-400"></i> ${block.title}
-            </span>
-            <div class="flex items-center gap-2">
-              <button onclick="toggleBlockCollapse('${block.id}')" class="text-xs text-slate-400 hover:text-white font-bold bg-slate-900 px-2 py-1 rounded-lg border border-slate-800">
-                ${block.collapsed ? 'Mở rộng ▼' : 'Thu gọn ▲'}
-              </button>
-              <button onclick="removeMainIdeaBlock('${block.id}')" class="text-xs text-rose-400 hover:text-rose-300 font-bold bg-rose-950/40 px-2 py-1 rounded-lg border border-rose-900/60" title="Xóa khung này">
-                🗑️ Xóa Khung
-              </button>
-            </div>
+      // Sentence input always visible at top of Column B
+      let html = `
+        <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/80 mb-4 space-y-2 shrink-0">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-black text-indigo-300 uppercase">${block.title} - Ô Nhập Ý Chính</span>
           </div>
-
-          <!-- 1/ Ô NHẬP MÔ TẢ NGẮN GỌN THÀNH CÂU -->
-          <div class="space-y-1.5 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
-            <label class="text-[11px] font-extrabold text-slate-200 block">1/ Mô tả ngắn gọn thành câu (Tự động đóng gói thành Glow Chip & đẩy vào PIPELINE):</label>
-            <div class="flex gap-2">
-              <input type="text" id="sentence-input-${block.id}" value="${block.sentence}" placeholder="Nhập nội dung ý chính..." class="flex-grow bg-slate-950 border border-slate-700 text-slate-100 text-xs rounded-xl p-2 focus:outline-none focus:border-indigo-500 font-medium">
-              <button onclick="packSentenceToChip('${block.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shrink-0 flex items-center gap-1 shadow-md">
-                <i data-lucide="package-check" class="w-3.5 h-3.5"></i> Đóng Gói Chip
-              </button>
-            </div>
+          <div class="flex gap-2">
+            <input type="text" id="sentence-input-${block.id}" value="${block.sentence}" placeholder="Mô tả ngắn gọn thành câu (Sẽ tự đóng gói thành Glow Chip)..." class="flex-grow bg-slate-900 border border-slate-700 text-slate-100 text-xs rounded-xl p-2 font-medium focus:outline-none focus:border-indigo-500">
+            <button onclick="packSentenceToChip('${block.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-xl shrink-0 flex items-center gap-1 shadow-md">
+              <i data-lucide="package-check" class="w-3.5 h-3.5"></i> Đóng Gói Chip
+            </button>
           </div>
+        </div>
+      `;
 
-          <!-- 2/ SPLIT WORKSPACE: CỘT A (30% WIDTH) & CỘT B (70% WIDTH) IN CỦA KHUNG MÔ TẢ Ý CHÍNH -->
-          <div class="${block.collapsed ? 'hidden' : ''} grid grid-cols-1 lg:grid-cols-10 gap-3 pt-2">
+      // Render selected section content in Column B
+      if (activeMenuSection === 'who') {
+        html += renderWhoSectionHTML(block);
+      } else if (activeMenuSection === 'what_where_when_how') {
+        html += renderWhatWhereWhenHowSectionHTML(block);
+      } else if (activeMenuSection === 'why') {
+        html += renderWhyDiagnosticSectionHTML(block);
+      } else if (activeMenuSection === 'macro') {
+        html += renderMacroSectionHTML(block);
+      } else if (activeMenuSection === 'pipeline') {
+        html += renderPipelineSectionHTML(block);
+      } else if (activeMenuSection === 'filter4layers') {
+        html += renderFilter4LayersSectionHTML(block);
+      } else if (activeMenuSection === 'swot') {
+        html += renderSwotSectionHTML(block);
+      } else if (activeMenuSection === 'solutions') {
+        html += renderSolutionsSectionHTML(block);
+      } else if (activeMenuSection === 'counterfactual') {
+        html += renderCounterfactualSectionHTML(block);
+      }
+
+      container.innerHTML = html;
+      lucide.createIcons();
+    }
+
+    function renderWhoSectionHTML(block) {
+      return `
+        <div class="space-y-4">
+          <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="users" class="w-4 h-4"></i> 1. 5W1H - WHO (ĐỐI TƯỢNG, BỐI CẢNH & KHÍA CẠNH TOÀN DIỆN)
+          </h2>
+          
+          <!-- KHU VỰC THÊM ĐỐI TƯỢNG MỚI (TẠO KHUNG ĐỔI TƯỢNG) -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-3">
+            <span class="text-xs font-black text-indigo-300 block uppercase">➕ THÊM ĐỐI TƯỢNG MỚI & THIẾT LẬP BỐI CẢNH / KHÍA CẠNH:</span>
             
-            <!-- CỘT A (30% Width - 3 cols) - INDEPENDENT SCROLLBAR -->
-            <div class="lg:col-span-3 space-y-3 bg-slate-900 p-3 rounded-2xl border border-slate-800 shadow-md flex flex-col max-h-[720px] overflow-y-auto custom-scroll">
-              
-              <div class="border-b border-slate-800 pb-2 flex justify-between items-center shrink-0">
-                <span class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1">
-                  <i data-lucide="database" class="w-3.5 h-3.5"></i> CỘT A (30%): BỐI CẢNH & ĐỐI TƯỢNG
-                </span>
-              </div>
+            <!-- 1. Tên đối tượng -->
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-indigo-300 block">1. Tên đối tượng cụ thể:</label>
+              <input type="text" id="who-name-input-${block.id}" placeholder="VD: Anh Nam (Trưởng phòng), Nhóm Khách Hàng VIP..." class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-lg p-2 text-xs focus:border-indigo-500 focus:outline-none">
+            </div>
 
-              <!-- 1. WHO (26 Đối Tượng & Matrix) -->
-              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
-                <span class="font-extrabold text-slate-200 text-xs block">👤 1. WHO (26 Đối Tượng & Matrix)</span>
-                
+            <!-- 2. Phân loại đối tượng (Chọn nhiều) -->
+            <div class="space-y-1">
+              <label class="text-[10px] text-slate-400 font-bold block">2. Phân loại đối tượng (Có thể chọn nhiều):</label>
+              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-[10px]">
+                ${STAKEHOLDER_TYPES.map(stk => `
+                  <label class="flex items-center gap-1 text-slate-300 font-medium cursor-pointer hover:text-white bg-slate-950 px-2 py-1 rounded border border-slate-800">
+                    <input type="checkbox" value="${stk}" class="who-type-checkbox-${block.id} rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-0">
+                    <span>${stk}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- 3. Nút chọn Bối Cảnh (Chọn nhiều) -->
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-emerald-400 block">3. Chọn các Bối Cảnh cần điền (Nút chọn nhiều):</label>
+              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-[10px]">
+                ${BACKGROUND_OPTIONS.map(bg => `
+                  <label class="flex items-center gap-1 text-emerald-200 cursor-pointer bg-emerald-950/40 px-2 py-1 rounded border border-emerald-900/60 hover:bg-emerald-900/60">
+                    <input type="checkbox" value="${bg}" class="who-bg-checkbox-${block.id} rounded border-emerald-700 bg-slate-950 text-emerald-500">
+                    <span>${bg}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- 4. Nút chọn Khía Cạnh (Chọn nhiều) -->
+            <div class="space-y-1">
+              <label class="text-[10px] font-bold text-amber-400 block">4. Chọn các Khía Cạnh cần điền (Nút chọn nhiều):</label>
+              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-[10px]">
+                ${ASPECT_OPTIONS.map(asp => `
+                  <label class="flex items-center gap-1 text-amber-200 cursor-pointer bg-amber-950/40 px-2 py-1 rounded border border-amber-900/60 hover:bg-amber-900/60">
+                    <input type="checkbox" value="${asp}" class="who-asp-checkbox-${block.id} rounded border-amber-700 bg-slate-950 text-amber-500">
+                    <span>${asp}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+
+            <button onclick="createNewStakeholderWithFullDetails('${block.id}')" class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-black px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-600/30">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> ➕ TẠO KHUNG BỐI CẢNH & KHÍA CẠNH ĐỐI TƯỢNG
+            </button>
+          </div>
+
+          <!-- DANH SÁCH CÁC KHUNG ĐỐI TƯỢNG ĐÃ TẠO (NHẬP NỘI DUNG TỪNG BỐI CẢNH & KHÍA CẠNH) -->
+          <div class="space-y-3">
+            <span class="font-black text-slate-200 text-xs block">📋 DANH SÁCH KHUNG ĐỐI TƯỢNG & NỘI DUNG CHI TIẾT (Đã Đóng Gói Glow Chip):</span>
+            ${block.colA.stakeholders.length === 0 ? `<div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-500 italic">Chưa tạo đối tượng nào. Hãy điền tên và chọn Bối Cảnh / Khía Cạnh ở trên.</div>` : ''}
+            
+            ${block.colA.stakeholders.map(stk => `
+              <div draggable="true" ondragstart="onDragStakeholder(event, '${block.id}', '${stk.id}')" class="bg-slate-950 p-3 rounded-xl border border-indigo-900/80 space-y-3 hover:border-indigo-500 transition-all shadow-md cursor-grab active:cursor-grabbing">
+                <!-- Header khung đối tượng -->
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-black text-indigo-300">👤 ${stk.name}</span>
+                    <span class="text-[9px] bg-indigo-950 text-indigo-400 border border-indigo-800 px-2 py-0.5 rounded-full font-semibold">
+                      ${stk.types.join(', ') || 'Chưa chọn phân loại'}
+                    </span>
+                    <span class="text-[9px] bg-slate-900 text-emerald-400 border border-emerald-900/60 px-2 py-0.5 rounded">
+                      Trạng thái: ${stk.quadrant}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <span class="text-[9px] text-slate-500 font-mono italic">🖐️ Kéo thẻ để thả vào Matrix hoặc Xương Cụ thể</span>
+                    <button onclick="removeStakeholderBlock('${block.id}', '${stk.id}')" class="text-rose-400 font-bold text-xs hover:text-rose-300 ml-2">❌ Xóa</button>
+                  </div>
+                </div>
+
+                <!-- Tên đối tượng có thể chỉnh sửa -->
                 <div class="space-y-1">
-                  <div class="grid grid-cols-2 gap-1 max-h-28 overflow-y-auto bg-slate-900 p-1.5 rounded-lg border border-slate-800 text-[10px]">
-                    ${MASTER_26_STAKEHOLDERS.map(stk => `
-                      <label class="flex items-center gap-1 text-slate-300 font-medium cursor-pointer hover:text-white">
-                        <input type="checkbox" value="${stk}" class="who-checkbox-${block.id} rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-0"> <span>${stk}</span>
-                      </label>
+                  <label class="text-[10px] text-slate-400 font-bold block">Sửa tên đối tượng:</label>
+                  <input type="text" value="${stk.name}" onchange="updateStakeholderName('${block.id}', '${stk.id}', this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded p-1.5 text-xs font-bold focus:border-indigo-500 focus:outline-none">
+                </div>
+
+                <!-- Phân vùng BỐI CẢNH (Nội dung từng loại đã chọn) -->
+                <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-900/40 space-y-2">
+                  <span class="text-[10px] font-black text-emerald-400 uppercase block">🟢 Nội Dung Các Bối Cảnh Đã Chọn:</span>
+                  ${stk.backgrounds.length === 0 ? `<div class="text-[10px] text-slate-500 italic">Không có loại bối cảnh nào được chọn.</div>` : ''}
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    ${stk.backgrounds.map((bgObj, bIdx) => `
+                      <div class="bg-slate-900 p-2 rounded border border-emerald-900/60 space-y-1">
+                        <span class="text-[10px] font-bold text-emerald-300 block">• ${bgObj.type}:</span>
+                        <input type="text" value="${bgObj.detail || ''}" onchange="updateStakeholderBgDetail('${block.id}', '${stk.id}', ${bIdx}, this.value)" placeholder="Nhập nội dung ${bgObj.type}..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-[10px]">
+                      </div>
                     `).join('')}
                   </div>
-                  <div class="flex gap-1 pt-1">
-                    <input type="text" id="who-custom-${block.id}" placeholder="Tên cụ thể..." class="flex-grow bg-slate-900 border border-slate-700 text-slate-200 rounded-lg p-1 text-[10px]">
-                    <button onclick="addSelectedStakeholdersBlock('${block.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-2 py-1 rounded-lg text-xs shrink-0">➕ Thêm</button>
+                </div>
+
+                <!-- Phân vùng KHÍA CẠNH (Nội dung từng loại đã chọn) -->
+                <div class="bg-amber-950/20 p-2.5 rounded-lg border border-amber-900/40 space-y-2">
+                  <span class="text-[10px] font-black text-amber-400 uppercase block">🟠 Nội Dung Các Khía Cạnh Đã Chọn:</span>
+                  ${stk.aspects.length === 0 ? `<div class="text-[10px] text-slate-500 italic">Không có loại khía cạnh nào được chọn.</div>` : ''}
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    ${stk.aspects.map((aspObj, aIdx) => `
+                      <div class="bg-slate-900 p-2 rounded border border-amber-900/60 space-y-1">
+                        <span class="text-[10px] font-bold text-amber-300 block">• ${aspObj.type}:</span>
+                        <input type="text" value="${aspObj.detail || ''}" onchange="updateStakeholderAspDetail('${block.id}', '${stk.id}', ${aIdx}, this.value)" placeholder="Nhập nội dung ${aspObj.type}..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-[10px]">
+                      </div>
+                    `).join('')}
                   </div>
                 </div>
 
-                <!-- Stakeholder Matrix 4 Quadrants -->
-                <div class="grid grid-cols-2 gap-1 text-[9px] pt-1">
-                  ${['Manage Closely', 'Keep Satisfied', 'Keep Informed', 'Monitor'].map(q => `
-                    <div class="bg-slate-900 border border-slate-800 p-1.5 rounded-lg min-h-[50px]">
-                      <span class="font-bold text-indigo-300 block mb-0.5 border-b border-slate-800">${q}</span>
-                      <div class="space-y-1">
-                        ${block.colA.stakeholders.filter(s => s.quadrant === q).map(stk => `
-                          <div class="bg-slate-950 border border-slate-700 p-1 rounded text-[9px] font-bold text-slate-200 flex justify-between items-center">
-                            <span>${stk.name}</span>
-                            <button onclick="removeStakeholderBlock('${block.id}', '${stk.name}')" class="text-rose-400 font-bold">×</button>
-                          </div>
-                        `).join('')}
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-
-                <!-- Accordion Bối Cảnh Stakeholders -->
-                <div class="space-y-1 pt-1">
-                  ${block.colA.stakeholders.map(stk => `
-                    <details class="bg-slate-900 border border-slate-800 rounded text-[9px]">
-                      <summary class="p-1 font-bold text-slate-200 cursor-pointer flex justify-between items-center">
-                        <span>👤 ${stk.name}</span>
-                      </summary>
-                      <div class="p-1.5 space-y-1 border-t border-slate-800">
-                        <input type="text" placeholder="Bối cảnh gốc (Tín ngưỡng, tài sản, luật pháp...)" value="${stk.background || ''}" oninput="updateBlockStkBg('${block.id}', '${stk.name}', this.value)" class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-[9px]">
-                      </div>
-                    </details>
-                  `).join('')}
+                <!-- Hiển thị chuỗi Glow Chip đầy đủ được tự động tạo -->
+                <div class="bg-slate-900 p-2 rounded-lg border border-indigo-800 text-[10px] space-y-1">
+                  <span class="font-bold text-indigo-400 block">✨ Chuỗi Glow Chip Tự Động Đóng Gói (Gồm Tên + Bối cảnh + Khía cạnh):</span>
+                  <p class="text-indigo-200 font-mono leading-relaxed bg-slate-950 p-1.5 rounded border border-slate-800 break-words">${stk.chipObj ? stk.chipObj.text : ''}</p>
                 </div>
               </div>
-
-              <!-- 2. WHAT, WHY, WHERE, WHEN, HOW (5W1H) -->
-              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
-                <span class="font-extrabold text-slate-200 text-xs block">📌 2. 5W1H (Ô Nhập & Glow Chips)</span>
-                ${[
-                  { k: 'WHAT', label: 'WHAT (Sự cố, chỉ số)' },
-                  { k: 'WHY', label: 'WHY (Nguyên nhân sơ bộ)' },
-                  { k: 'WHERE', label: 'WHERE (Không gian, quy trình)' },
-                  { k: 'WHEN', label: 'WHEN (Mốc thời gian, chu kỳ)' },
-                  { k: 'HOW', label: 'HOW (Cách thức, thiệt hại)' }
-                ].map(item => `
-                  <div class="space-y-1 text-[10px]">
-                    <span class="font-bold text-indigo-400">${item.label}:</span>
-                    <div class="flex gap-1">
-                      <input type="text" id="chip-input-${block.id}-${item.k.toLowerCase()}" placeholder="Nhập ${item.k}..." class="flex-grow bg-slate-900 border border-slate-700 text-slate-200 rounded-lg p-1 text-[10px]">
-                      <button onclick="addBlockChip('${block.id}', '${item.k}', 'chip-input-${block.id}-${item.k.toLowerCase()}')" class="bg-indigo-600 text-white px-2 py-0.5 rounded-lg font-bold">➕ Thêm Glow Chip</button>
-                    </div>
-                    <div class="flex flex-wrap gap-1">
-                      ${block.colA.chips5w1h[item.k].map((chipObj, cIdx) => `
-                        <span class="bg-indigo-950 border border-indigo-700 text-indigo-300 text-[9px] px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
-                          ${chipObj.text} <button onclick="removeBlockChip('${block.id}', '${item.k}', ${cIdx})" class="text-rose-400">×</button>
-                        </span>
-                      `).join('')}
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-
-              <!-- B. BỐI CẢNH VĨ MÔ (STEEPLED & ESG) -->
-              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-2">
-                <span class="font-extrabold text-slate-200 text-xs block">🌐 B. BỐI CẢNH VĨ MÔ (STEEPLED & ESG)</span>
-                
-                <!-- STEEPLED (8 Mảng) -->
-                <div class="space-y-1.5">
-                  <span class="font-bold text-emerald-400 text-[10px] block">STEEPLED (8 Mảng):</span>
-                  ${STEEPLED_KEYS.map(k => `
-                    <div class="space-y-1 text-[9px]">
-                      <span class="font-bold text-slate-300">${k}:</span>
-                      <div class="flex gap-1">
-                        <input type="text" id="chip-input-${block.id}-steepled-${k.toLowerCase()}" placeholder="Nhập ${k}..." class="flex-grow bg-slate-900 border border-slate-700 text-slate-200 rounded p-0.5 text-[9px]">
-                        <button onclick="addBlockChip('${block.id}', '${k}', 'chip-input-${block.id}-steepled-${k.toLowerCase()}')" class="bg-emerald-600 text-white px-1.5 py-0.5 rounded font-bold">➕ Thêm Glow Chip</button>
-                      </div>
-                      <div class="flex flex-wrap gap-1">
-                        ${block.colA.chipsSteepled[k].map((chipObj, cIdx) => `
-                          <span class="bg-emerald-950 border border-emerald-700 text-emerald-300 text-[9px] px-1 py-0.5 rounded font-bold flex items-center gap-1">
-                            ${chipObj.text} <button onclick="removeBlockChip('${block.id}', '${k}', ${cIdx})" class="text-rose-400">×</button>
-                          </span>
-                        `).join('')}
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-
-                <!-- ESG (3 Trụ Cột) -->
-                <div class="space-y-1.5 pt-2 border-t border-slate-800">
-                  <span class="font-bold text-amber-400 text-[10px] block">ESG (3 Trụ Cột):</span>
-                  ${ESG_KEYS.map(k => `
-                    <div class="space-y-1 text-[9px]">
-                      <span class="font-bold text-slate-300">${k}:</span>
-                      <div class="flex gap-1">
-                        <input type="text" id="chip-input-${block.id}-esg-${k.toLowerCase()}" placeholder="Nhập ${k}..." class="flex-grow bg-slate-900 border border-slate-700 text-slate-200 rounded p-0.5 text-[9px]">
-                        <button onclick="addBlockChip('${block.id}', '${k}', 'chip-input-${block.id}-esg-${k.toLowerCase()}')" class="bg-amber-600 text-white px-1.5 py-0.5 rounded font-bold">➕ Thêm Glow Chip</button>
-                      </div>
-                      <div class="flex flex-wrap gap-1">
-                        ${block.colA.chipsESG[k].map((chipObj, cIdx) => `
-                          <span class="bg-amber-950 border border-amber-700 text-amber-300 text-[9px] px-1 py-0.5 rounded font-bold flex items-center gap-1">
-                            ${chipObj.text} <button onclick="removeBlockChip('${block.id}', '${k}', ${cIdx})" class="text-rose-400">×</button>
-                          </span>
-                        `).join('')}
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-
-              <!-- 🤖 ĐỘNG CƠ GLOW CHIPS PIPELINE (TRẠM TRUYỀN DỮ LIỆU TỰ ĐỘNG) -->
-              <div class="bg-indigo-950/80 p-3 rounded-xl border border-indigo-800/60 space-y-2">
-                <div class="flex items-center justify-between flex-wrap gap-1">
-                  <span class="text-[10px] font-black uppercase text-indigo-300 flex items-center gap-1">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 🤖 GLOW CHIPS PIPELINE
-                  </span>
-                </div>
-                <div class="flex flex-col gap-1.5">
-                  <button onclick="autoTransferBlockGlowChips('${block.id}')" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-black py-1.5 px-2 rounded-lg flex items-center justify-center gap-1 shadow-md">
-                    <i data-lucide="rocket" class="w-3.5 h-3.5"></i> 🚀 Tự động chuyển tất cả (Nhánh Xương Lớn & 4 Lớp)
-                  </button>
-                </div>
-                <div class="flex flex-wrap gap-1 pt-1">
-                  ${block.glowChipsPipeline.map((c, idx) => `
-                    <span class="glow-chip bg-indigo-900/90 border border-indigo-700 text-indigo-200 text-[9px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
-                      [${c.category}] ${c.text.substring(0, 20)}
-                    </span>
-                  `).join('')}
-                </div>
-              </div>
-
-            </div>
-
-            <!-- CỘT B (70% Width - 7 cols) - INDEPENDENT SCROLLBAR -->
-            <div class="lg:col-span-7 space-y-4 bg-slate-900 p-3.5 rounded-2xl border border-slate-800 shadow-md flex flex-col max-h-[720px] overflow-y-auto custom-scroll">
-              
-              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between shrink-0">
-                <h2 class="text-xs font-black text-slate-100 flex items-center gap-2">
-                  <span class="bg-indigo-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">CỘT B</span>
-                  SHDF DYNAMIC LOOP ENGINE
-                </h2>
-              </div>
-
-              <!-- BƯỚC 1: BỘ CHẨN ĐOÁN NGUYÊN NHÂN GỐC RỄ (DIAGNOSTIC ENGINE - 6M/8P FISHBONE) -->
-              <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2">
-                <span class="text-xs font-black text-slate-100 block border-b border-slate-800 pb-1">BƯỚC 1: BỘ CHẨN ĐOÁN NGUYÊN NHÂN GỐC RỄ (DIAGNOSTIC ENGINE)</span>
-                
-                <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-                  <!-- Cột Trái 35% Fishbone Canvas (6M & 8P Branches) -->
-                  <div class="md:col-span-5 bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-2">
-                    <div class="bg-indigo-950/60 p-2 rounded-lg border border-indigo-800/80 text-[10px]">
-                      <span class="font-bold text-indigo-300 block">🐟 Đầu cá (Vấn đề ban đầu):</span>
-                      <span class="text-slate-200 font-semibold">${block.sentence || practiceState.topProblem || 'Chưa nhập vấn đề'}</span>
-                    </div>
-
-                    <span class="text-[10px] font-bold text-slate-300 block">📌 Nhánh Xương Lớn (14 Nhánh: 6M & 8P):</span>
-                    <div class="space-y-1.5 text-xs">
-                      ${Object.keys(block.colB.fishboneSubcauses).map(bKey => `
-                        <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 space-y-1">
-                          <span class="font-bold text-indigo-400 text-[10px] block">${bKey}</span>
-                          ${block.colB.fishboneSubcauses[bKey].map((sub, sIdx) => `
-                            <div class="p-1 rounded bg-slate-900 text-[10px] text-slate-300 flex justify-between items-center border border-slate-800">
-                              <span onclick="selectSubcauseForWhy('${block.id}', '${sub}')" class="truncate mr-1 cursor-pointer hover:text-indigo-300">${sub}</span>
-                              <button onclick="deleteBlockFishboneSubcause('${block.id}', '${bKey}', ${sIdx})" class="text-rose-400 font-bold hover:text-rose-300 text-[11px]" title="Xóa nguyên nhân">🗑️</button>
-                            </div>
-                          `).join('')}
-                          <button onclick="addBlockFishboneSubcause('${block.id}', '${bKey}')" class="text-[9px] font-bold text-indigo-400 hover:underline">+ Thêm nguyên nhân</button>
-                        </div>
-                      `).join('')}
-                    </div>
-                  </div>
-
-                  <!-- Cột Phải 65% Mũi Khoan 5-WHYs & First Principles Studio -->
-                  <div class="md:col-span-7 bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-2">
-                    <div class="flex border-b border-slate-800 gap-2 pb-1.5">
-                      <button onclick="switchBlockStudioTab('${block.id}', '5whys')" id="block-tab-5whys-${block.id}" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-600 text-white">
-                        🔹 Tab 1: Mũi Khoan 5-WHYs (Waterfall)
-                      </button>
-                      <button onclick="switchBlockStudioTab('${block.id}', 'firstp')" id="block-tab-firstp-${block.id}" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300">
-                        🔹 Tab 2: First Principles ⭐
-                      </button>
-                    </div>
-
-                    <!-- Tab 1: 5-WHYs Waterfall -->
-                    <div id="block-content-5whys-${block.id}" class="space-y-2 text-xs">
-                      <div class="text-[10px] text-slate-400 font-bold">
-                        Nguyên nhân được chọn: <span class="text-indigo-400" id="block-subcause-label-${block.id}">${block.colB.selectedSubcause || 'Chưa chọn'}</span>
-                      </div>
-                      <div class="space-y-1.5">
-                        ${[1,2,3,4,5].map(w => `
-                          <div class="flex gap-1 items-center ${block.colB.eliminatedWhys.includes(w) ? 'opacity-40 line-through' : ''}">
-                            <span class="text-[9px] font-bold text-slate-500 w-12">WHY ${w}:</span>
-                            <input type="text" value="${block.colB.whys[w] || ''}" oninput="updateBlockWhy('${block.id}', ${w}, this.value)" placeholder="WHY ${w}..." class="flex-grow bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-[10px]">
-                            <button onclick="toggleEliminateWhy('${block.id}', ${w})" class="text-[10px] bg-rose-950 text-rose-400 border border-rose-900/60 px-1.5 py-0.5 rounded font-bold" title="Bác bỏ giả thuyết">❌ Bác bỏ</button>
-                          </div>
-                        `).join('')}
-                      </div>
-
-                      <div class="bg-amber-950/40 border border-amber-900/60 p-2 rounded-xl text-[10px] text-amber-200 flex items-center justify-between">
-                        <span class="flex items-center gap-1"><i data-lucide="shield-alert" class="w-3.5 h-3.5 text-amber-400"></i> AI Fallacy Detector: Sẵn sàng quét ngụy biện logic...</span>
-                        <button onclick="scanLogicFallacy('${block.id}')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2 py-0.5 rounded text-[9px]">Quét Logic</button>
-                      </div>
-                    </div>
-
-                    <!-- Tab 2: First Principles Studio -->
-                    <div id="block-content-firstp-${block.id}" class="hidden space-y-2 text-xs">
-                      <div class="space-y-1">
-                        <span class="font-bold text-amber-400 text-[10px] block">Khối 1: Bóc Tách Giả Định Cũ (Assumptions Breakdown)</span>
-                        <textarea rows="1" oninput="updateBlockFirstP('${block.id}', 'assumptions', this.value)" placeholder="Giả định cũ..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1.5 text-[10px]">${block.colB.firstP.assumptions}</textarea>
-                      </div>
-                      <div class="space-y-1">
-                        <span class="font-bold text-emerald-400 text-[10px] block">Khối 2: Trích Xuất Chân Lý Cơ Bản (Fundamental Truths)</span>
-                        <textarea rows="1" oninput="updateBlockFirstP('${block.id}', 'truths', this.value)" placeholder="Chân lý cơ bản toán học / thực tế..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1.5 text-[10px]">${block.colB.firstP.truths}</textarea>
-                      </div>
-                      <div class="space-y-1">
-                        <span class="font-bold text-indigo-300 text-[10px] block">Khối 3: Tái Thiết Lập Sự Thật & Chốt Nguyên Nhân Gốc Rễ</span>
-                        <input type="text" value="${block.colB.firstP.rootCause}" oninput="updateBlockFirstP('${block.id}', 'rootCause', this.value)" placeholder="Chốt nguyên nhân gốc rễ bản chất..." class="w-full bg-slate-950 border border-indigo-700 text-indigo-300 rounded p-1.5 text-[10px] font-bold">
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-
-              <!-- BƯỚC 2: BỘ LỌC KIỂM TRA 4 LỚP (TÁC ĐỘNG [LỢI] & [HẠI]) WITH 3 STRUCTURED KHUNG & PER-CHIP PREDICTIONS -->
-              <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-3">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-1">
-                  <span class="text-xs font-black text-slate-100">BƯỚC 2: BỘ LỌC KIỂM TRA 4 LỚP (3 KHUNG CHỨA GLOW CHIPS TÁC ĐỘNG [LỢI] & [HẠI])</span>
-                </div>
-
-                <!-- KHUNG 1: CÂU MÔ TẢ Ý CHÍNH -->
-                <div class="bg-slate-900/90 p-3 rounded-xl border border-indigo-900/60 space-y-2">
-                  <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
-                    <i data-lucide="file-text" class="w-4 h-4 text-indigo-400"></i> KHUNG 1: CÂU MÔ TẢ Ý CHÍNH
-                  </span>
-                  ${block.sentenceChip 
-                    ? renderChipImpactCardHTML(block.id, block.sentenceChip) 
-                    : `<div class="p-2 text-[10px] text-slate-500 italic">Vui lòng bấm nút "Đóng Gói Chip" ở trên để tạo Glow Chip cho Câu Ý chính.</div>`}
-                </div>
-
-                <!-- KHUNG 2: 5W1H & STAKEHOLDERS WHO -->
-                <div class="bg-slate-900/90 p-3 rounded-xl border border-indigo-900/60 space-y-2">
-                  <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
-                    <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> KHUNG 2: 5W1H (CHIẾU THEO CÁC KHÍA CẠNH & STAKEHOLDERS WHO)
-                  </span>
-                  <div class="space-y-2">
-                    ${chips5w1hWho.length > 0 
-                      ? chips5w1hWho.map(cObj => renderChipImpactCardHTML(block.id, cObj)).join('') 
-                      : `<div class="p-2 text-[10px] text-slate-500 italic">Chưa có Glow Chips 5W1H hoặc Stakeholder WHO.</div>`}
-                  </div>
-                </div>
-
-                <!-- KHUNG 3: VĨ MÔ STEEPLED / ESG -->
-                <div class="bg-slate-900/90 p-3 rounded-xl border border-indigo-900/60 space-y-2">
-                  <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
-                    <i data-lucide="globe" class="w-4 h-4 text-emerald-400"></i> KHUNG 3: VĨ MÔ STEEPLED / ESG
-                  </span>
-                  <div class="space-y-2">
-                    ${chipsMacro.length > 0 
-                      ? chipsMacro.map(cObj => renderChipImpactCardHTML(block.id, cObj)).join('') 
-                      : `<div class="p-2 text-[10px] text-slate-500 italic">Chưa có Glow Chips STEEPLED hoặc ESG.</div>`}
-                  </div>
-                </div>
-
-              </div>
-
-              <!-- BƯỚC 3: MA TRẬN SWOT & ACTION PLAN THỰC THI ⭐ -->
-              <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2">
-                <span class="text-xs font-black text-slate-100 block border-b border-slate-800 pb-1">BƯỚC 3: MA TRẬN SWOT & ACTION PLAN THỰC THI ⭐</span>
-                
-                <!-- Auto-Populated Inputs Display -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[9px]">
-                  <div class="bg-emerald-950/40 p-1.5 rounded border border-emerald-900/60">
-                    <span class="font-bold text-emerald-400 block">S (Strengths):</span>
-                    <span class="text-slate-300">${Object.values(block.colA.chipsESG).flat().map(c => c.text).join(', ') || 'Auto từ ESG/STEEPLED...'}</span>
-                  </div>
-                  <div class="bg-rose-950/40 p-1.5 rounded border border-rose-900/60">
-                    <span class="font-bold text-rose-400 block">W (Weaknesses):</span>
-                    <span class="text-slate-300">
-                      ${Object.keys(block.colB.fishboneSubcauses).map(bk => block.colB.fishboneSubcauses[bk].map(sc => `[${bk}] - ${sc} - [5-WHYs]: ${block.colB.whys[5]||block.colB.whys[1]||''}`).join(', ')).filter(Boolean).join(' | ') || 'Auto từ Fishbone & 5-WHYs...'}
-                    </span>
-                  </div>
-                  <div class="bg-indigo-950/40 p-1.5 rounded border border-indigo-900/60">
-                    <span class="font-bold text-indigo-300 block">O (Opportunities):</span>
-                    <span class="text-slate-300">${collectAllLoiImpacts(block).join(', ') || 'Auto từ Tác động LỢI ở 3 Khung...'}</span>
-                  </div>
-                  <div class="bg-amber-950/40 p-1.5 rounded border border-amber-900/60">
-                    <span class="font-bold text-amber-400 block">T (Threats):</span>
-                    <span class="text-slate-300">${collectAllHaiImpacts(block).join(', ') || 'Auto từ Tác động HẠI ở 3 Khung...'}</span>
-                  </div>
-                </div>
-
-                <!-- SWOT Matrix 4 Grids -->
-                <div class="grid grid-cols-2 gap-2 text-[10px]">
-                  <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                    <span class="font-bold text-emerald-400 block">SO (Tấn công):</span>
-                    <textarea oninput="updateBlockStrategy('${block.id}', 'so', this.value)" rows="1" placeholder="Chiến lược SO..." class="w-full bg-slate-950 text-slate-100 rounded p-1 text-[10px] border border-slate-700">${block.colB.strategies.so}</textarea>
-                  </div>
-                  <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                    <span class="font-bold text-indigo-400 block">ST (Phòng thủ):</span>
-                    <textarea oninput="updateBlockStrategy('${block.id}', 'st', this.value)" rows="1" placeholder="Chiến lược ST..." class="w-full bg-slate-950 text-slate-100 rounded p-1 text-[10px] border border-slate-700">${block.colB.strategies.st}</textarea>
-                  </div>
-                  <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                    <span class="font-bold text-amber-400 block">WO (Bứt phá):</span>
-                    <textarea oninput="updateBlockStrategy('${block.id}', 'wo', this.value)" rows="1" placeholder="Chiến lược WO..." class="w-full bg-slate-950 text-slate-100 rounded p-1 text-[10px] border border-slate-700">${block.colB.strategies.wo}</textarea>
-                  </div>
-                  <div class="bg-slate-900 p-2 rounded-lg border border-slate-800">
-                    <span class="font-bold text-rose-400 block">WT (Sinh tồn):</span>
-                    <textarea oninput="updateBlockStrategy('${block.id}', 'wt', this.value)" rows="1" placeholder="Chiến lược WT..." class="w-full bg-slate-950 text-slate-100 rounded p-1 text-[10px] border border-slate-700">${block.colB.strategies.wt}</textarea>
-                  </div>
-                </div>
-              </div>
-
-              <!-- BƯỚC 4: SÁNG TẠO GIẢI PHÁP BAN ĐẦU ($S_1$) & OPTIMIZATION ($S_1 \rightarrow S_2$) -->
-              <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2">
-                <div class="flex justify-between items-center border-b border-slate-800 pb-1">
-                  <span class="text-xs font-black text-slate-100">BƯỚC 4: SÁNG TẠO GIẢI PHÁP BAN ĐẦU ($S_1$) & OPTIMIZATION ($S_1 \rightarrow S_2$)</span>
-                  <button onclick="addBlockS1Solution('${block.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] px-2 py-0.5 rounded">➕ Thêm Giải Pháp $S_1$</button>
-                </div>
-
-                ${block.colB.s1Solutions.map((sol, solIdx) => `
-                  <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-2 text-xs">
-                    <div class="flex justify-between items-center">
-                      <span class="font-bold text-indigo-300">Giải Pháp $S_1$ #${solIdx + 1}</span>
-                      <button onclick="removeBlockS1Solution('${block.id}', '${sol.id}')" class="text-rose-400 font-bold text-[10px]">Xóa</button>
-                    </div>
-
-                    <input type="text" value="${sol.title}" oninput="updateBlockS1Field('${block.id}', '${sol.id}', 'title', this.value)" placeholder="Tên giải pháp S1..." class="w-full bg-slate-950 border border-slate-700 text-indigo-300 font-bold rounded p-1 text-[11px]">
-                    <textarea rows="1" oninput="updateBlockS1Field('${block.id}', '${sol.id}', 'desc', this.value)" placeholder="Nội dung thực thi..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-[10px]">${sol.desc}</textarea>
-
-                    <!-- Bộ Lọc 4 Lớp Sau S1 -->
-                    <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 space-y-1">
-                      <div class="flex justify-between items-center">
-                        <span class="text-[9px] font-bold text-slate-400">Bộ Lọc 4 Lớp Tác Động Sau S1:</span>
-                        <button onclick="aiEvaluatePostS1('${block.id}', '${sol.id}')" class="bg-indigo-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">🤖 Tự động đánh giá bằng AI</button>
-                      </div>
-                      <div class="grid grid-cols-2 gap-1 text-[9px]">
-                        <div class="bg-emerald-950/30 p-1 rounded border border-emerald-900/40">
-                          <span class="text-emerald-400 font-bold block">Lợi sau S1:</span>
-                          ${sol.filterImpactsPostS1.loi.tier1.map(i => `<div>• ${i}</div>`).join('')}
-                        </div>
-                        <div class="bg-rose-950/30 p-1 rounded border border-rose-900/40">
-                          <span class="text-rose-400 font-bold block">Hại sau S1:</span>
-                          ${sol.filterImpactsPostS1.hai.tier1.map(i => `<div>• ${i}</div>`).join('')}
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Loop Button S1 -> S2 -->
-                    <button onclick="toggleBlockS2Loop('${block.id}', '${sol.id}')" class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white font-bold py-1 rounded text-[10px]">
-                      🔄 KÍCH HOẠT VÒNG LẶP: CHUYỂN HẠI THÀNH LỢI (Tạo S₂)
-                    </button>
-
-                    <div class="${sol.activeS2 ? '' : 'hidden'} bg-emerald-950/40 border border-emerald-800/80 p-2 rounded-lg space-y-1">
-                      <span class="font-bold text-emerald-300 text-[10px] block">🟢 Giải Pháp Cải Tiến $S_2$:</span>
-                      <textarea rows="1" oninput="updateBlockS1Field('${block.id}', '${sol.id}', 's2Desc', this.value)" placeholder="Giải pháp S2 khắc phục điểm hại..." class="w-full bg-slate-950 border border-emerald-700 text-emerald-100 rounded p-1 text-[10px]">${sol.s2Desc}</textarea>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-
-              <!-- BƯỚC 5: COUNTERFACTUAL SIMULATOR & EXPORT -->
-              <div class="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-2">
-                <span class="text-xs font-black text-slate-100 block border-b border-slate-800 pb-1">BƯỚC 5: COUNTERFACTUAL SIMULATOR & XUẤT BÁO CÁO</span>
-                <div class="space-y-1 text-[10px]">
-                  <input type="text" value="${block.colB.whatIf.veto}" oninput="updateBlockWhatIf('${block.id}', 'veto', this.value)" placeholder="Nếu Stakeholders VETO?..." class="w-full bg-slate-900 border border-slate-800 text-slate-200 rounded p-1">
-                  <input type="text" value="${block.colB.whatIf.opposite}" oninput="updateBlockWhatIf('${block.id}', 'opposite', this.value)" placeholder="Nếu đối thủ phản ứng ngược?..." class="w-full bg-slate-900 border border-slate-800 text-slate-200 rounded p-1">
-                </div>
-                <div class="pt-1 flex justify-end">
-                  <button onclick="exportComprehensiveStrategyMap()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-3 py-1.5 rounded-xl shadow-md flex items-center gap-1">
-                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 📑 XUẤT BẢN ĐỒ CHIẾN LƯỢC TOÀN DIỆN
-                  </button>
-                </div>
-              </div>
-
-            </div>
-
+            `).join('')}
           </div>
-        `;
 
-        container.appendChild(blockEl);
+          <!-- STAKEHOLDER MATRIX (DRAG & DROP READY) -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+            <span class="font-black text-slate-200 text-xs block">Stakeholder Matrix (Kéo & Thả Đối Tượng):</span>
+            <p class="text-[10px] text-slate-400 italic">Kéo thả thẻ đối tượng trực tiếp vào 4 phần tư bên dưới hoặc thả vào Nhánh Xương Lớn.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
+              ${['Manage Closely', 'Keep Satisfied', 'Keep Informed', 'Monitor'].map(q => `
+                <div ondragover="allowDrop(event)" ondrop="onDropStakeholderMatrix(event, '${block.id}', '${q}')" class="matrix-quad bg-slate-900 border border-slate-800 p-2 rounded-xl min-h-[90px] space-y-1 transition-all">
+                  <span class="font-bold text-indigo-300 block border-b border-slate-800 pb-1 flex justify-between items-center">
+                    <span>${q}</span>
+                    <span class="bg-indigo-950 text-indigo-400 border border-indigo-800 text-[9px] px-1.5 py-0.5 rounded-full font-mono">${block.colA.stakeholders.filter(s => s.quadrant === q).length}</span>
+                  </span>
+                  <div class="space-y-1 pt-1">
+                    ${block.colA.stakeholders.filter(s => s.quadrant === q).map(stk => `
+                      <div draggable="true" ondragstart="onDragStakeholder(event, '${block.id}', '${stk.id}')" class="bg-slate-950 border border-indigo-900/80 p-1.5 rounded-lg text-[10px] text-slate-200 cursor-grab hover:border-indigo-500 transition-all flex flex-col gap-0.5">
+                        <div class="flex justify-between items-center font-bold text-indigo-300">
+                          <span>👤 ${stk.name} <span class="text-[9px] text-slate-400 font-normal">(${stk.types.join(', ') || 'Chưa phân loại'})</span></span>
+                          <button onclick="removeStakeholderBlock('${block.id}', '${stk.id}')" class="text-rose-400 font-bold hover:text-rose-300">×</button>
+                        </div>
+                        <div class="text-[9px] text-emerald-300 truncate"><b>Bối cảnh:</b> ${stk.backgrounds.map(b => b.type + (b.detail ? ': ' + b.detail : '')).join(', ') || 'Chưa điền'}</div>
+                        <div class="text-[9px] text-amber-300 truncate"><b>Khía cạnh:</b> ${stk.aspects.map(a => a.type + (a.detail ? ': ' + a.detail : '')).join(', ') || 'Chưa điền'}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function createNewStakeholderWithFullDetails(blockId) {
+      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      if (!block) return;
+
+      const typeCbs = document.querySelectorAll(`.who-type-checkbox-${blockId}:checked`);
+      const nameInp = document.getElementById(`who-name-input-${blockId}`);
+      const bgCbs = document.querySelectorAll(`.who-bg-checkbox-${blockId}:checked`);
+      const aspCbs = document.querySelectorAll(`.who-asp-checkbox-${blockId}:checked`);
+
+      const nameVal = nameInp ? nameInp.value.trim() : "";
+      if (!nameVal) {
+        showToast("Vui lòng nhập Tên đối tượng!", "error");
+        return;
+      }
+
+      const selectedTypes = Array.from(typeCbs).map(cb => cb.value);
+      const selectedBgTypes = Array.from(bgCbs).map(cb => cb.value);
+      const selectedAspTypes = Array.from(aspCbs).map(cb => cb.value);
+
+      const stkId = 'stk_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+
+      const backgroundsObj = selectedBgTypes.map(t => ({ type: t, detail: "" }));
+      const aspectsObj = selectedAspTypes.map(t => ({ type: t, detail: "" }));
+
+      const newStk = {
+        id: stkId,
+        name: nameVal,
+        types: selectedTypes,
+        backgrounds: backgroundsObj,
+        aspects: aspectsObj,
+        quadrant: 'Manage Closely',
+        chipObj: null
+      };
+
+      newStk.chipObj = createChipObj("", 'WHO');
+      block.colA.stakeholders.push(newStk);
+
+      // Helper update full chip text
+      updateStakeholderChipText(blockId, stkId);
+
+      // Reset top inputs
+      if (nameInp) nameInp.value = "";
+      typeCbs.forEach(cb => cb.checked = false);
+      bgCbs.forEach(cb => cb.checked = false);
+      aspCbs.forEach(cb => cb.checked = false);
+
+      renderWorkspace();
+      showToast(`Đã tạo khung bối cảnh & khía cạnh cho đối tượng "${nameVal}"!`, "success");
+    }
+
+    function updateStakeholderName(blockId, stkId, newName) {
+      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      if (!block) return;
+      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      if (stk) {
+        stk.name = newName.trim() || stk.name;
+        updateStakeholderChipText(blockId, stkId);
+        renderWorkspace();
+      }
+    }
+
+    function updateStakeholderBgDetail(blockId, stkId, bgIdx, val) {
+      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      if (!block) return;
+      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      if (stk && stk.backgrounds[bgIdx]) {
+        stk.backgrounds[bgIdx].detail = val.trim();
+        updateStakeholderChipText(blockId, stkId);
+      }
+    }
+
+    function updateStakeholderAspDetail(blockId, stkId, aspIdx, val) {
+      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      if (!block) return;
+      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      if (stk && stk.aspects[aspIdx]) {
+        stk.aspects[aspIdx].detail = val.trim();
+        updateStakeholderChipText(blockId, stkId);
+      }
+    }
+
+    function updateStakeholderChipText(blockId, stkId) {
+      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      if (!block) return;
+      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      if (!stk || !stk.chipObj) return;
+
+      const bgStr = stk.backgrounds.map(b => b.type + (b.detail ? ': ' + b.detail : '')).join(', ') || 'Chưa điền';
+      const aspStr = stk.aspects.map(a => a.type + (a.detail ? ': ' + a.detail : '')).join(', ') || 'Chưa điền';
+      const typeStr = stk.types.length ? ` (${stk.types.join(', ')})` : '';
+
+      stk.chipObj.text = `[WHO]: ${stk.name}${typeStr} | Bối cảnh: ${bgStr} | Khía cạnh: ${aspStr}`;
+      syncBlockPipeline(blockId);
+    }
+
+    function removeStakeholderBlock(blockId, stkId) {
+      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      if (block) {
+        block.colA.stakeholders = block.colA.stakeholders.filter(s => s.id !== stkId);
+        syncBlockPipeline(blockId);
+        renderWorkspace();
+      }
+    }
+
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+
+    function onDragStakeholder(ev, blockId, stkId) {
+      ev.dataTransfer.setData("text/plain", JSON.stringify({ blockId: blockId, stkId: stkId }));
+    }
+
+    function onDropStakeholderMatrix(ev, blockId, targetQuadrant) {
+      ev.preventDefault();
+      try {
+        const raw = ev.dataTransfer.getData("text/plain");
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+        if (block && data.stkId) {
+          const stk = block.colA.stakeholders.find(s => s.id === data.stkId);
+          if (stk) {
+            stk.quadrant = targetQuadrant;
+            renderWorkspace();
+            showToast(`Đã chuyển đối tượng "${stk.name}" sang ${targetQuadrant}!`, "info");
+          }
+        }
+      } catch (e) {}
+    }
+
+    function onDropToFishbone(ev, blockId, branchKey) {
+      ev.preventDefault();
+      try {
+        const raw = ev.dataTransfer.getData("text/plain");
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+        if (block && data.stkId) {
+          const stk = block.colA.stakeholders.find(s => s.id === data.stkId);
+          if (stk && stk.chipObj) {
+            if (!block.colB.fishboneSubcauses[branchKey].includes(stk.chipObj.text)) {
+              block.colB.fishboneSubcauses[branchKey].push(stk.chipObj.text);
+              renderWorkspace();
+              syncLiveTree();
+              showToast(`Đã thả đối tượng [Tên + Bối Cảnh + Khía Cạnh] "${stk.name}" vào nhánh [${branchKey}]!`, "success");
+            }
+          }
+        }
+      } catch (e) {}
+    }
+
+    function renderWhatWhereWhenHowSectionHTML(block) {
+      return `
+        <div class="space-y-3">
+          <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> 2. HOW, WHAT, WHEN, WHERE (Ô Nhập & Glow Chips)
+          </h2>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-3">
+            ${[
+              { k: 'WHAT', label: 'WHAT (Sự cố, hiện trạng, chỉ số)' },
+              { k: 'WHY', label: 'WHY (Nguyên nhân sơ bộ ban đầu)' },
+              { k: 'WHERE', label: 'WHERE (Không gian, quy trình, địa bàn)' },
+              { k: 'WHEN', label: 'WHEN (Mốc thời gian, chu kỳ)' },
+              { k: 'HOW', label: 'HOW (Cách thức diễn ra, thiệt hại nguồn lực)' }
+            ].map(item => `
+              <div class="space-y-1.5 text-xs bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                <span class="font-bold text-indigo-300 block">${item.label}:</span>
+                <div class="flex gap-1.5">
+                  <input type="text" id="chip-input-${block.id}-${item.k.toLowerCase()}" placeholder="Nhập nội dung ${item.k}..." class="flex-grow bg-slate-950 border border-slate-700 text-slate-200 rounded-lg p-1.5 text-xs">
+                  <button onclick="addBlockChip('${block.id}', '${item.k}', 'chip-input-${block.id}-${item.k.toLowerCase()}')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded-lg font-bold text-xs shrink-0">➕ Thêm Glow Chip</button>
+                </div>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  ${block.colA.chips5w1h[item.k].map((chipObj, cIdx) => `
+                    <span class="bg-indigo-950 border border-indigo-700 text-indigo-300 text-xs px-2 py-0.5 rounded-lg font-bold flex items-center gap-1.5">
+                      ${chipObj.text} <button onclick="removeBlockChip('${block.id}', '${item.k}', ${cIdx})" class="text-rose-400 hover:text-rose-300 font-bold">×</button>
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderWhyDiagnosticSectionHTML(block) {
+      return `
+        <div class="space-y-3">
+          <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="fish" class="w-4 h-4"></i> 3. WHY (BỘ CHẨN ĐOÁN NGUYÊN NHÂN GỐC RỄ - DIAGNOSTIC ENGINE)
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+            <!-- Fishbone 14 Branches (6M & 8P) -->
+            <div class="md:col-span-5 bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+              <div class="bg-indigo-950/60 p-2 rounded-lg border border-indigo-800/80 text-xs">
+                <span class="font-bold text-indigo-300 block">🐟 Đầu cá (Vấn đề ban đầu):</span>
+                <span class="text-slate-200 font-semibold">${block.sentence || practiceState.topProblem || 'Chưa nhập vấn đề'}</span>
+              </div>
+
+              <span class="text-xs font-bold text-slate-300 block">📌 Nhánh Xương Lớn (14 Nhánh: 6M & 8P):</span>
+              <div class="space-y-2 max-h-[500px] overflow-y-auto custom-scroll pr-1">
+                ${Object.keys(block.colB.fishboneSubcauses).map(bKey => `
+                  <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 space-y-1">
+                    <span class="font-bold text-indigo-400 text-xs block">${bKey}</span>
+                    ${block.colB.fishboneSubcauses[bKey].map((sub, sIdx) => `
+                      <div class="p-1.5 rounded bg-slate-950 text-xs text-slate-300 flex justify-between items-center border border-slate-800">
+                        <span onclick="selectSubcauseForWhy('${block.id}', '${sub}')" class="truncate mr-1 cursor-pointer hover:text-indigo-300 font-medium">${sub}</span>
+                        <button onclick="deleteBlockFishboneSubcause('${block.id}', '${bKey}', ${sIdx})" class="text-rose-400 font-bold hover:text-rose-300" title="Xóa nguyên nhân">🗑️</button>
+                      </div>
+                    `).join('')}
+                    <button onclick="addBlockFishboneSubcause('${block.id}', '${bKey}')" class="text-[10px] font-bold text-indigo-400 hover:underline">+ Thêm nguyên nhân</button>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Studio: 5-WHYs & First Principles -->
+            <div class="md:col-span-7 bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-3">
+              <div class="flex border-b border-slate-800 gap-2 pb-2">
+                <button onclick="switchBlockStudioTab('${block.id}', '5whys')" id="block-tab-5whys-${block.id}" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white">
+                  🔹 Tab 1: Mũi Khoan 5-WHYs (Waterfall)
+                </button>
+                <button onclick="switchBlockStudioTab('${block.id}', 'firstp')" id="block-tab-firstp-${block.id}" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">
+                  🔹 Tab 2: First Principles ⭐
+                </button>
+              </div>
+
+              <!-- Tab 1: 5-WHYs -->
+              <div id="block-content-5whys-${block.id}" class="space-y-2 text-xs">
+                <div class="text-xs text-slate-400 font-bold bg-slate-900 p-2 rounded-lg border border-slate-800">
+                  Nguyên nhân được chọn: <span class="text-indigo-300 font-black" id="block-subcause-label-${block.id}">${block.colB.selectedSubcause || 'Chưa chọn nguyên nhân từ cây xương cá'}</span>
+                </div>
+                <div class="space-y-2 pt-1">
+                  ${[1,2,3,4,5].map(w => `
+                    <div class="flex gap-2 items-center ${block.colB.eliminatedWhys.includes(w) ? 'opacity-40 line-through' : ''}">
+                      <span class="text-xs font-bold text-slate-500 w-14 shrink-0">WHY ${w}:</span>
+                      <input type="text" value="${block.colB.whys[w] || ''}" oninput="updateBlockWhy('${block.id}', ${w}, this.value)" placeholder="WHY ${w}..." class="flex-grow bg-slate-900 border border-slate-700 text-slate-200 rounded-lg p-1.5 text-xs">
+                      <button onclick="toggleEliminateWhy('${block.id}', ${w})" class="text-[10px] bg-rose-950 text-rose-400 border border-rose-900/60 px-2 py-1 rounded-lg font-bold shrink-0" title="Bác bỏ giả thuyết">❌ Bác bỏ</button>
+                    </div>
+                  `).join('')}
+                </div>
+
+                <div class="bg-amber-950/40 border border-amber-900/60 p-2.5 rounded-xl text-xs text-amber-200 flex items-center justify-between mt-3">
+                  <span class="flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-4 h-4 text-amber-400"></i> AI Fallacy Detector: Quét ngụy biện logic</span>
+                  <button onclick="scanLogicFallacy('${block.id}')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2.5 py-1 rounded-lg text-xs">Quét Logic</button>
+                </div>
+              </div>
+
+              <!-- Tab 2: First Principles -->
+              <div id="block-content-firstp-${block.id}" class="hidden space-y-3 text-xs">
+                <div class="space-y-1">
+                  <span class="font-bold text-amber-400 text-xs block">Khối 1: Bóc Tách Giả Định Cũ (Assumptions Breakdown)</span>
+                  <textarea rows="2" oninput="updateBlockFirstP('${block.id}', 'assumptions', this.value)" placeholder="Những điều được cho là nghiễm nhiên/bắt buộc..." class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-xl p-2 text-xs">${block.colB.firstP.assumptions}</textarea>
+                </div>
+                <div class="space-y-1">
+                  <span class="font-bold text-emerald-400 text-xs block">Khối 2: Trích Xuất Chân Lý Cơ Bản (Fundamental Truths)</span>
+                  <textarea rows="2" oninput="updateBlockFirstP('${block.id}', 'truths', this.value)" placeholder="Chân lý cơ bản toán học / thực tế / quy trình..." class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-xl p-2 text-xs">${block.colB.firstP.truths}</textarea>
+                </div>
+                <div class="space-y-1">
+                  <span class="font-bold text-indigo-300 text-xs block">Khối 3: Tái Thiết Lập Sự Thật & Chốt Nguyên Nhân Gốc Rễ</span>
+                  <input type="text" value="${block.colB.firstP.rootCause}" oninput="updateBlockFirstP('${block.id}', 'rootCause', this.value)" placeholder="Chốt nguyên nhân gốc rễ bản chất..." class="w-full bg-slate-900 border border-indigo-700 text-indigo-300 rounded-xl p-2 text-xs font-bold">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderMacroSectionHTML(block) {
+      const showSteepled = activeMacroSub === 'all' || activeMacroSub === 'steepled';
+      const showEsg = activeMacroSub === 'all' || activeMacroSub === 'esg';
+
+      return `
+        <div class="space-y-3">
+          <h2 class="text-xs font-black text-emerald-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="globe" class="w-4 h-4"></i> 4. BỐI CẢNH VĨ MÔ (STEEPLED & ESG)
+          </h2>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-4">
+            ${showSteepled ? `
+              <div class="space-y-2">
+                <span class="font-black text-emerald-400 text-xs block">STEEPLED (8 Mảng Vĩ Mô):</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  ${STEEPLED_KEYS.map(k => `
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                      <span class="font-bold text-slate-200 text-xs block">${k}:</span>
+                      <div class="flex gap-1">
+                        <input type="text" id="chip-input-${block.id}-steepled-${k.toLowerCase()}" placeholder="Nhập ${k}..." class="flex-grow bg-slate-950 border border-slate-700 text-slate-200 rounded-lg p-1 text-xs">
+                        <button onclick="addBlockChip('${block.id}', '${k}', 'chip-input-${block.id}-steepled-${k.toLowerCase()}')" class="bg-emerald-600 text-white px-2 py-0.5 rounded-lg font-bold text-xs">➕ Chip</button>
+                      </div>
+                      <div class="flex flex-wrap gap-1 pt-1">
+                        ${block.colA.chipsSteepled[k].map((chipObj, cIdx) => `
+                          <span class="bg-emerald-950 border border-emerald-700 text-emerald-300 text-[10px] px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
+                            ${chipObj.text} <button onclick="removeBlockChip('${block.id}', '${k}', ${cIdx})" class="text-rose-400">×</button>
+                          </span>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${showEsg ? `
+              <div class="space-y-2 pt-2 border-t border-slate-800">
+                <span class="font-black text-amber-400 text-xs block">ESG (3 Trụ Cột):</span>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  ${ESG_KEYS.map(k => `
+                    <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                      <span class="font-bold text-slate-200 text-xs block">${k}:</span>
+                      <div class="flex gap-1">
+                        <input type="text" id="chip-input-${block.id}-esg-${k.toLowerCase()}" placeholder="Nhập ${k}..." class="flex-grow bg-slate-950 border border-slate-700 text-slate-200 rounded-lg p-1 text-xs">
+                        <button onclick="addBlockChip('${block.id}', '${k}', 'chip-input-${block.id}-esg-${k.toLowerCase()}')" class="bg-amber-600 text-white px-2 py-0.5 rounded-lg font-bold text-xs">➕ Chip</button>
+                      </div>
+                      <div class="flex flex-wrap gap-1 pt-1">
+                        ${block.colA.chipsESG[k].map((chipObj, cIdx) => `
+                          <span class="bg-amber-950 border border-amber-700 text-amber-300 text-[10px] px-1.5 py-0.5 rounded font-bold flex items-center gap-1">
+                            ${chipObj.text} <button onclick="removeBlockChip('${block.id}', '${k}', ${cIdx})" class="text-rose-400">×</button>
+                          </span>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPipelineSectionHTML(block) {
+      return `
+        <div class="space-y-3">
+          <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> 5. GLOW CHIPS PIPELINE (TRẠM TRUYỀN DỮ LIỆU TỰ ĐỘNG)
+          </h2>
+          <div class="bg-indigo-950/80 p-4 rounded-xl border border-indigo-800/80 space-y-3">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="text-xs font-black uppercase text-indigo-300">Tổng số Glow Chips: ${block.glowChipsPipeline.length}</span>
+              <button onclick="autoTransferBlockGlowChips('${block.id}')" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black py-2 px-4 rounded-xl flex items-center gap-1.5 shadow-md">
+                <i data-lucide="rocket" class="w-4 h-4"></i> 🚀 Tự động chuyển tất cả (Nhánh Xương Lớn & 4 Lớp)
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-2">
+              ${block.glowChipsPipeline.map((c) => `
+                <span class="glow-chip bg-indigo-900 border border-indigo-700 text-indigo-100 text-xs font-bold px-2.5 py-1 rounded-xl flex items-center gap-1">
+                  [${c.category}] ${c.text}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderFilter4LayersSectionHTML(block) {
+      const chips5w1hWho = [];
+      Object.keys(block.colA.chips5w1h).forEach(k => {
+        block.colA.chips5w1h[k].forEach(cObj => chips5w1hWho.push(cObj));
+      });
+      block.colA.stakeholders.forEach(s => {
+        if (s.chipObj) chips5w1hWho.push(s.chipObj);
       });
 
-      lucide.createIcons();
+      const chipsMacro = [];
+      STEEPLED_KEYS.forEach(k => {
+        block.colA.chipsSteepled[k].forEach(cObj => chipsMacro.push(cObj));
+      });
+      ESG_KEYS.forEach(k => {
+        block.colA.chipsESG[k].forEach(cObj => chipsMacro.push(cObj));
+      });
+
+      return `
+        <div class="space-y-4">
+          <h2 class="text-xs font-black text-amber-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="shield-check" class="w-4 h-4"></i> 6. BỘ LỌC KIỂM TRA 4 LỚP (3 KHUNG CHỨA GLOW CHIPS TÁC ĐỘNG [LỢI] & [HẠI])
+          </h2>
+
+          <!-- KHUNG 1 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-2">
+            <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-4 h-4 text-indigo-400"></i> KHUNG 1: CÂU MÔ TẢ Ý CHÍNH
+            </span>
+            ${block.sentenceChip 
+              ? renderChipImpactCardHTML(block.id, block.sentenceChip) 
+              : `<div class="p-2 text-xs text-slate-500 italic">Bấm "Đóng Gói Chip" ở trên để tạo Glow Chip cho Ý chính.</div>`}
+          </div>
+
+          <!-- KHUNG 2 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-2">
+            <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
+              <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> KHUNG 2: 5W1H & STAKEHOLDERS WHO
+            </span>
+            <div class="space-y-2">
+              ${chips5w1hWho.length > 0 
+                ? chips5w1hWho.map(cObj => renderChipImpactCardHTML(block.id, cObj)).join('') 
+                : `<div class="p-2 text-xs text-slate-500 italic">Chưa có Glow Chips 5W1H hoặc Stakeholder WHO.</div>`}
+            </div>
+          </div>
+
+          <!-- KHUNG 3 -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-2">
+            <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
+              <i data-lucide="globe" class="w-4 h-4 text-emerald-400"></i> KHUNG 3: VĨ MÔ STEEPLED / ESG
+            </span>
+            <div class="space-y-2">
+              ${chipsMacro.length > 0 
+                ? chipsMacro.map(cObj => renderChipImpactCardHTML(block.id, cObj)).join('') 
+                : `<div class="p-2 text-xs text-slate-500 italic">Chưa có Glow Chips STEEPLED hoặc ESG.</div>`}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSwotSectionHTML(block) {
+      return `
+        <div class="space-y-3">
+          <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="grid" class="w-4 h-4"></i> 7. MA TRẬN SWOT & ACTION PLAN THỰC THI
+          </h2>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-3">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
+              <div class="bg-emerald-950/40 p-2 rounded-lg border border-emerald-900/60">
+                <span class="font-bold text-emerald-400 block">S (Strengths):</span>
+                <span class="text-slate-300">${Object.values(block.colA.chipsESG).flat().map(c => c.text).join(', ') || 'Auto từ ESG/STEEPLED...'}</span>
+              </div>
+              <div class="bg-rose-950/40 p-2 rounded-lg border border-rose-900/60">
+                <span class="font-bold text-rose-400 block">W (Weaknesses):</span>
+                <span class="text-slate-300">
+                  ${Object.keys(block.colB.fishboneSubcauses).map(bk => block.colB.fishboneSubcauses[bk].map(sc => `[${bk}] - ${sc}`).join(', ')).filter(Boolean).join(' | ') || 'Auto từ Fishbone & 5-WHYs...'}
+                </span>
+              </div>
+              <div class="bg-indigo-950/40 p-2 rounded-lg border border-indigo-900/60">
+                <span class="font-bold text-indigo-300 block">O (Opportunities):</span>
+                <span class="text-slate-300">${collectAllLoiImpacts(block).join(', ') || 'Auto từ Tác động LỢI...'}</span>
+              </div>
+              <div class="bg-amber-950/40 p-2 rounded-lg border border-amber-900/60">
+                <span class="font-bold text-amber-400 block">T (Threats):</span>
+                <span class="text-slate-300">${collectAllHaiImpacts(block).join(', ') || 'Auto từ Tác động HẠI...'}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <span class="font-bold text-emerald-400 block">SO (Tấn công):</span>
+                <textarea oninput="updateBlockStrategy('${block.id}', 'so', this.value)" rows="2" placeholder="Chiến lược SO..." class="w-full bg-slate-950 text-slate-100 rounded-lg p-2 text-xs border border-slate-700">${block.colB.strategies.so}</textarea>
+              </div>
+              <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <span class="font-bold text-indigo-400 block">ST (Phòng thủ):</span>
+                <textarea oninput="updateBlockStrategy('${block.id}', 'st', this.value)" rows="2" placeholder="Chiến lược ST..." class="w-full bg-slate-950 text-slate-100 rounded-lg p-2 text-xs border border-slate-700">${block.colB.strategies.st}</textarea>
+              </div>
+              <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <span class="font-bold text-amber-400 block">WO (Bứt phá):</span>
+                <textarea oninput="updateBlockStrategy('${block.id}', 'wo', this.value)" rows="2" placeholder="Chiến lược WO..." class="w-full bg-slate-950 text-slate-100 rounded-lg p-2 text-xs border border-slate-700">${block.colB.strategies.wo}</textarea>
+              </div>
+              <div class="bg-slate-900 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <span class="font-bold text-rose-400 block">WT (Sinh tồn):</span>
+                <textarea oninput="updateBlockStrategy('${block.id}', 'wt', this.value)" rows="2" placeholder="Chiến lược WT..." class="w-full bg-slate-950 text-slate-100 rounded-lg p-2 text-xs border border-slate-700">${block.colB.strategies.wt}</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSolutionsSectionHTML(block) {
+      return `
+        <div class="space-y-3">
+          <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+            <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+              <i data-lucide="lightbulb" class="w-4 h-4"></i> 8. SÁNG TẠO GIẢI PHÁP BAN ĐẦU ($S_1$) & OPTIMIZATION ($S_1 \\rightarrow S_2$)
+            </h2>
+            <button onclick="addBlockS1Solution('${block.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-1 rounded-lg flex items-center gap-1">➕ Thêm Giải Pháp $S_1$</button>
+          </div>
+
+          <div class="space-y-3">
+            ${block.colB.s1Solutions.map((sol, solIdx) => `
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-indigo-300">Giải Pháp $S_1$ #${solIdx + 1}</span>
+                  <button onclick="removeBlockS1Solution('${block.id}', '${sol.id}')" class="text-rose-400 font-bold text-xs">Xóa</button>
+                </div>
+
+                <input type="text" value="${sol.title}" oninput="updateBlockS1Field('${block.id}', '${sol.id}', 'title', this.value)" placeholder="Tên giải pháp S1..." class="w-full bg-slate-900 border border-slate-700 text-indigo-300 font-bold rounded-lg p-2 text-xs">
+                <textarea rows="2" oninput="updateBlockS1Field('${block.id}', '${sol.id}', 'desc', this.value)" placeholder="Nội dung thực thi..." class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-lg p-2 text-xs">${sol.desc}</textarea>
+
+                <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 space-y-1.5">
+                  <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-300">Bộ Lọc Tác Động Sau S1:</span>
+                    <button onclick="aiEvaluatePostS1('${block.id}', '${sol.id}')" class="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-lg">🤖 AI Đánh Giá</button>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="bg-emerald-950/30 p-2 rounded-lg border border-emerald-900/40">
+                      <span class="text-emerald-400 font-bold block">Lợi:</span>
+                      ${sol.filterImpactsPostS1.loi.tier1.map(i => `<div>• ${i}</div>`).join('')}
+                    </div>
+                    <div class="bg-rose-950/30 p-2 rounded-lg border border-rose-900/40">
+                      <span class="text-rose-400 font-bold block">Hại:</span>
+                      ${sol.filterImpactsPostS1.hai.tier1.map(i => `<div>• ${i}</div>`).join('')}
+                    </div>
+                  </div>
+                </div>
+
+                <button onclick="toggleBlockS2Loop('${block.id}', '${sol.id}')" class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white font-bold py-1.5 rounded-lg text-xs">
+                  🔄 KÍCH HOẠT VÒNG LẶP: CHUYỂN HẠI THÀNH LỢI (Tạo $S_2$)
+                </button>
+
+                <div class="${sol.activeS2 ? '' : 'hidden'} bg-emerald-950/40 border border-emerald-800/80 p-2.5 rounded-lg space-y-1.5">
+                  <span class="font-bold text-emerald-300 text-xs block">🟢 Giải Pháp Cải Tiến $S_2$:</span>
+                  <textarea rows="2" oninput="updateBlockS1Field('${block.id}', '${sol.id}', 's2Desc', this.value)" placeholder="Giải pháp S2 khắc phục điểm hại..." class="w-full bg-slate-900 border border-emerald-700 text-emerald-100 rounded-lg p-2 text-xs">${sol.s2Desc}</textarea>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCounterfactualSectionHTML(block) {
+      return `
+        <div class="space-y-3">
+          <h2 class="text-xs font-black text-emerald-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="file-text" class="w-4 h-4"></i> 9. COUNTERFACTUAL SIMULATOR & XUẤT BÁO CÁO
+          </h2>
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-3 text-xs">
+            <div class="space-y-2">
+              <span class="font-bold text-slate-200 block">Kịch bản Counterfactual What-If:</span>
+              <input type="text" value="${block.colB.whatIf.veto}" oninput="updateBlockWhatIf('${block.id}', 'veto', this.value)" placeholder="Nếu Stakeholders VETO?..." class="w-full bg-slate-900 border border-slate-800 text-slate-200 rounded-lg p-2">
+              <input type="text" value="${block.colB.whatIf.opposite}" oninput="updateBlockWhatIf('${block.id}', 'opposite', this.value)" placeholder="Nếu đối thủ phản ứng ngược?..." class="w-full bg-slate-900 border border-slate-800 text-slate-200 rounded-lg p-2">
+            </div>
+            <div class="pt-2 flex justify-end">
+              <button onclick="exportComprehensiveStrategyMap()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-lg flex items-center gap-2">
+                <i data-lucide="file-text" class="w-4 h-4"></i> 📑 XUẤT BẢN ĐỒ CHIẾN LƯỢC TOÀN DIỆN
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
     function addSelectedStakeholdersBlock(blockId) {
@@ -1253,8 +1614,8 @@
 
       if (customInp) customInp.value = "";
       syncBlockPipeline(blockId);
-      renderAllMainIdeaBlocks();
-      showToast("Đã thêm đối tượng vào Khung Ý chính!", "success");
+      renderWorkspace();
+      showToast("Đã thêm đối tượng thành công!", "success");
     }
 
     function removeStakeholderBlock(blockId, stkName) {
@@ -1262,7 +1623,7 @@
       if (block) {
         block.colA.stakeholders = block.colA.stakeholders.filter(s => s.name !== stkName);
         syncBlockPipeline(blockId);
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
       }
     }
 
@@ -1292,7 +1653,7 @@
 
       if (inp) inp.value = "";
       syncBlockPipeline(blockId);
-      renderAllMainIdeaBlocks();
+      renderWorkspace();
       showToast(`Đã thêm Glow Chip [${category}]!`, "success");
     }
 
@@ -1309,7 +1670,7 @@
       }
 
       syncBlockPipeline(blockId);
-      renderAllMainIdeaBlocks();
+      renderWorkspace();
     }
 
     function syncBlockPipeline(blockId) {
@@ -1339,7 +1700,7 @@
     function autoTransferBlockGlowChips(blockId) {
       const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
       if (!block || block.glowChipsPipeline.length === 0) {
-        showToast("Pipeline của Khung này đang trống!", "error");
+        showToast("Pipeline đang trống!", "error");
         return;
       }
 
@@ -1352,12 +1713,11 @@
         }
       });
 
-      renderAllMainIdeaBlocks();
+      renderWorkspace();
       syncLiveTree();
       showToast("Đã tự động chuyển Glow Chips vào Nhánh Xương Lớn!", "success");
     }
 
-    // Impact point manipulation per single chip
     function addSingleChipImpact(blockId, chipId, type, tier, inputId) {
       const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
       if (!block) return;
@@ -1369,7 +1729,7 @@
       if (chipObj) {
         chipObj[type][`tier${tier}`].push(val);
         if (inp) inp.value = "";
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
       }
     }
@@ -1380,7 +1740,7 @@
       const chipObj = block.glowChipsPipeline.find(c => c.id === chipId);
       if (chipObj) {
         chipObj[type][`tier${tier}`].splice(index, 1);
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
       }
     }
@@ -1416,7 +1776,7 @@
           if (parsed.hai_1) chipObj.hai.tier1.push(...parsed.hai_1);
           if (parsed.hai_2) chipObj.hai.tier2.push(...parsed.hai_2);
 
-          renderAllMainIdeaBlocks();
+          renderWorkspace();
           syncLiveTree();
           showToast("AI đã hoàn tất dự báo cho Chip này!", "success");
         }
@@ -1445,7 +1805,7 @@
       const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
       if (block) {
         block.colB.fishboneSubcauses[branchKey].splice(index, 1);
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
       }
     }
@@ -1455,7 +1815,7 @@
       const input = prompt(`Nhập nguyên nhân mới cho [${branchKey}]:`);
       if (block && input && input.trim()) {
         block.colB.fishboneSubcauses[branchKey].push(input.trim());
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
       }
     }
@@ -1479,13 +1839,13 @@
       if (tab === '5whys') {
         if (content5w) content5w.classList.remove('hidden');
         if (contentFp) contentFp.classList.add('hidden');
-        if (btn5w) btn5w.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-600 text-white";
-        if (btnFp) btnFp.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300";
+        if (btn5w) btn5w.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white";
+        if (btnFp) btnFp.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300";
       } else {
         if (content5w) content5w.classList.add('hidden');
         if (contentFp) contentFp.classList.remove('hidden');
-        if (btnFp) btnFp.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-600 text-white";
-        if (btn5w) btn5w.className = "px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-800 text-slate-300";
+        if (btnFp) btnFp.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white";
+        if (btn5w) btn5w.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300";
       }
     }
 
@@ -1502,7 +1862,7 @@
       } else {
         block.colB.eliminatedWhys.push(num);
       }
-      renderAllMainIdeaBlocks();
+      renderWorkspace();
     }
 
     function updateBlockFirstP(blockId, field, val) {
@@ -1519,7 +1879,7 @@
       if (!block) return;
 
       showToast("AI đang quét ngụy biện logic...", "info");
-      const promptText = `Hãy quét ngụy biện logic cho chuỗi 5-WHYs sau: ${JSON.stringify(block.colB.whys)}. Nhận xét ngắn gọn 2 câu tiếng Việt xem có bị lỗi vi phạm logic hoặc nhảy vọt kết luận không.`;
+      const promptText = `Hãy quét ngụy biện logic cho chuỗi 5-WHYs sau: ${JSON.stringify(block.colB.whys)}. Nhận xét ngắn gọn 2 câu tiếng Việt.`;
 
       try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${geminiApiKey}`, {
@@ -1548,7 +1908,7 @@
           title: "", desc: "", s2Desc: "", activeS2: false,
           filterImpactsPostS1: { loi: { tier1: [] }, hai: { tier1: [] } }
         });
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
       }
     }
@@ -1557,7 +1917,7 @@
       const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
       if (block) {
         block.colB.s1Solutions = block.colB.s1Solutions.filter(s => s.id !== solId);
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
       }
     }
@@ -1574,7 +1934,7 @@
       const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
       if (block) {
         const sol = block.colB.s1Solutions.find(s => s.id === solId);
-        if (sol) { sol.activeS2 = !sol.activeS2; renderAllMainIdeaBlocks(); syncLiveTree(); }
+        if (sol) { sol.activeS2 = !sol.activeS2; renderWorkspace(); syncLiveTree(); }
       }
     }
 
@@ -1602,7 +1962,7 @@
         const parsed = JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text);
         if (parsed.loi) sol.filterImpactsPostS1.loi.tier1.push(...parsed.loi);
         if (parsed.hai) sol.filterImpactsPostS1.hai.tier1.push(...parsed.hai);
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
         syncLiveTree();
         showToast("AI đã hoàn tất đánh giá sau S1!", "success");
       } catch (err) {
@@ -1686,7 +2046,7 @@
             filterImpactsPostS1: { loi: { tier1: [] }, hai: { tier1: [] } }
           });
         }
-        renderAllMainIdeaBlocks();
+        renderWorkspace();
       }
       switchPracticeSubTab('workflow');
       showToast(`Đã đưa "${title}" vào Khung Giải Pháp ở Tab 1!`, "success");
