@@ -72,25 +72,25 @@
   <!-- NAVIGATION & HEADER WITH GEMINI API KEY INPUT -->
   <header class="bg-slate-900/95 backdrop-blur-md text-white shadow-2xl sticky top-0 z-40 border-b border-slate-800 shrink-0">
     <div class="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 gap-4">
+      <div class="flex items-center justify-between h-16 gap-2 sm:gap-4">
         <!-- Logo -->
-        <div class="flex items-center space-x-3 cursor-pointer shrink-0" onclick="switchTab('home')">
+        <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="switchTab('home')">
           <div class="bg-gradient-to-tr from-indigo-600 to-indigo-500 p-2 rounded-xl shadow-lg shadow-indigo-500/20">
-            <i data-lucide="brain-circuit" class="w-6 h-6 text-white"></i>
+            <i data-lucide="brain-circuit" class="w-5 h-5 sm:w-6 sm:h-6 text-white"></i>
           </div>
           <div>
-            <span class="font-black text-base sm:text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-              MindGym <span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-full font-bold ml-1 shadow-sm">SHDF v3.0 AI</span>
+            <span class="font-black text-sm sm:text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+              MindGym <span class="text-[9px] sm:text-[10px] bg-indigo-600 text-white px-1.5 sm:px-2 py-0.5 rounded-full font-bold ml-1 shadow-sm">SHDF v3.0 AI</span>
             </span>
           </div>
         </div>
 
         <!-- Gemini API Key Input Header Integration -->
-        <div class="flex items-center gap-2 bg-slate-950/80 border border-indigo-900/60 px-3 py-1.5 rounded-xl max-w-xs sm:max-w-md w-full">
-          <i data-lucide="key-round" class="w-4 h-4 text-indigo-400 shrink-0"></i>
-          <input type="password" id="gemini-api-key" placeholder="Nhập Gemini API Key (để bật AI trong app)..." class="bg-transparent text-xs text-indigo-200 focus:outline-none w-full placeholder-slate-500 font-mono">
-          <button onclick="saveGeminiKey()" title="Lưu API Key" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-all">
-            <i data-lucide="save" class="w-3 h-3"></i> Lưu
+        <div class="flex items-center gap-1.5 sm:gap-2 bg-slate-950/80 border border-indigo-900/60 px-2 sm:px-3 py-1.5 rounded-xl max-w-[200px] sm:max-w-xs md:max-w-md w-full">
+          <i data-lucide="key-round" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-400 shrink-0"></i>
+          <input type="password" id="gemini-api-key" placeholder="Gemini API Key..." class="bg-transparent text-xs text-indigo-200 focus:outline-none w-full placeholder-slate-500 font-mono">
+          <button onclick="saveGeminiKey()" title="Lưu API Key" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-2.5 py-1 rounded-lg shrink-0 flex items-center gap-1 transition-all">
+            <i data-lucide="save" class="w-3 h-3"></i> <span class="hidden sm:inline">Lưu</span>
           </button>
         </div>
         
@@ -111,7 +111,7 @@
         </nav>
         
         <div class="flex md:hidden">
-          <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white p-2">
+          <button onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white p-1.5">
             <i data-lucide="menu" id="mobile-menu-icon" class="w-6 h-6"></i>
           </button>
         </div>
@@ -136,12 +136,12 @@
           <span class="bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full inline-flex items-center gap-1.5">
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> MindGym Dark Engine 3.0 AI
           </span>
-          <h1 class="text-2xl sm:text-4xl font-black tracking-tight leading-tight">Hệ Thống Luyện Tập Tư Duy Chiến Lược SHDF Tối Ưu</h1>
+          <h1 class="text-2xl sm:text-4xl font-black tracking-tight leading-tight">Hệ Thống Luyện Tập Tư Duy Chiến LƯỢC SHDF Tối Ưu</h1>
           <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
             Quy trình từ trên xuống tích hợp Mũ Trắng 5W1H, STEEPLED, ESG, Fishbone 6M/8P, 5-WHYs, First Principles, SWOT Matrix 4 Ô và AI dự báo tác động.
           </p>
           <div class="pt-2 flex flex-wrap justify-center gap-3">
-            <button onclick="switchTab('practice')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-2xl font-black text-xs transition-all shadow-xl shadow-emerald-600/20 flex items-center gap-2">
+            <button onclick="switchTab('practice')" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-2xl font-black text-xs sm:text-sm transition-all shadow-xl shadow-emerald-600/20 flex items-center gap-2">
               Vào Luyện Tư Duy SHDF <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </button>
           </div>
@@ -149,22 +149,23 @@
       </div>
     </section>
 
-    <!-- ==================== TRANG IMPORT ==================== -->
+    <!-- ==================== TRANG IMPORT (NHẬP DỮ LIỆU) ==================== -->
     <section id="tab-import" class="space-y-6 hidden overflow-y-auto max-h-[calc(100vh-100px)] p-2">
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-md">
         <div>
-          <h2 class="text-lg font-black tracking-tight text-slate-100">Nhập & Quản Lý Tri Thức Excel</h2>
-          <p class="text-slate-400 text-xs mt-0.5">Nạp dữ liệu Tình huống, Bảng Phương Pháp và Quy Luật.</p>
+          <h2 class="text-base sm:text-lg font-black tracking-tight text-slate-100">Nhập & Quản Lý Tri Thức Excel</h2>
+          <p class="text-slate-400 text-xs mt-0.5">Nạp dữ liệu Tình huống, Bảng Phương Pháp và Quy Luật với đầy đủ cột quy định.</p>
         </div>
         <div class="flex gap-2">
           <button onclick="clearAllData()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-rose-600/20">
-            <i data-lucide="trash-2" class="w-4 h-4"></i> Xóa Dữ Liệu Import
+            <i data-lucide="trash-2" class="w-4 h-4"></i> Xóa Tất Cả Dữ Liệu
           </button>
         </div>
       </div>
 
+      <!-- Excel File Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Situations Card -->
+        <!-- File 1: Situations Card -->
         <div class="bg-slate-900 rounded-2xl p-4 border border-slate-800 shadow-md flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-2">
@@ -172,16 +173,16 @@
               <span class="bg-indigo-950 text-indigo-400 border border-indigo-800/50 px-2 py-0.5 rounded-full text-[10px] font-bold" id="badge-situations-count">0 mục</span>
             </div>
             <h3 class="font-bold text-sm text-slate-100 mb-1">Tình Huống Bài Học</h3>
-            <p class="text-[10px] text-slate-400 mb-3">Cột: <code class="text-rose-400">STT</code>, <code class="text-rose-400">tình huống</code>, <code class="text-rose-400">keywords</code></p>
+            <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Cột bắt buộc: <code class="text-rose-400 font-mono">STT</code>, <code class="text-rose-400 font-mono">tình huống</code>, <code class="text-rose-400 font-mono">keywords</code></p>
           </div>
           <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-xl py-4 cursor-pointer hover:border-indigo-500 transition-all">
             <i data-lucide="upload-cloud" class="w-6 h-6 text-slate-500 mb-1"></i>
-            <span class="text-xs font-bold text-slate-300">Tải file .xlsx</span>
-            <input type="file" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event, 'situations')">
+            <span class="text-xs font-bold text-slate-300">Tải file Tình huống (.xlsx)</span>
+            <input type="file" class="hidden" accept=".xlsx, .xls" onchange="previewExcelFile(event, 'situations')">
           </label>
         </div>
 
-        <!-- Methods Card -->
+        <!-- File 2: Methods Card -->
         <div class="bg-slate-900 rounded-2xl p-4 border border-slate-800 shadow-md flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-2">
@@ -189,16 +190,16 @@
               <span class="bg-indigo-950 text-indigo-400 border border-indigo-800/50 px-2 py-0.5 rounded-full text-[10px] font-bold" id="badge-methods-count">0 mục</span>
             </div>
             <h3 class="font-bold text-sm text-slate-100 mb-1">Bảng Phương Pháp</h3>
-            <p class="text-[10px] text-slate-400 mb-3">Cột: <code class="text-rose-400">Loại phương pháp</code>, <code class="text-rose-400">Tên phương pháp</code>, <code class="text-rose-400">Nội dung</code>, <code class="text-rose-400">Từ khóa điều kiện</code></p>
+            <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Cột: <code class="text-rose-400 font-mono">Loại phương pháp</code>, <code class="text-rose-400 font-mono">STT</code>, <code class="text-rose-400 font-mono">Tên phương pháp</code>, <code class="text-rose-400 font-mono">Nội dung</code>, <code class="text-rose-400 font-mono">Điều kiện</code>, <code class="text-rose-400 font-mono">keywords</code>, <code class="text-rose-400 font-mono">Từ khóa điều kiện</code></p>
           </div>
           <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-xl py-4 cursor-pointer hover:border-indigo-500 transition-all">
             <i data-lucide="upload-cloud" class="w-6 h-6 text-slate-500 mb-1"></i>
-            <span class="text-xs font-bold text-slate-300">Tải file .xlsx</span>
-            <input type="file" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event, 'methods')">
+            <span class="text-xs font-bold text-slate-300">Tải file Phương Pháp (.xlsx)</span>
+            <input type="file" class="hidden" accept=".xlsx, .xls" onchange="previewExcelFile(event, 'methods')">
           </label>
         </div>
 
-        <!-- Rules Card -->
+        <!-- File 3: Rules Card -->
         <div class="bg-slate-900 rounded-2xl p-4 border border-slate-800 shadow-md flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-2">
@@ -206,32 +207,151 @@
               <span class="bg-indigo-950 text-indigo-400 border border-indigo-800/50 px-2 py-0.5 rounded-full text-[10px] font-bold" id="badge-rules-count">0 mục</span>
             </div>
             <h3 class="font-bold text-sm text-slate-100 mb-1">Bảng Quy Luật</h3>
-            <p class="text-[10px] text-slate-400 mb-3">Cột: <code class="text-rose-400">Loại quy luật</code>, <code class="text-rose-400">Tên quy luật</code>, <code class="text-rose-400">Nội dung</code>, <code class="text-rose-400">Từ khóa điều kiện</code></p>
+            <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Cột: <code class="text-rose-400 font-mono">Loại quy luật</code>, <code class="text-rose-400 font-mono">STT</code>, <code class="text-rose-400 font-mono">Tên quy luật</code>, <code class="text-rose-400 font-mono">Nội dung</code>, <code class="text-rose-400 font-mono">Nếu</code>, <code class="text-rose-400 font-mono">Thì</code>, <code class="text-rose-400 font-mono">keywords</code>, <code class="text-rose-400 font-mono">Từ khóa điều kiện</code></p>
           </div>
           <label class="flex flex-col items-center justify-center border-2 border-dashed border-slate-800 rounded-xl py-4 cursor-pointer hover:border-indigo-500 transition-all">
             <i data-lucide="upload-cloud" class="w-6 h-6 text-slate-500 mb-1"></i>
-            <span class="text-xs font-bold text-slate-300">Tải file .xlsx</span>
-            <input type="file" class="hidden" accept=".xlsx, .xls" onchange="handleExcelImport(event, 'rules')">
+            <span class="text-xs font-bold text-slate-300">Tải file Quy Luật (.xlsx)</span>
+            <input type="file" class="hidden" accept=".xlsx, .xls" onchange="previewExcelFile(event, 'rules')">
           </label>
+        </div>
+      </div>
+
+      <!-- PREVIEW MODAL / CONTAINER (Tạo bảng Preview để kiểm tra lỗi) -->
+      <div id="import-preview-section" class="hidden bg-slate-900 rounded-2xl p-4 border border-indigo-600 shadow-2xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+          <div class="flex items-center gap-2">
+            <i data-lucide="eye" class="w-5 h-5 text-indigo-400"></i>
+            <h3 class="font-black text-sm text-indigo-300 uppercase" id="preview-title">BẢNG PREVIEW DỮ LIỆU FILE EXCEL</h3>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="confirmImportData()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 shadow-lg shadow-emerald-600/30">
+              <i data-lucide="check-circle" class="w-4 h-4"></i> Xác Nhận Import Vào CSDL
+            </button>
+            <button onclick="cancelImportPreview()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-xl font-bold text-xs">
+              Hủy Bỏ
+            </button>
+          </div>
+        </div>
+
+        <div id="preview-validation-msg" class="text-xs p-2 rounded-xl bg-slate-950 border border-slate-800 font-medium"></div>
+
+        <div class="overflow-x-auto max-h-[350px] custom-scroll border border-slate-800 rounded-xl">
+          <table class="w-full text-left text-xs text-slate-200" id="preview-data-table">
+            <thead class="bg-slate-950 text-indigo-300 sticky top-0 border-b border-slate-800 font-bold uppercase">
+              <tr id="preview-table-header"></tr>
+            </thead>
+            <tbody id="preview-table-body" class="divide-y divide-slate-800/60 bg-slate-900/50 font-sans"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DATABASE VIEWER (Xem bảng dữ liệu hiện tại sau khi import) -->
+      <div class="bg-slate-900 rounded-2xl p-4 border border-slate-800 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-3">
+          <div class="flex items-center gap-2">
+            <i data-lucide="database" class="w-5 h-5 text-emerald-400"></i>
+            <h3 class="font-black text-sm text-slate-100 uppercase">CƠ SỞ DỮ LIỆU ĐÃ NẠP (LƯU TRỮ LẦN SAU)</h3>
+          </div>
+          
+          <div class="flex items-center gap-2 flex-wrap">
+            <div class="bg-slate-950 p-1 rounded-xl border border-slate-800 flex gap-1">
+              <button onclick="switchDbViewer('methods')" id="btn-view-methods" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white">Bảng Phương Pháp</button>
+              <button onclick="switchDbViewer('rules')" id="btn-view-rules" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white">Bảng Quy Luật</button>
+              <button onclick="switchDbViewer('situations')" id="btn-view-situations" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white">Bảng Tình Huống</button>
+            </div>
+            
+            <button onclick="clearCurrentViewerTable()" class="bg-rose-950 text-rose-400 border border-rose-800/80 hover:bg-rose-900 px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1">
+              <i data-lucide="trash" class="w-3.5 h-3.5"></i> Xóa Bảng Này
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto max-h-[400px] custom-scroll border border-slate-800 rounded-xl">
+          <table class="w-full text-left text-xs text-slate-200" id="db-viewer-table">
+            <thead class="bg-slate-950 text-emerald-400 sticky top-0 border-b border-slate-800 font-bold uppercase">
+              <tr id="db-viewer-header"></tr>
+            </thead>
+            <tbody id="db-viewer-body" class="divide-y divide-slate-800/60 bg-slate-950/40"></tbody>
+          </table>
         </div>
       </div>
     </section>
 
-    <!-- ==================== TRANG HỌC THUỘC ==================== -->
-    <section id="tab-memorize" class="space-y-6 hidden overflow-y-auto max-h-[calc(100vh-100px)] p-2">
-      <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 shadow-md">
-        <h2 class="text-lg font-black tracking-tight text-slate-100 mb-2">Học Thuộc Phản Xạ & Trắc Nghiệm</h2>
-        <p class="text-xs text-slate-400 mb-4">Luyện tập trí nhớ với các Phương Pháp và Quy Luật đã import.</p>
-        <div class="flex gap-2 mb-4">
-          <select id="quiz-target-type" class="bg-slate-950 border border-slate-700 text-xs text-slate-100 p-2 rounded-xl">
-            <option value="methods">Bảng Phương Pháp</option>
-            <option value="rules">Bảng Quy Luật</option>
-          </select>
-          <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-xl">Bắt Đầu Học</button>
+    <!-- ==================== TRANG HỌC THUỘC (NÂNG CẤP) ==================== -->
+    <section id="tab-memorize" class="space-y-4 hidden overflow-y-auto max-h-[calc(100vh-100px)] p-2">
+      <div class="bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-md space-y-4">
+        <div>
+          <h2 class="text-base sm:text-lg font-black tracking-tight text-slate-100">Học Thuộc Phản Xạ & Trắc Nghiệm Tự Động</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Luyện tập ghi nhớ với Phương Pháp hoặc Quy Luật, tô đậm từ khóa keywords ở cả 4 phương án, hỗ trợ đọc đáp án bằng giọng nói.</p>
         </div>
-        <div id="quiz-arena" class="hidden space-y-4">
-          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-bold text-sm text-indigo-300" id="quiz-question-title"></div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="quiz-options-container"></div>
+
+        <!-- BỘ LỌC CẤU HÌNH BÀI LUYỆN TẬP -->
+        <div class="bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs">
+            <!-- 1. Chọn Đối tượng -->
+            <div class="space-y-1">
+              <label class="font-bold text-indigo-300 block">1. Chọn Đối Tượng Luyện Tập:</label>
+              <select id="quiz-target-type" onchange="onQuizTargetTypeChange()" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-100 p-2 rounded-xl font-bold focus:outline-none focus:border-indigo-500">
+                <option value="methods">Bảng Phương Pháp</option>
+                <option value="rules">Bảng Quy Luật</option>
+              </select>
+            </div>
+
+            <!-- 2. Chọn Loại cụ thể -->
+            <div class="space-y-1">
+              <label class="font-bold text-indigo-300 block">2. Chọn Loại Phương Pháp / Quy Luật:</label>
+              <select id="quiz-category-select" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-100 p-2 rounded-xl font-semibold focus:outline-none focus:border-indigo-500">
+                <option value="all">-- Tất cả các Loại --</option>
+              </select>
+            </div>
+
+            <!-- 3. Trình tự câu hỏi -->
+            <div class="space-y-1">
+              <label class="font-bold text-indigo-300 block">3. Trình Tự Câu Hỏi:</label>
+              <select id="quiz-order-mode" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-100 p-2 rounded-xl font-semibold focus:outline-none focus:border-indigo-500">
+                <option value="sequential">Theo thứ tự định sẵn</option>
+                <option value="random">Lựa chọn ngẫu nhiên</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- THANH ĐIỀU KHIỂN & ĐỌC GIỌNG NÓI (LÀM GỌN KẾ NÚT BẮT ĐẦU) -->
+          <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800">
+            <button onclick="startQuiz()" class="bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white text-xs font-black px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-1.5 transition-all">
+              <i data-lucide="play" class="w-4 h-4"></i> Bắt Đầu Luyện Tập
+            </button>
+
+            <!-- Ô Đọc To Phương Án Đúng Để Trả Lời (Làm gọn kế nút Bắt Đầu) -->
+            <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700 text-xs">
+              <button id="btn-toggle-speech" onclick="toggleSpeechRecognition()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 text-xs transition-all">
+                <i data-lucide="mic" class="w-3.5 h-3.5 text-indigo-400" id="speech-mic-icon"></i>
+                <span id="speech-btn-label">Bật Đọc Giọng Nói Trả Lời</span>
+              </button>
+              <span class="text-[10px] text-slate-400 hidden lg:inline font-mono">(Đọc khớp 50% tự chọn & qua câu)</span>
+            </div>
+
+            <div id="speech-status-indicator" class="hidden text-xs text-emerald-400 font-bold flex items-center gap-1 animate-pulse">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span> 🎙️ Đang lắng nghe giọng nói...
+            </div>
+          </div>
+        </div>
+
+        <!-- TRẬN ĐẤU TRẮC NGHIỆM (QUIZ ARENA) -->
+        <div id="quiz-arena" class="hidden space-y-4 bg-slate-950 p-4 sm:p-5 rounded-2xl border border-indigo-900/80 shadow-2xl">
+          <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800 pb-2">
+            <span class="font-bold text-indigo-400" id="quiz-progress-text">Câu hỏi 1 / 10</span>
+            <span class="bg-indigo-950 border border-indigo-800 text-indigo-300 px-2 py-0.5 rounded-full font-mono text-[10px]" id="quiz-current-category">Loại: ...</span>
+          </div>
+
+          <!-- Tên phương pháp / quy luật câu hỏi -->
+          <div class="space-y-1">
+            <span class="text-xs text-slate-400 font-medium">Nêu Nội dung của:</span>
+            <h3 class="font-black text-base sm:text-lg text-indigo-200 leading-snug" id="quiz-question-title"></h3>
+          </div>
+
+          <!-- 4 Phương án lựa chọn (Có tô đậm từ khóa keywords) -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2" id="quiz-options-container"></div>
         </div>
       </div>
     </section>
@@ -382,14 +502,6 @@
 
       </div>
 
-      <!-- ================= SUB-TAB 1: QUY TRÌNH TỪ TRÊN XUỐNG (DYNAMIC MAIN IDEA BLOCKS CONTAINER) ================= -->
-      <div id="practice-subtab-workflow-content" class="flex-grow flex flex-col overflow-y-auto custom-scroll space-y-4 pr-1">
-        
-        <!-- DYNAMIC CONTAINER CHỨA CÁC KHUNG MÔ TẢ Ý CHÍNH -->
-        <div id="main-idea-blocks-container" class="space-y-6"></div>
-
-      </div>
-
       <!-- ================= SUB-TAB 2: SƠ ĐỒ KẾT QUẢ (LIVE) ================= -->
       <div id="practice-subtab-tree-content" class="hidden flex-grow overflow-hidden">
         <div class="bg-slate-900 text-slate-100 rounded-2xl p-4 border border-slate-800 shadow-2xl h-full flex flex-col">
@@ -488,7 +600,8 @@
     let activeMenuSection = 'who';
     let activeMacroSub = 'all';
 
-    const STAKEHOLDER_TYPES = ['Người thân', 'Bạn bè', 'Cấp trên', 'Cấp dưới', 'Người xem', 'Xã hội', 'Quốc gia'];
+    // Stakeholders WHO Constants
+    const STAKEHOLDER_TYPES = ['Nhân vật chính', 'Người thân', 'Bạn bè', 'Cấp trên', 'Cấp dưới', 'Người xem', 'Xã hội', 'Quốc gia', 'Khác'];
     const BACKGROUND_OPTIONS = ['Lịch sử hình thành', 'Quê quán', 'Văn hóa', 'Tầng lớp', 'Tín ngưỡng', 'Niềm tin', 'Danh tiếng'];
     const ASPECT_OPTIONS = ['Mong muốn', 'Tính cách', 'Kỹ năng', 'Địa vị', 'Tài sản', 'Quan hệ', 'Quy định'];
 
@@ -510,11 +623,27 @@
       mainIdeaBlocks: []
     };
 
-    function createNewBlockData(customTitle = "") {
+    // Temporary Import State for Preview
+    let tempImportData = null;
+    let activeDbViewerKey = 'methods';
+
+    // Quiz / Memorization State
+    let quizState = {
+      targetType: 'methods',
+      category: 'all',
+      orderMode: 'sequential',
+      items: [],
+      currentIndex: 0,
+      currentQuestion: null,
+      speechActive: false,
+      recognition: null
+    };
+
+    function createNewBlockData(customTitle) {
       const blockId = 'block_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
       return {
         id: blockId,
-        title: customTitle || `Khung Ý chính #${practiceState.mainIdeaBlocks.length + 1}`,
+        title: customTitle || ('Khung Ý chính #' + (practiceState.mainIdeaBlocks.length + 1)),
         sentence: "",
         sentenceChip: null,
         collapsed: false,
@@ -586,38 +715,43 @@
       localStorage.setItem('mindgym_shdf_db', JSON.stringify(db));
       updateStats();
       populateSituationDropdown();
+      renderDbViewerTable();
     }
 
-    function showToast(msg, type = 'success') {
+    function showToast(msg, type) {
+      if (!type) type = 'success';
       const container = document.getElementById('toast-container');
       if (!container) return;
       const toast = document.createElement('div');
-      toast.className = `flex items-center p-3 rounded-xl text-white shadow-xl transition-all duration-300 text-xs font-bold ${
-        type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-indigo-600'
-      }`;
-      toast.innerHTML = `<span>${msg}</span>`;
+      toast.className = "flex items-center p-3 rounded-xl text-white shadow-xl transition-all duration-300 text-xs font-bold " +
+        (type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-indigo-600');
+      toast.innerHTML = "<span>" + msg + "</span>";
       container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
+      setTimeout(function() { toast.remove(); }, 3000);
     }
 
     function switchTab(tabId) {
       activeTab = tabId;
-      ['home', 'import', 'memorize', 'practice'].forEach(t => {
-        const el = document.getElementById(`tab-${t}`);
+      ['home', 'import', 'memorize', 'practice'].forEach(function(t) {
+        const el = document.getElementById("tab-" + t);
         if (el) el.classList.add('hidden');
-        const navBtn = document.getElementById(`nav-${t}`);
+        const navBtn = document.getElementById("nav-" + t);
         if (navBtn) {
           navBtn.className = (t === tabId) 
             ? "px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 bg-indigo-600 text-white shadow-lg shadow-indigo-600/30"
             : "px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 hover:bg-slate-800 text-slate-300";
         }
       });
-      const activeEl = document.getElementById(`tab-${tabId}`);
+      const activeEl = document.getElementById("tab-" + tabId);
       if (activeEl) activeEl.classList.remove('hidden');
       const mobileMenu = document.getElementById('mobile-menu');
       if (mobileMenu) mobileMenu.classList.add('hidden');
 
-      if (tabId === 'practice') {
+      if (tabId === 'import') {
+        renderDbViewerTable();
+      } else if (tabId === 'memorize') {
+        onQuizTargetTypeChange();
+      } else if (tabId === 'practice') {
         populateSituationDropdown();
         renderWorkspace();
         syncLiveTree();
@@ -631,17 +765,17 @@
 
     function switchPracticeSubTab(subId) {
       activePracticeSubTab = subId;
-      ['workflow', 'tree', 'suggest', 'lookup'].forEach(s => {
-        const content = document.getElementById(`practice-subtab-${s}-content`);
+      ['workflow', 'tree', 'suggest', 'lookup'].forEach(function(s) {
+        const content = document.getElementById("practice-subtab-" + s + "-content");
         if (content) content.classList.add('hidden');
-        const btn = document.getElementById(`psubtab-${s}`);
+        const btn = document.getElementById("psubtab-" + s);
         if (btn) {
           btn.className = (s === subId)
             ? "flex-1 min-w-[130px] py-2 px-3 rounded-lg font-black text-xs transition-all bg-indigo-600 text-white shadow-md flex items-center justify-center gap-1.5"
             : "flex-1 min-w-[130px] py-2 px-3 rounded-lg font-bold text-xs transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center justify-center gap-1.5";
         }
       });
-      const targetContent = document.getElementById(`practice-subtab-${subId}-content`);
+      const targetContent = document.getElementById("practice-subtab-" + subId + "-content");
       if (targetContent) targetContent.classList.remove('hidden');
 
       if (subId === 'tree') syncLiveTree();
@@ -649,17 +783,414 @@
       if (subId === 'lookup') renderQuickLook();
     }
 
+    // ==================== TRANG IMPORT: EXCEL PREVIEW & DATABASE VIEWER ====================
+    function previewExcelFile(ev, targetKey) {
+      const file = ev.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const rawRows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: "" });
+
+          if (!rawRows || rawRows.length === 0) {
+            showToast("File Excel trống hoặc không đọc được dữ liệu!", "error");
+            return;
+          }
+
+          tempImportData = {
+            key: targetKey,
+            fileName: file.name,
+            rows: rawRows
+          };
+
+          renderPreviewModal();
+        } catch (err) {
+          showToast("Lỗi đọc file Excel!", "error");
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function renderPreviewModal() {
+      if (!tempImportData) return;
+      const previewSec = document.getElementById('import-preview-section');
+      const titleEl = document.getElementById('preview-title');
+      const msgEl = document.getElementById('preview-validation-msg');
+      const headerRow = document.getElementById('preview-table-header');
+      const bodyRow = document.getElementById('preview-table-body');
+
+      if (!previewSec) return;
+      previewSec.classList.remove('hidden');
+
+      const targetKey = tempImportData.key;
+      let requiredCols = [];
+      if (targetKey === 'situations') {
+        requiredCols = ['STT', 'tình huống', 'keywords'];
+      } else if (targetKey === 'methods') {
+        requiredCols = ['Loại phương pháp', 'STT', 'Tên phương pháp', 'Nội dung', 'Điều kiện', 'keywords', 'Từ khóa điều kiện'];
+      } else if (targetKey === 'rules') {
+        requiredCols = ['Loại quy luật', 'STT', 'Tên quy luật', 'Nội dung', 'Nếu', 'Thì', 'keywords', 'Từ khóa điều kiện'];
+      }
+
+      titleEl.innerText = `BẢNG PREVIEW FILE: ${tempImportData.fileName} (${tempImportData.rows.length} DÒNG)`;
+
+      // Column Validation Check
+      const firstRowKeys = Object.keys(tempImportData.rows[0] || {});
+      const missingCols = requiredCols.filter(col => !firstRowKeys.includes(col));
+
+      if (missingCols.length > 0) {
+        msgEl.className = "text-xs p-2 rounded-xl bg-rose-950/80 border border-rose-800 text-rose-300 font-bold flex items-center gap-1";
+        msgEl.innerHTML = `<i data-lucide="alert-triangle" class="w-4 h-4 text-rose-400"></i> Cảnh báo: Thiếu cột quy định: ${missingCols.join(', ')}`;
+      } else {
+        msgEl.className = "text-xs p-2 rounded-xl bg-emerald-950/80 border border-emerald-800 text-emerald-300 font-bold flex items-center gap-1";
+        msgEl.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> File khớp đầy đủ cột quy định! Bạn có thể nhấn "Xác Nhận Import".`;
+      }
+
+      // Render Headers
+      headerRow.innerHTML = "";
+      const displayCols = firstRowKeys.length > 0 ? firstRowKeys : requiredCols;
+      displayCols.forEach(col => {
+        const th = document.createElement('th');
+        th.className = "px-3 py-2 border-b border-slate-800 font-bold whitespace-nowrap";
+        th.innerText = col;
+        headerRow.appendChild(th);
+      });
+
+      // Render Preview Rows (max 15 rows for preview speed)
+      bodyRow.innerHTML = "";
+      const previewRows = tempImportData.rows.slice(0, 15);
+      previewRows.forEach((row, rIdx) => {
+        const tr = document.createElement('tr');
+        tr.className = rIdx % 2 === 0 ? "bg-slate-900/40" : "bg-slate-950/40";
+        displayCols.forEach(col => {
+          const td = document.createElement('td');
+          td.className = "px-3 py-1.5 border-b border-slate-800/60 max-w-xs truncate text-[11px]";
+          td.innerText = row[col] !== undefined ? row[col] : "";
+          tr.appendChild(td);
+        });
+        bodyRow.appendChild(tr);
+      });
+
+      lucide.createIcons();
+    }
+
+    function confirmImportData() {
+      if (!tempImportData) return;
+      db[tempImportData.key] = tempImportData.rows;
+      saveDbToLocal();
+      showToast(`Đã import thành công ${tempImportData.rows.length} dòng cho ${tempImportData.key}!`, "success");
+      cancelImportPreview();
+      activeDbViewerKey = tempImportData.key;
+      renderDbViewerTable();
+    }
+
+    function cancelImportPreview() {
+      tempImportData = null;
+      const previewSec = document.getElementById('import-preview-section');
+      if (previewSec) previewSec.classList.add('hidden');
+    }
+
+    function switchDbViewer(key) {
+      activeDbViewerKey = key;
+      ['methods', 'rules', 'situations'].forEach(k => {
+        const btn = document.getElementById(`btn-view-${k}`);
+        if (btn) {
+          btn.className = (k === key)
+            ? "px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white"
+            : "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white";
+        }
+      });
+      renderDbViewerTable();
+    }
+
+    function renderDbViewerTable() {
+      const headerRow = document.getElementById('db-viewer-header');
+      const bodyRow = document.getElementById('db-viewer-body');
+      if (!headerRow || !bodyRow) return;
+
+      const dataList = db[activeDbViewerKey] || [];
+      headerRow.innerHTML = "";
+      bodyRow.innerHTML = "";
+
+      if (dataList.length === 0) {
+        bodyRow.innerHTML = `<tr><td colspan="10" class="p-4 text-center text-xs text-slate-500 italic">Chưa có dữ liệu cho bảng này. Vui lòng import file Excel ở trên.</td></tr>`;
+        return;
+      }
+
+      const cols = Object.keys(dataList[0]);
+      cols.forEach(col => {
+        const th = document.createElement('th');
+        th.className = "px-3 py-2 border-b border-slate-800 font-bold whitespace-nowrap text-emerald-400";
+        th.innerText = col;
+        headerRow.appendChild(th);
+      });
+
+      dataList.forEach((row, rIdx) => {
+        const tr = document.createElement('tr');
+        tr.className = rIdx % 2 === 0 ? "bg-slate-900/30" : "bg-slate-950/30";
+        cols.forEach(col => {
+          const td = document.createElement('td');
+          td.className = "px-3 py-2 border-b border-slate-800/50 text-[11px] max-w-sm truncate";
+          td.innerText = row[col] !== undefined ? row[col] : "";
+          tr.appendChild(td);
+        });
+        bodyRow.appendChild(tr);
+      });
+    }
+
+    function clearCurrentViewerTable() {
+      db[activeDbViewerKey] = [];
+      saveDbToLocal();
+      showToast(`Đã xóa dữ liệu bảng ${activeDbViewerKey}!`, "error");
+    }
+
+    function clearAllData() {
+      db = { situations: [], methods: [], rules: [] };
+      saveDbToLocal();
+      showToast("Đã xóa tất cả dữ liệu import!", "error");
+    }
+
+    // ==================== TRANG HỌC THUỘC & BÀI TẬP TRẮC NGHIỆM ====================
+    function onQuizTargetTypeChange() {
+      const targetTypeSelect = document.getElementById('quiz-target-type');
+      const catSelect = document.getElementById('quiz-category-select');
+      if (!targetTypeSelect || !catSelect) return;
+
+      const targetType = targetTypeSelect.value;
+      quizState.targetType = targetType;
+      catSelect.innerHTML = '<option value="all">-- Tất cả các Loại --</option>';
+
+      const dataPool = db[targetType] || [];
+      const catKey = targetType === 'methods' ? 'Loại phương pháp' : 'Loại quy luật';
+
+      const categories = Array.from(new Set(dataPool.map(item => item[catKey]).filter(Boolean)));
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.innerText = cat;
+        catSelect.appendChild(opt);
+      });
+    }
+
+    function startQuiz() {
+      const targetTypeSelect = document.getElementById('quiz-target-type');
+      const catSelect = document.getElementById('quiz-category-select');
+      const orderModeSelect = document.getElementById('quiz-order-mode');
+
+      const targetType = targetTypeSelect ? targetTypeSelect.value : 'methods';
+      const selectedCat = catSelect ? catSelect.value : 'all';
+      const orderMode = orderModeSelect ? orderModeSelect.value : 'sequential';
+
+      const dataPool = db[targetType] || [];
+      const catKey = targetType === 'methods' ? 'Loại phương pháp' : 'Loại quy luật';
+
+      let filteredItems = dataPool.filter(item => {
+        if (!item['Nội dung']) return false;
+        if (selectedCat !== 'all' && item[catKey] !== selectedCat) return false;
+        return true;
+      });
+
+      if (filteredItems.length === 0) {
+        showToast("Không tìm thấy dữ liệu phù hợp! Hãy nạp file Excel trước.", "error");
+        return;
+      }
+
+      if (orderMode === 'random') {
+        filteredItems = [...filteredItems].sort(() => Math.random() - 0.5);
+      }
+
+      quizState.targetType = targetType;
+      quizState.category = selectedCat;
+      quizState.orderMode = orderMode;
+      quizState.items = filteredItems;
+      quizState.currentIndex = 0;
+
+      const arena = document.getElementById('quiz-arena');
+      if (arena) arena.classList.remove('hidden');
+
+      renderQuizQuestion();
+      showToast("Đã bắt đầu bài luyện tập phản xạ!", "success");
+    }
+
+    function renderQuizQuestion() {
+      if (quizState.currentIndex >= quizState.items.length) {
+        showToast("Chúc mừng! Bạn đã hoàn thành toàn bộ câu hỏi luyện tập.", "success");
+        const arena = document.getElementById('quiz-arena');
+        if (arena) arena.classList.add('hidden');
+        return;
+      }
+
+      const currentItem = quizState.items[quizState.currentIndex];
+      quizState.currentQuestion = currentItem;
+
+      const progressEl = document.getElementById('quiz-progress-text');
+      const catBadgeEl = document.getElementById('quiz-current-category');
+      const qTitleEl = document.getElementById('quiz-question-title');
+      const optionsContainer = document.getElementById('quiz-options-container');
+
+      const targetType = quizState.targetType;
+      const titleKey = targetType === 'methods' ? 'Tên phương pháp' : 'Tên quy luật';
+      const catKey = targetType === 'methods' ? 'Loại phương pháp' : 'Loại quy luật';
+
+      if (progressEl) progressEl.innerText = `Câu hỏi ${quizState.currentIndex + 1} / ${quizState.items.length}`;
+      if (catBadgeEl) catBadgeEl.innerText = `Loại: ${currentItem[catKey] || 'Tất cả'}`;
+      if (qTitleEl) qTitleEl.innerText = `"${currentItem[titleKey] || 'Phương pháp / Quy luật'}"`;
+
+      // Build 4 Options (1 correct + 3 distractors)
+      const correctAnswer = currentItem['Nội dung'];
+      const allPool = db[targetType] || [];
+      const otherAnswers = Array.from(new Set(allPool.map(i => i['Nội dung']).filter(ans => ans && ans !== correctAnswer)));
+      
+      const shuffledDistractors = [...otherAnswers].sort(() => Math.random() - 0.5).slice(0, 3);
+      const fourOptions = [correctAnswer, ...shuffledDistractors].sort(() => Math.random() - 0.5);
+
+      // Extract Keywords for Highlighting across ALL 4 options
+      const rawKeywords = currentItem['keywords'] || currentItem['Từ khóa điều kiện'] || "";
+      const keywordList = rawKeywords.split(/[,;\/\s]+/).map(k => k.trim()).filter(k => k.length > 1);
+
+      optionsContainer.innerHTML = "";
+      fourOptions.forEach((optText, idx) => {
+        // Highlight keywords in text
+        let highlightedText = optText;
+        if (keywordList.length > 0) {
+          keywordList.forEach(kw => {
+            const regex = new RegExp(`(${escapeRegExp(kw)})`, 'gi');
+            highlightedText = highlightedText.replace(regex, '<mark class="bg-amber-500/30 text-amber-200 font-extrabold px-1 py-0.5 rounded border border-amber-500/50">$1</mark>');
+          });
+        }
+
+        const btn = document.createElement('button');
+        btn.onclick = function() { handleQuizAnswerSelect(optText, correctAnswer, btn); };
+        btn.className = "quiz-option-btn w-full text-left p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-indigo-500 hover:bg-slate-850 text-xs text-slate-200 transition-all font-medium leading-relaxed shadow-sm";
+        btn.innerHTML = `<span class="font-bold text-indigo-400 mr-1 opacity-70">${String.fromCharCode(65 + idx)}.</span> ${highlightedText}`;
+        optionsContainer.appendChild(btn);
+      });
+
+      // Restart Speech Recognition listener if active
+      if (quizState.speechActive && quizState.recognition) {
+        try { quizState.recognition.start(); } catch (e) {}
+      }
+    }
+
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function handleQuizAnswerSelect(selectedAnswer, correctAnswer, btnElement) {
+      const allBtns = document.querySelectorAll('.quiz-option-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      if (selectedAnswer === correctAnswer) {
+        if (btnElement) {
+          btnElement.className = "quiz-option-btn w-full text-left p-3 rounded-xl bg-emerald-950 border border-emerald-500 text-xs text-emerald-100 font-bold leading-relaxed shadow-lg";
+        }
+        showToast("ĐÍNH CHÍNH XÁC! Tự động chuyển câu tiếp...", "success");
+      } else {
+        if (btnElement) {
+          btnElement.className = "quiz-option-btn w-full text-left p-3 rounded-xl bg-rose-950 border border-rose-500 text-xs text-rose-100 font-bold leading-relaxed";
+        }
+        showToast("Rất tiếc! Đáp án chưa chính xác.", "error");
+      }
+
+      // Auto advance to next question after short delay
+      setTimeout(function() {
+        quizState.currentIndex++;
+        renderQuizQuestion();
+      }, 1000);
+    }
+
+    // Speech Recognition Integration for Answering by Voice
+    function toggleSpeechRecognition() {
+      const btnLabel = document.getElementById('speech-btn-label');
+      const micIcon = document.getElementById('speech-mic-icon');
+      const indicator = document.getElementById('speech-status-indicator');
+
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        showToast("Trình duyệt không hỗ trợ Web Speech Recognition API!", "error");
+        return;
+      }
+
+      if (quizState.speechActive) {
+        quizState.speechActive = false;
+        if (quizState.recognition) quizState.recognition.stop();
+        if (btnLabel) btnLabel.innerText = "Bật Đọc Giọng Nói Trả Lời";
+        if (indicator) indicator.classList.add('hidden');
+        showToast("Đã tắt nhận diện giọng nói.", "info");
+      } else {
+        quizState.speechActive = true;
+        if (btnLabel) btnLabel.innerText = "Tắt Đọc Giọng Nói";
+        if (indicator) indicator.classList.remove('hidden');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        quizState.recognition = new SpeechRecognition();
+        quizState.recognition.lang = 'vi-VN';
+        quizState.recognition.continuous = true;
+        quizState.recognition.interimResults = true;
+
+        quizState.recognition.onresult = function(event) {
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              const transcript = event.results[i][0].transcript.trim();
+              processVoiceAnswer(transcript);
+            }
+          }
+        };
+
+        quizState.recognition.onerror = function(event) {
+          if (quizState.speechActive) {
+            try { quizState.recognition.start(); } catch (e) {}
+          }
+        };
+
+        try { quizState.recognition.start(); } catch (e) {}
+        showToast("Đã bật giọng nói! Hãy đọc phương án đúng để tự chọn.", "success");
+      }
+    }
+
+    function processVoiceAnswer(spokenText) {
+      if (!quizState.currentQuestion) return;
+      const correctAnswer = quizState.currentQuestion['Nội dung'];
+      
+      const similarity = calculateStringSimilarity(spokenText.toLowerCase(), correctAnswer.toLowerCase());
+      if (similarity >= 0.50) {
+        showToast(`🎙️ Đã đọc đúng giọng nói (${Math.round(similarity * 100)}% khớp)!`, "success");
+        quizState.currentIndex++;
+        renderQuizQuestion();
+      } else {
+        showToast(`🎙️ Nhận diện: "${spokenText}" (${Math.round(similarity * 100)}% khớp) - Chưa đủ 50%`, "info");
+      }
+    }
+
+    // String Similarity Function (Word Overlap & Levenshtein fallback)
+    function calculateStringSimilarity(str1, str2) {
+      const words1 = str1.split(/\s+/).filter(Boolean);
+      const words2 = str2.split(/\s+/).filter(Boolean);
+      if (words1.length === 0 || words2.length === 0) return 0;
+
+      let matches = 0;
+      words1.forEach(w => {
+        if (words2.some(w2 => w2.includes(w) || w.includes(w2))) matches++;
+      });
+
+      return matches / Math.max(words1.length, words2.length);
+    }
+
+    // Populate Situation Dropdown for Tab 4 Practice
     function populateSituationDropdown() {
       const select = document.getElementById('p-top-situation-select');
       if (!select) return;
-      select.innerHTML = `<option value="">-- Chọn tình huống Excel (${db.situations ? db.situations.length : 0}) --</option>`;
+      select.innerHTML = '<option value="">-- Chọn tình huống Excel (' + (db.situations ? db.situations.length : 0) + ') --</option>';
       
       if (db.situations) {
-        db.situations.forEach(sit => {
+        db.situations.forEach(function(sit) {
           const opt = document.createElement('option');
           const sitText = sit['tình huống'] || sit['Tình huống'] || '';
           opt.value = sitText;
-          opt.innerText = `[STT ${sit['STT'] || '?'}] ${sitText.substring(0, 50)}...`;
+          opt.innerText = "[STT " + (sit['STT'] || '?') + "] " + sitText.substring(0, 50) + "...";
           select.appendChild(opt);
         });
       }
@@ -680,7 +1211,7 @@
       syncLiveTree();
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', function() {
       const savedKey = localStorage.getItem('mindgym_gemini_key');
       if (savedKey) {
         geminiApiKey = savedKey;
@@ -710,7 +1241,7 @@
       activeBlockIndex = practiceState.mainIdeaBlocks.length - 1;
       renderWorkspace();
       syncLiveTree();
-      showToast(`Đã tạo thêm ${newBlock.title}!`, "success");
+      showToast("Đã tạo thêm " + newBlock.title + "!", "success");
     }
 
     function selectBlock(idx) {
@@ -723,7 +1254,7 @@
         showToast("Phải giữ ít nhất 1 Khung Ý chính!", "error");
         return;
       }
-      practiceState.mainIdeaBlocks = practiceState.mainIdeaBlocks.filter(b => b.id !== blockId);
+      practiceState.mainIdeaBlocks = practiceState.mainIdeaBlocks.filter(function(b) { return b.id !== blockId; });
       if (activeBlockIndex >= practiceState.mainIdeaBlocks.length) {
         activeBlockIndex = practiceState.mainIdeaBlocks.length - 1;
       }
@@ -732,15 +1263,15 @@
       showToast("Đã xóa Khung Ý chính!", "error");
     }
 
-    function selectMenuSection(sec, sub = 'all') {
+    function selectMenuSection(sec, sub) {
+      if (!sub) sub = 'all';
       activeMenuSection = sec;
       activeMacroSub = sub;
 
-      // Highlight active menu in Column A
-      document.querySelectorAll('.tree-menu-item').forEach(el => {
+      document.querySelectorAll('.tree-menu-item').forEach(function(el) {
         el.className = "tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800";
       });
-      const activeBtn = document.getElementById(`menu-btn-${sec}`);
+      const activeBtn = document.getElementById("menu-btn-" + sec);
       if (activeBtn) {
         activeBtn.className = "tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 bg-indigo-600 text-white font-bold shadow-md";
       }
@@ -749,16 +1280,16 @@
     }
 
     function packSentenceToChip(blockId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const inp = document.getElementById(`sentence-input-${blockId}`);
+      const inp = document.getElementById("sentence-input-" + blockId);
       const val = inp ? inp.value.trim() : "";
       if (!val) {
         showToast("Vui lòng nhập câu mô tả ý chính!", "error");
         return;
       }
       block.sentence = val;
-      block.sentenceChip = createChipObj(`[Ý Chính]: ${val}`, 'CÂU Ý CHÍNH');
+      block.sentenceChip = createChipObj("[Ý Chính]: " + val, 'CÂU Ý CHÍNH');
       
       syncBlockPipeline(blockId);
       renderWorkspace();
@@ -775,16 +1306,14 @@
       if (!bar) return;
       bar.innerHTML = "";
 
-      practiceState.mainIdeaBlocks.forEach((block, idx) => {
+      practiceState.mainIdeaBlocks.forEach(function(block, idx) {
         const btn = document.createElement('button');
-        btn.onclick = () => selectBlock(idx);
+        btn.onclick = function() { selectBlock(idx); };
         btn.className = (idx === activeBlockIndex)
           ? "px-3 py-1.5 rounded-lg text-xs font-black bg-indigo-600 text-white shadow-md flex items-center gap-1.5 shrink-0"
           : "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:bg-slate-800 shrink-0";
-        btn.innerHTML = `
-          <span>${block.title}</span>
-          ${practiceState.mainIdeaBlocks.length > 1 ? `<span onclick="event.stopPropagation(); removeMainIdeaBlock('${block.id}')" class="text-rose-400 hover:text-white font-bold">×</span>` : ''}
-        `;
+        btn.innerHTML = '<span>' + block.title + '</span>' +
+          (practiceState.mainIdeaBlocks.length > 1 ? '<span onclick="event.stopPropagation(); removeMainIdeaBlock(\'' + block.id + '\')" class="text-rose-400 hover:text-white font-bold">×</span>' : '');
         bar.appendChild(btn);
       });
     }
@@ -815,7 +1344,7 @@
                     <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'loi', ${tier}, 'inp-chip-loi-${tier}-${chip.id}')" class="bg-emerald-600 text-white font-bold px-1.5 rounded">+</button>
                   </div>
                   <div class="space-y-0.5 pl-1 text-emerald-200">
-                    ${chip.loi[`tier${tier}`].map((item, idx) => `<div class="flex justify-between items-center">• B${tier}: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'loi', ${tier}, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
+                    ${(chip.loi['tier' + tier] || []).map((item, idx) => `<div class="flex justify-between items-center">• B${tier}: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'loi', ${tier}, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
                   </div>
                 </div>
               `).join('')}
@@ -832,7 +1361,7 @@
                     <button onclick="addSingleChipImpact('${blockId}', '${chip.id}', 'hai', ${tier}, 'inp-chip-hai-${tier}-${chip.id}')" class="bg-rose-600 text-white font-bold px-1.5 rounded">+</button>
                   </div>
                   <div class="space-y-0.5 pl-1 text-rose-200">
-                    ${chip.hai[`tier${tier}`].map((item, idx) => `<div class="flex justify-between items-center">• B${tier}: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'hai', ${tier}, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
+                    ${(chip.hai['tier' + tier] || []).map((item, idx) => `<div class="flex justify-between items-center">• B${tier}: ${item} <button onclick="removeSingleChipImpact('${blockId}', '${chip.id}', 'hai', ${tier}, ${idx})" class="text-rose-400 font-bold">×</button></div>`).join('')}
                   </div>
                 </div>
               `).join('')}
@@ -849,7 +1378,6 @@
       const block = practiceState.mainIdeaBlocks[activeBlockIndex] || practiceState.mainIdeaBlocks[0];
       if (!block) return;
 
-      // Sentence input always visible at top of Column B
       let html = `
         <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/80 mb-4 space-y-2 shrink-0">
           <div class="flex justify-between items-center">
@@ -864,7 +1392,6 @@
         </div>
       `;
 
-      // Render selected section content in Column B
       if (activeMenuSection === 'who') {
         html += renderWhoSectionHTML(block);
       } else if (activeMenuSection === 'what_where_when_how') {
@@ -889,27 +1416,34 @@
       lucide.createIcons();
     }
 
+    function selectAllWhoBg(blockId, isSelect) {
+      const cbs = document.querySelectorAll(`.who-bg-checkbox-${blockId}`);
+      cbs.forEach(function(cb) { cb.checked = isSelect; });
+    }
+
+    function selectAllWhoAsp(blockId, isSelect) {
+      const cbs = document.querySelectorAll(`.who-asp-checkbox-${blockId}`);
+      cbs.forEach(function(cb) { cb.checked = isSelect; });
+    }
+
     function renderWhoSectionHTML(block) {
       return `
-        <div class="space-y-4">
-          <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+        <div class="space-y-4 text-xs sm:text-sm">
+          <h2 class="text-xs sm:text-sm font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
             <i data-lucide="users" class="w-4 h-4"></i> 1. 5W1H - WHO (ĐỐI TƯỢNG, BỐI CẢNH & KHÍA CẠNH TOÀN DIỆN)
           </h2>
           
-          <!-- KHU VỰC THÊM ĐỐI TƯỢNG MỚI (TẠO KHUNG ĐỔI TƯỢNG) -->
           <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-3">
-            <span class="text-xs font-black text-indigo-300 block uppercase">➕ THÊM ĐỐI TƯỢNG MỚI & THIẾT LẬP BỐI CẢNH / KHÍA CẠNH:</span>
+            <span class="text-xs font-black text-indigo-300 block uppercase">➕ THÊM ĐỐI TƯỢNG MỚI (CHỌN NHIỀU ĐỐI TƯỢNG, BỐI CẢNH & KHÍA CẠNH):</span>
             
-            <!-- 1. Tên đối tượng -->
             <div class="space-y-1">
-              <label class="text-[10px] font-bold text-indigo-300 block">1. Tên đối tượng cụ thể:</label>
-              <input type="text" id="who-name-input-${block.id}" placeholder="VD: Anh Nam (Trưởng phòng), Nhóm Khách Hàng VIP..." class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-lg p-2 text-xs focus:border-indigo-500 focus:outline-none">
+              <label class="text-xs font-bold text-indigo-300 block">1. Tên đối tượng cụ thể:</label>
+              <input type="text" id="who-name-input-${block.id}" placeholder="VD: Anh Nam (Trưởng phòng), Nhóm Khách Hàng VIP..." class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded-lg p-2 text-xs sm:text-sm focus:border-indigo-500 focus:outline-none font-bold">
             </div>
 
-            <!-- 2. Phân loại đối tượng (Chọn nhiều) -->
             <div class="space-y-1">
-              <label class="text-[10px] text-slate-400 font-bold block">2. Phân loại đối tượng (Có thể chọn nhiều):</label>
-              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-[10px]">
+              <label class="text-xs text-slate-300 font-bold block">2. Phân loại đối tượng (Có thể chọn nhiều cùng lúc):</label>
+              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-xs">
                 ${STAKEHOLDER_TYPES.map(stk => `
                   <label class="flex items-center gap-1 text-slate-300 font-medium cursor-pointer hover:text-white bg-slate-950 px-2 py-1 rounded border border-slate-800">
                     <input type="checkbox" value="${stk}" class="who-type-checkbox-${block.id} rounded border-slate-700 bg-slate-900 text-indigo-600 focus:ring-0">
@@ -919,10 +1453,15 @@
               </div>
             </div>
 
-            <!-- 3. Nút chọn Bối Cảnh (Chọn nhiều) -->
             <div class="space-y-1">
-              <label class="text-[10px] font-bold text-emerald-400 block">3. Chọn các Bối Cảnh cần điền (Nút chọn nhiều):</label>
-              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-[10px]">
+              <div class="flex justify-between items-center">
+                <label class="text-xs font-bold text-emerald-400 block">3. Chọn các Bối Cảnh cần điền:</label>
+                <div class="flex gap-1">
+                  <button type="button" onclick="selectAllWhoBg('${block.id}', true)" class="bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold">✓ Chọn tất cả</button>
+                  <button type="button" onclick="selectAllWhoBg('${block.id}', false)" class="bg-slate-900 text-slate-400 border border-slate-800 text-[10px] px-2 py-0.5 rounded font-bold">Bỏ chọn</button>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-xs">
                 ${BACKGROUND_OPTIONS.map(bg => `
                   <label class="flex items-center gap-1 text-emerald-200 cursor-pointer bg-emerald-950/40 px-2 py-1 rounded border border-emerald-900/60 hover:bg-emerald-900/60">
                     <input type="checkbox" value="${bg}" class="who-bg-checkbox-${block.id} rounded border-emerald-700 bg-slate-950 text-emerald-500">
@@ -932,10 +1471,15 @@
               </div>
             </div>
 
-            <!-- 4. Nút chọn Khía Cạnh (Chọn nhiều) -->
             <div class="space-y-1">
-              <label class="text-[10px] font-bold text-amber-400 block">4. Chọn các Khía Cạnh cần điền (Nút chọn nhiều):</label>
-              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-[10px]">
+              <div class="flex justify-between items-center">
+                <label class="text-xs font-bold text-amber-400 block">4. Chọn các Khía Cạnh cần điền:</label>
+                <div class="flex gap-1">
+                  <button type="button" onclick="selectAllWhoAsp('${block.id}', true)" class="bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-800 text-[10px] px-2 py-0.5 rounded font-bold">✓ Chọn tất cả</button>
+                  <button type="button" onclick="selectAllWhoAsp('${block.id}', false)" class="bg-slate-900 text-slate-400 border border-slate-800 text-[10px] px-2 py-0.5 rounded font-bold">Bỏ chọn</button>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-1.5 bg-slate-900 p-2 rounded-lg border border-slate-800 text-xs">
                 ${ASPECT_OPTIONS.map(asp => `
                   <label class="flex items-center gap-1 text-amber-200 cursor-pointer bg-amber-950/40 px-2 py-1 rounded border border-amber-900/60 hover:bg-amber-900/60">
                     <input type="checkbox" value="${asp}" class="who-asp-checkbox-${block.id} rounded border-amber-700 bg-slate-950 text-amber-500">
@@ -945,98 +1489,86 @@
               </div>
             </div>
 
-            <button onclick="createNewStakeholderWithFullDetails('${block.id}')" class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-black px-4 py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-600/30">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i> ➕ TẠO KHUNG BỐI CẢNH & KHÍA CẠNH ĐỐI TƯỢNG
+            <button onclick="createNewStakeholderWithFullDetails('${block.id}')" class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white font-black px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-600/30">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> ➕ TẠO KHUNG ĐỐI TƯỢNG WHO (ĐÓNG GÓI FULL GLOW CHIP)
             </button>
           </div>
 
-          <!-- DANH SÁCH CÁC KHUNG ĐỐI TƯỢNG ĐÃ TẠO (NHẬP NỘI DUNG TỪNG BỐI CẢNH & KHÍA CẠNH) -->
           <div class="space-y-3">
-            <span class="font-black text-slate-200 text-xs block">📋 DANH SÁCH KHUNG ĐỐI TƯỢNG & NỘI DUNG CHI TIẾT (Đã Đóng Gói Glow Chip):</span>
-            ${block.colA.stakeholders.length === 0 ? `<div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-500 italic">Chưa tạo đối tượng nào. Hãy điền tên và chọn Bối Cảnh / Khía Cạnh ở trên.</div>` : ''}
+            <span class="font-black text-slate-200 text-xs block">📋 DANH SÁCH KHUNG ĐỐI TƯỢNG & NỘI DUNG CHI TIẾT (KÉO & THẢ ĐƯỢC):</span>
+            ${block.colA.stakeholders.length === 0 ? `<div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs text-slate-500 italic">Chưa tạo đối tượng nào. Hãy điền tên và chọn Bối cảnh / Khía cạnh ở trên.</div>` : ''}
             
             ${block.colA.stakeholders.map(stk => `
-              <div draggable="true" ondragstart="onDragStakeholder(event, '${block.id}', '${stk.id}')" class="bg-slate-950 p-3 rounded-xl border border-indigo-900/80 space-y-3 hover:border-indigo-500 transition-all shadow-md cursor-grab active:cursor-grabbing">
-                <!-- Header khung đối tượng -->
-                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+              <div draggable="true" ondragstart="onDragStakeholder(event, '${block.id}', '${stk.id}')" class="bg-slate-950 p-3 rounded-xl border border-indigo-900/80 space-y-3 shadow-md hover:border-indigo-500 transition-all cursor-grab active:cursor-grabbing">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2 flex-wrap gap-1">
                   <div class="flex items-center gap-2">
-                    <span class="text-xs font-black text-indigo-300">👤 ${stk.name}</span>
-                    <span class="text-[9px] bg-indigo-950 text-indigo-400 border border-indigo-800 px-2 py-0.5 rounded-full font-semibold">
-                      ${stk.types.join(', ') || 'Chưa chọn phân loại'}
+                    <span class="text-xs sm:text-sm font-black text-indigo-300">👤 ${stk.name}</span>
+                    <span class="text-[10px] bg-indigo-950 text-indigo-400 border border-indigo-800 px-2 py-0.5 rounded-full font-semibold">
+                      ${stk.types.join(', ') || 'Chưa chọn loại'}
                     </span>
-                    <span class="text-[9px] bg-slate-900 text-emerald-400 border border-emerald-900/60 px-2 py-0.5 rounded">
-                      Trạng thái: ${stk.quadrant}
+                    <span class="text-[10px] bg-slate-900 text-emerald-400 border border-emerald-900/60 px-2 py-0.5 rounded font-mono">
+                      Vùng Matrix: ${stk.quadrant}
                     </span>
                   </div>
                   <div class="flex items-center gap-1">
-                    <span class="text-[9px] text-slate-500 font-mono italic">🖐️ Kéo thẻ để thả vào Matrix hoặc Xương Cụ thể</span>
+                    <span class="text-[10px] text-amber-400 font-mono italic">🖐️ Kéo thẻ này thả vào Matrix hoặc Nhánh Xương Lớn</span>
                     <button onclick="removeStakeholderBlock('${block.id}', '${stk.id}')" class="text-rose-400 font-bold text-xs hover:text-rose-300 ml-2">❌ Xóa</button>
                   </div>
                 </div>
 
-                <!-- Tên đối tượng có thể chỉnh sửa -->
-                <div class="space-y-1">
-                  <label class="text-[10px] text-slate-400 font-bold block">Sửa tên đối tượng:</label>
-                  <input type="text" value="${stk.name}" onchange="updateStakeholderName('${block.id}', '${stk.id}', this.value)" class="w-full bg-slate-900 border border-slate-700 text-slate-100 rounded p-1.5 text-xs font-bold focus:border-indigo-500 focus:outline-none">
-                </div>
-
-                <!-- Phân vùng BỐI CẢNH (Nội dung từng loại đã chọn) -->
                 <div class="bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-900/40 space-y-2">
-                  <span class="text-[10px] font-black text-emerald-400 uppercase block">🟢 Nội Dung Các Bối Cảnh Đã Chọn:</span>
-                  ${stk.backgrounds.length === 0 ? `<div class="text-[10px] text-slate-500 italic">Không có loại bối cảnh nào được chọn.</div>` : ''}
+                  <span class="text-xs font-black text-emerald-400 uppercase block">🟢 Nội Dung Các Bối Cảnh:</span>
+                  ${stk.backgrounds.length === 0 ? `<div class="text-[11px] text-slate-500 italic">Chưa chọn loại bối cảnh nào.</div>` : ''}
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     ${stk.backgrounds.map((bgObj, bIdx) => `
                       <div class="bg-slate-900 p-2 rounded border border-emerald-900/60 space-y-1">
-                        <span class="text-[10px] font-bold text-emerald-300 block">• ${bgObj.type}:</span>
-                        <input type="text" value="${bgObj.detail || ''}" onchange="updateStakeholderBgDetail('${block.id}', '${stk.id}', ${bIdx}, this.value)" placeholder="Nhập nội dung ${bgObj.type}..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-[10px]">
+                        <span class="text-xs font-bold text-emerald-300 block">• ${bgObj.type}:</span>
+                        <input type="text" value="${bgObj.detail || ''}" onchange="updateStakeholderBgDetail('${block.id}', '${stk.id}', ${bIdx}, this.value)" placeholder="Nhập nội dung ${bgObj.type}..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-xs">
                       </div>
                     `).join('')}
                   </div>
                 </div>
 
-                <!-- Phân vùng KHÍA CẠNH (Nội dung từng loại đã chọn) -->
                 <div class="bg-amber-950/20 p-2.5 rounded-lg border border-amber-900/40 space-y-2">
-                  <span class="text-[10px] font-black text-amber-400 uppercase block">🟠 Nội Dung Các Khía Cạnh Đã Chọn:</span>
-                  ${stk.aspects.length === 0 ? `<div class="text-[10px] text-slate-500 italic">Không có loại khía cạnh nào được chọn.</div>` : ''}
+                  <span class="text-xs font-black text-amber-400 uppercase block">🟠 Nội Dung Các Khía Cạnh:</span>
+                  ${stk.aspects.length === 0 ? `<div class="text-[11px] text-slate-500 italic">Chưa chọn loại khía cạnh nào.</div>` : ''}
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     ${stk.aspects.map((aspObj, aIdx) => `
                       <div class="bg-slate-900 p-2 rounded border border-amber-900/60 space-y-1">
-                        <span class="text-[10px] font-bold text-amber-300 block">• ${aspObj.type}:</span>
-                        <input type="text" value="${aspObj.detail || ''}" onchange="updateStakeholderAspDetail('${block.id}', '${stk.id}', ${aIdx}, this.value)" placeholder="Nhập nội dung ${aspObj.type}..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-[10px]">
+                        <span class="text-xs font-bold text-amber-300 block">• ${aspObj.type}:</span>
+                        <input type="text" value="${aspObj.detail || ''}" onchange="updateStakeholderAspDetail('${block.id}', '${stk.id}', ${aIdx}, this.value)" placeholder="Nhập nội dung ${aspObj.type}..." class="w-full bg-slate-950 border border-slate-700 text-slate-200 rounded p-1 text-xs">
                       </div>
                     `).join('')}
                   </div>
                 </div>
 
-                <!-- Hiển thị chuỗi Glow Chip đầy đủ được tự động tạo -->
-                <div class="bg-slate-900 p-2 rounded-lg border border-indigo-800 text-[10px] space-y-1">
-                  <span class="font-bold text-indigo-400 block">✨ Chuỗi Glow Chip Tự Động Đóng Gói (Gồm Tên + Bối cảnh + Khía cạnh):</span>
-                  <p class="text-indigo-200 font-mono leading-relaxed bg-slate-950 p-1.5 rounded border border-slate-800 break-words">${stk.chipObj ? stk.chipObj.text : ''}</p>
+                <div class="bg-slate-900 p-2 rounded-lg border border-indigo-800 text-xs space-y-1">
+                  <span class="font-bold text-indigo-400 block">✨ Chuỗi GLOW CHIP Tự Động Đóng Gói (Gồm Tên + Bối cảnh + Khía cạnh):</span>
+                  <p class="text-indigo-200 font-mono text-[11px] leading-relaxed bg-slate-950 p-2 rounded border border-slate-800 break-words">${stk.chipObj ? stk.chipObj.text : ''}</p>
                 </div>
               </div>
             `).join('')}
           </div>
 
-          <!-- STAKEHOLDER MATRIX (DRAG & DROP READY) -->
+          <!-- STAKEHOLDER MATRIX (DRAG & DROP) -->
           <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
-            <span class="font-black text-slate-200 text-xs block">Stakeholder Matrix (Kéo & Thả Đối Tượng):</span>
-            <p class="text-[10px] text-slate-400 italic">Kéo thả thẻ đối tượng trực tiếp vào 4 phần tư bên dưới hoặc thả vào Nhánh Xương Lớn.</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10px]">
+            <span class="font-black text-slate-200 text-xs block">Stakeholder Matrix (Thả Đối Tượng Vào 4 Vùng):</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
               ${['Manage Closely', 'Keep Satisfied', 'Keep Informed', 'Monitor'].map(q => `
-                <div ondragover="allowDrop(event)" ondrop="onDropStakeholderMatrix(event, '${block.id}', '${q}')" class="matrix-quad bg-slate-900 border border-slate-800 p-2 rounded-xl min-h-[90px] space-y-1 transition-all">
+                <div ondragover="allowDrop(event)" ondrop="onDropStakeholderMatrix(event, '${block.id}', '${q}')" class="bg-slate-900 border border-slate-800 p-2.5 rounded-xl min-h-[100px] space-y-1 hover:border-indigo-500 transition-all">
                   <span class="font-bold text-indigo-300 block border-b border-slate-800 pb-1 flex justify-between items-center">
                     <span>${q}</span>
-                    <span class="bg-indigo-950 text-indigo-400 border border-indigo-800 text-[9px] px-1.5 py-0.5 rounded-full font-mono">${block.colA.stakeholders.filter(s => s.quadrant === q).length}</span>
+                    <span class="bg-indigo-950 text-indigo-400 border border-indigo-800 text-[10px] px-2 py-0.5 rounded-full font-mono">${block.colA.stakeholders.filter(s => s.quadrant === q).length}</span>
                   </span>
                   <div class="space-y-1 pt-1">
                     ${block.colA.stakeholders.filter(s => s.quadrant === q).map(stk => `
-                      <div draggable="true" ondragstart="onDragStakeholder(event, '${block.id}', '${stk.id}')" class="bg-slate-950 border border-indigo-900/80 p-1.5 rounded-lg text-[10px] text-slate-200 cursor-grab hover:border-indigo-500 transition-all flex flex-col gap-0.5">
+                      <div draggable="true" ondragstart="onDragStakeholder(event, '${block.id}', '${stk.id}')" class="bg-slate-950 border border-indigo-900/80 p-2 rounded-lg text-xs text-slate-200 cursor-grab active:cursor-grabbing hover:border-indigo-500 transition-all space-y-0.5">
                         <div class="flex justify-between items-center font-bold text-indigo-300">
-                          <span>👤 ${stk.name} <span class="text-[9px] text-slate-400 font-normal">(${stk.types.join(', ') || 'Chưa phân loại'})</span></span>
-                          <button onclick="removeStakeholderBlock('${block.id}', '${stk.id}')" class="text-rose-400 font-bold hover:text-rose-300">×</button>
+                          <span>👤 ${stk.name} <span class="text-[10px] text-slate-400 font-normal">(${stk.types.join(', ') || 'Chưa phân loại'})</span></span>
+                          <button onclick="removeStakeholderBlock('${block.id}', '${stk.id}')" class="text-rose-400 hover:text-rose-300 font-bold">×</button>
                         </div>
-                        <div class="text-[9px] text-emerald-300 truncate"><b>Bối cảnh:</b> ${stk.backgrounds.map(b => b.type + (b.detail ? ': ' + b.detail : '')).join(', ') || 'Chưa điền'}</div>
-                        <div class="text-[9px] text-amber-300 truncate"><b>Khía cạnh:</b> ${stk.aspects.map(a => a.type + (a.detail ? ': ' + a.detail : '')).join(', ') || 'Chưa điền'}</div>
+                        <div class="text-[10px] text-emerald-300 truncate"><b>Bối cảnh:</b> ${stk.backgrounds.map(b => b.type + (b.detail ? ': ' + b.detail : '')).join(', ') || 'Chưa điền'}</div>
+                        <div class="text-[10px] text-amber-300 truncate"><b>Khía cạnh:</b> ${stk.aspects.map(a => a.type + (a.detail ? ': ' + a.detail : '')).join(', ') || 'Chưa điền'}</div>
                       </div>
                     `).join('')}
                   </div>
@@ -1049,7 +1581,7 @@
     }
 
     function createNewStakeholderWithFullDetails(blockId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
 
       const typeCbs = document.querySelectorAll(`.who-type-checkbox-${blockId}:checked`);
@@ -1063,14 +1595,14 @@
         return;
       }
 
-      const selectedTypes = Array.from(typeCbs).map(cb => cb.value);
-      const selectedBgTypes = Array.from(bgCbs).map(cb => cb.value);
-      const selectedAspTypes = Array.from(aspCbs).map(cb => cb.value);
+      const selectedTypes = Array.from(typeCbs).map(function(cb) { return cb.value; });
+      const selectedBgTypes = Array.from(bgCbs).map(function(cb) { return cb.value; });
+      const selectedAspTypes = Array.from(aspCbs).map(function(cb) { return cb.value; });
 
       const stkId = 'stk_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
-      const backgroundsObj = selectedBgTypes.map(t => ({ type: t, detail: "" }));
-      const aspectsObj = selectedAspTypes.map(t => ({ type: t, detail: "" }));
+      const backgroundsObj = selectedBgTypes.map(function(t) { return { type: t, detail: "" }; });
+      const aspectsObj = selectedAspTypes.map(function(t) { return { type: t, detail: "" }; });
 
       const newStk = {
         id: stkId,
@@ -1085,23 +1617,21 @@
       newStk.chipObj = createChipObj("", 'WHO');
       block.colA.stakeholders.push(newStk);
 
-      // Helper update full chip text
       updateStakeholderChipText(blockId, stkId);
 
-      // Reset top inputs
       if (nameInp) nameInp.value = "";
-      typeCbs.forEach(cb => cb.checked = false);
-      bgCbs.forEach(cb => cb.checked = false);
-      aspCbs.forEach(cb => cb.checked = false);
+      typeCbs.forEach(function(cb) { cb.checked = false; });
+      bgCbs.forEach(function(cb) { cb.checked = false; });
+      aspCbs.forEach(function(cb) { cb.checked = false; });
 
       renderWorkspace();
-      showToast(`Đã tạo khung bối cảnh & khía cạnh cho đối tượng "${nameVal}"!`, "success");
+      showToast('Đã tạo khung đối tượng WHO cho "' + nameVal + '"!', "success");
     }
 
     function updateStakeholderName(blockId, stkId, newName) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      const stk = block.colA.stakeholders.find(function(s) { return s.id === stkId; });
       if (stk) {
         stk.name = newName.trim() || stk.name;
         updateStakeholderChipText(blockId, stkId);
@@ -1110,9 +1640,9 @@
     }
 
     function updateStakeholderBgDetail(blockId, stkId, bgIdx, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      const stk = block.colA.stakeholders.find(function(s) { return s.id === stkId; });
       if (stk && stk.backgrounds[bgIdx]) {
         stk.backgrounds[bgIdx].detail = val.trim();
         updateStakeholderChipText(blockId, stkId);
@@ -1120,9 +1650,9 @@
     }
 
     function updateStakeholderAspDetail(blockId, stkId, aspIdx, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      const stk = block.colA.stakeholders.find(function(s) { return s.id === stkId; });
       if (stk && stk.aspects[aspIdx]) {
         stk.aspects[aspIdx].detail = val.trim();
         updateStakeholderChipText(blockId, stkId);
@@ -1130,23 +1660,23 @@
     }
 
     function updateStakeholderChipText(blockId, stkId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const stk = block.colA.stakeholders.find(s => s.id === stkId);
+      const stk = block.colA.stakeholders.find(function(s) { return s.id === stkId; });
       if (!stk || !stk.chipObj) return;
 
-      const bgStr = stk.backgrounds.map(b => b.type + (b.detail ? ': ' + b.detail : '')).join(', ') || 'Chưa điền';
-      const aspStr = stk.aspects.map(a => a.type + (a.detail ? ': ' + a.detail : '')).join(', ') || 'Chưa điền';
-      const typeStr = stk.types.length ? ` (${stk.types.join(', ')})` : '';
+      const bgStr = stk.backgrounds.map(function(b) { return b.type + (b.detail ? ': ' + b.detail : ''); }).join(', ') || 'Chưa điền';
+      const aspStr = stk.aspects.map(function(a) { return a.type + (a.detail ? ': ' + a.detail : ''); }).join(', ') || 'Chưa điền';
+      const typeStr = stk.types.length ? ' (' + stk.types.join(', ') + ')' : '';
 
-      stk.chipObj.text = `[WHO]: ${stk.name}${typeStr} | Bối cảnh: ${bgStr} | Khía cạnh: ${aspStr}`;
+      stk.chipObj.text = "[WHO]: " + stk.name + typeStr + " | Bối cảnh: " + bgStr + " | Khía cạnh: " + aspStr;
       syncBlockPipeline(blockId);
     }
 
     function removeStakeholderBlock(blockId, stkId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) {
-        block.colA.stakeholders = block.colA.stakeholders.filter(s => s.id !== stkId);
+        block.colA.stakeholders = block.colA.stakeholders.filter(function(s) { return s.id !== stkId; });
         syncBlockPipeline(blockId);
         renderWorkspace();
       }
@@ -1166,13 +1696,13 @@
         const raw = ev.dataTransfer.getData("text/plain");
         if (!raw) return;
         const data = JSON.parse(raw);
-        const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+        const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
         if (block && data.stkId) {
-          const stk = block.colA.stakeholders.find(s => s.id === data.stkId);
+          const stk = block.colA.stakeholders.find(function(s) { return s.id === data.stkId; });
           if (stk) {
             stk.quadrant = targetQuadrant;
             renderWorkspace();
-            showToast(`Đã chuyển đối tượng "${stk.name}" sang ${targetQuadrant}!`, "info");
+            showToast('Đã chuyển đối tượng "' + stk.name + '" sang ' + targetQuadrant + '!', "info");
           }
         }
       } catch (e) {}
@@ -1184,15 +1714,16 @@
         const raw = ev.dataTransfer.getData("text/plain");
         if (!raw) return;
         const data = JSON.parse(raw);
-        const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+        const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
         if (block && data.stkId) {
-          const stk = block.colA.stakeholders.find(s => s.id === data.stkId);
+          const stk = block.colA.stakeholders.find(function(s) { return s.id === data.stkId; });
           if (stk && stk.chipObj) {
-            if (!block.colB.fishboneSubcauses[branchKey].includes(stk.chipObj.text)) {
-              block.colB.fishboneSubcauses[branchKey].push(stk.chipObj.text);
+            const fullChipText = stk.chipObj.text;
+            if (!block.colB.fishboneSubcauses[branchKey].includes(fullChipText)) {
+              block.colB.fishboneSubcauses[branchKey].push(fullChipText);
               renderWorkspace();
               syncLiveTree();
-              showToast(`Đã thả đối tượng [Tên + Bối Cảnh + Khía Cạnh] "${stk.name}" vào nhánh [${branchKey}]!`, "success");
+              showToast('Đã thả đối tượng [Full Glow Chip] "' + stk.name + '" vào nhánh [' + branchKey + ']!', "success");
             }
           }
         }
@@ -1235,48 +1766,43 @@
 
     function renderWhyDiagnosticSectionHTML(block) {
       return `
-        <div class="space-y-3">
-          <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
-            <i data-lucide="fish" class="w-4 h-4"></i> 3. WHY (BỘ CHẨN ĐOÁN NGUYÊN NHÂN GỐC RỄ - DIAGNOSTIC ENGINE)
+        <div class="space-y-3 text-xs sm:text-sm">
+          <h2 class="text-xs sm:text-sm font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
+            <i data-lucide="fish" class="w-4 h-4"></i> 3. WHY (BỘ CHẨN ĐOÁN DIAGNOSTIC ENGINE)
           </h2>
           
           <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
-            <!-- Fishbone 14 Branches (6M & 8P) -->
             <div class="md:col-span-5 bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
-              <div class="bg-indigo-950/60 p-2 rounded-lg border border-indigo-800/80 text-xs">
-                <span class="font-bold text-indigo-300 block">🐟 Đầu cá (Vấn đề ban đầu):</span>
-                <span class="text-slate-200 font-semibold">${block.sentence || practiceState.topProblem || 'Chưa nhập vấn đề'}</span>
-              </div>
-
-              <span class="text-xs font-bold text-slate-300 block">📌 Nhánh Xương Lớn (14 Nhánh: 6M & 8P):</span>
-              <div class="space-y-2 max-h-[500px] overflow-y-auto custom-scroll pr-1">
+              <span class="text-xs font-bold text-slate-300 block">📌 Nhánh Xương Lớn (14 Nhánh: 6M & 8P - Kéo Thả Thẻ Đối Tượng Vào Đây):</span>
+              <div class="space-y-2 max-h-[400px] overflow-y-auto custom-scroll pr-1">
                 ${Object.keys(block.colB.fishboneSubcauses).map(bKey => `
-                  <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 space-y-1">
-                    <span class="font-bold text-indigo-400 text-xs block">${bKey}</span>
+                  <div ondragover="allowDrop(event)" ondrop="onDropToFishbone(event, '${block.id}', '${bKey}')" class="bg-slate-900 p-2 rounded-lg border border-slate-800 hover:border-indigo-500/80 transition-all space-y-1">
+                    <div class="flex justify-between items-center">
+                      <span class="font-bold text-indigo-400 text-xs">${bKey}</span>
+                      <span class="text-[10px] text-slate-500 font-mono">Thả thẻ vào đây</span>
+                    </div>
                     ${block.colB.fishboneSubcauses[bKey].map((sub, sIdx) => `
                       <div class="p-1.5 rounded bg-slate-950 text-xs text-slate-300 flex justify-between items-center border border-slate-800">
                         <span onclick="selectSubcauseForWhy('${block.id}', '${sub}')" class="truncate mr-1 cursor-pointer hover:text-indigo-300 font-medium">${sub}</span>
-                        <button onclick="deleteBlockFishboneSubcause('${block.id}', '${bKey}', ${sIdx})" class="text-rose-400 font-bold hover:text-rose-300" title="Xóa nguyên nhân">🗑️</button>
+                        <button onclick="deleteBlockFishboneSubcause('${block.id}', '${bKey}', ${sIdx})" class="text-rose-400 font-bold hover:text-rose-300">🗑️</button>
                       </div>
                     `).join('')}
-                    <button onclick="addBlockFishboneSubcause('${block.id}', '${bKey}')" class="text-[10px] font-bold text-indigo-400 hover:underline">+ Thêm nguyên nhân</button>
+                    <button onclick="addBlockFishboneSubcause('${block.id}', '${bKey}')" class="text-[11px] font-bold text-indigo-400 hover:underline">+ Thêm nguyên nhân</button>
                   </div>
                 `).join('')}
               </div>
             </div>
 
-            <!-- Studio: 5-WHYs & First Principles -->
             <div class="md:col-span-7 bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-3">
               <div class="flex border-b border-slate-800 gap-2 pb-2">
                 <button onclick="switchBlockStudioTab('${block.id}', '5whys')" id="block-tab-5whys-${block.id}" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white">
-                  🔹 Tab 1: Mũi Khoan 5-WHYs (Waterfall)
+                  🔹 Tab 1: Mũi Khoan 5-WHYs
                 </button>
                 <button onclick="switchBlockStudioTab('${block.id}', 'firstp')" id="block-tab-firstp-${block.id}" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300">
                   🔹 Tab 2: First Principles ⭐
                 </button>
               </div>
 
-              <!-- Tab 1: 5-WHYs -->
               <div id="block-content-5whys-${block.id}" class="space-y-2 text-xs">
                 <div class="text-xs text-slate-400 font-bold bg-slate-900 p-2 rounded-lg border border-slate-800">
                   Nguyên nhân được chọn: <span class="text-indigo-300 font-black" id="block-subcause-label-${block.id}">${block.colB.selectedSubcause || 'Chưa chọn nguyên nhân từ cây xương cá'}</span>
@@ -1286,26 +1812,25 @@
                     <div class="flex gap-2 items-center ${block.colB.eliminatedWhys.includes(w) ? 'opacity-40 line-through' : ''}">
                       <span class="text-xs font-bold text-slate-500 w-14 shrink-0">WHY ${w}:</span>
                       <input type="text" value="${block.colB.whys[w] || ''}" oninput="updateBlockWhy('${block.id}', ${w}, this.value)" placeholder="WHY ${w}..." class="flex-grow bg-slate-900 border border-slate-700 text-slate-200 rounded-lg p-1.5 text-xs">
-                      <button onclick="toggleEliminateWhy('${block.id}', ${w})" class="text-[10px] bg-rose-950 text-rose-400 border border-rose-900/60 px-2 py-1 rounded-lg font-bold shrink-0" title="Bác bỏ giả thuyết">❌ Bác bỏ</button>
+                      <button onclick="toggleEliminateWhy('${block.id}', ${w})" class="text-[10px] bg-rose-950 text-rose-400 border border-rose-900/60 px-2 py-1 rounded-lg font-bold shrink-0">❌ Bác bỏ</button>
                     </div>
                   `).join('')}
                 </div>
 
                 <div class="bg-amber-950/40 border border-amber-900/60 p-2.5 rounded-xl text-xs text-amber-200 flex items-center justify-between mt-3">
-                  <span class="flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-4 h-4 text-amber-400"></i> AI Fallacy Detector: Quét ngụy biện logic</span>
+                  <span class="flex items-center gap-1.5"><i data-lucide="shield-alert" class="w-4 h-4 text-amber-400"></i> AI Fallacy Detector</span>
                   <button onclick="scanLogicFallacy('${block.id}')" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2.5 py-1 rounded-lg text-xs">Quét Logic</button>
                 </div>
               </div>
 
-              <!-- Tab 2: First Principles -->
               <div id="block-content-firstp-${block.id}" class="hidden space-y-3 text-xs">
                 <div class="space-y-1">
-                  <span class="font-bold text-amber-400 text-xs block">Khối 1: Bóc Tách Giả Định Cũ (Assumptions Breakdown)</span>
-                  <textarea rows="2" oninput="updateBlockFirstP('${block.id}', 'assumptions', this.value)" placeholder="Những điều được cho là nghiễm nhiên/bắt buộc..." class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-xl p-2 text-xs">${block.colB.firstP.assumptions}</textarea>
+                  <span class="font-bold text-amber-400 text-xs block">Khối 1: Bóc Tách Giả Định Cũ</span>
+                  <textarea rows="2" oninput="updateBlockFirstP('${block.id}', 'assumptions', this.value)" placeholder="Những điều được cho là nghiễm nhiên..." class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-xl p-2 text-xs">${block.colB.firstP.assumptions}</textarea>
                 </div>
                 <div class="space-y-1">
-                  <span class="font-bold text-emerald-400 text-xs block">Khối 2: Trích Xuất Chân Lý Cơ Bản (Fundamental Truths)</span>
-                  <textarea rows="2" oninput="updateBlockFirstP('${block.id}', 'truths', this.value)" placeholder="Chân lý cơ bản toán học / thực tế / quy trình..." class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-xl p-2 text-xs">${block.colB.firstP.truths}</textarea>
+                  <span class="font-bold text-emerald-400 text-xs block">Khối 2: Trích Xuất Chân Lý Cơ Bản</span>
+                  <textarea rows="2" oninput="updateBlockFirstP('${block.id}', 'truths', this.value)" placeholder="Chân lý cơ bản..." class="w-full bg-slate-900 border border-slate-700 text-slate-200 rounded-xl p-2 text-xs">${block.colB.firstP.truths}</textarea>
                 </div>
                 <div class="space-y-1">
                   <span class="font-bold text-indigo-300 text-xs block">Khối 3: Tái Thiết Lập Sự Thật & Chốt Nguyên Nhân Gốc Rễ</span>
@@ -1407,19 +1932,19 @@
 
     function renderFilter4LayersSectionHTML(block) {
       const chips5w1hWho = [];
-      Object.keys(block.colA.chips5w1h).forEach(k => {
-        block.colA.chips5w1h[k].forEach(cObj => chips5w1hWho.push(cObj));
+      Object.keys(block.colA.chips5w1h).forEach(function(k) {
+        block.colA.chips5w1h[k].forEach(function(cObj) { chips5w1hWho.push(cObj); });
       });
-      block.colA.stakeholders.forEach(s => {
+      block.colA.stakeholders.forEach(function(s) {
         if (s.chipObj) chips5w1hWho.push(s.chipObj);
       });
 
       const chipsMacro = [];
-      STEEPLED_KEYS.forEach(k => {
-        block.colA.chipsSteepled[k].forEach(cObj => chipsMacro.push(cObj));
+      STEEPLED_KEYS.forEach(function(k) {
+        block.colA.chipsSteepled[k].forEach(function(cObj) { chipsMacro.push(cObj); });
       });
-      ESG_KEYS.forEach(k => {
-        block.colA.chipsESG[k].forEach(cObj => chipsMacro.push(cObj));
+      ESG_KEYS.forEach(function(k) {
+        block.colA.chipsESG[k].forEach(function(cObj) { chipsMacro.push(cObj); });
       });
 
       return `
@@ -1428,7 +1953,6 @@
             <i data-lucide="shield-check" class="w-4 h-4"></i> 6. BỘ LỌC KIỂM TRA 4 LỚP (3 KHUNG CHỨA GLOW CHIPS TÁC ĐỘNG [LỢI] & [HẠI])
           </h2>
 
-          <!-- KHUNG 1 -->
           <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-2">
             <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
               <i data-lucide="file-text" class="w-4 h-4 text-indigo-400"></i> KHUNG 1: CÂU MÔ TẢ Ý CHÍNH
@@ -1438,7 +1962,6 @@
               : `<div class="p-2 text-xs text-slate-500 italic">Bấm "Đóng Gói Chip" ở trên để tạo Glow Chip cho Ý chính.</div>`}
           </div>
 
-          <!-- KHUNG 2 -->
           <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-2">
             <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
               <i data-lucide="users" class="w-4 h-4 text-indigo-400"></i> KHUNG 2: 5W1H & STAKEHOLDERS WHO
@@ -1450,7 +1973,6 @@
             </div>
           </div>
 
-          <!-- KHUNG 3 -->
           <div class="bg-slate-950 p-3 rounded-xl border border-indigo-900/60 space-y-2">
             <span class="font-black text-indigo-300 text-xs flex items-center gap-1.5">
               <i data-lucide="globe" class="w-4 h-4 text-emerald-400"></i> KHUNG 3: VĨ MÔ STEEPLED / ESG
@@ -1521,16 +2043,16 @@
         <div class="space-y-3">
           <div class="flex justify-between items-center border-b border-slate-800 pb-2">
             <h2 class="text-xs font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1.5">
-              <i data-lucide="lightbulb" class="w-4 h-4"></i> 8. SÁNG TẠO GIẢI PHÁP BAN ĐẦU ($S_1$) & OPTIMIZATION ($S_1 \\rightarrow S_2$)
+              <i data-lucide="lightbulb" class="w-4 h-4"></i> 8. SÁNG TẠO GIẢI PHÁP BAN ĐẦU (S₁) & OPTIMIZATION (S₁ → S₂)
             </h2>
-            <button onclick="addBlockS1Solution('${block.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-1 rounded-lg flex items-center gap-1">➕ Thêm Giải Pháp $S_1$</button>
+            <button onclick="addBlockS1Solution('${block.id}')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-1 rounded-lg flex items-center gap-1">➕ Thêm Giải Pháp S₁</button>
           </div>
 
           <div class="space-y-3">
             ${block.colB.s1Solutions.map((sol, solIdx) => `
               <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 text-xs">
                 <div class="flex justify-between items-center">
-                  <span class="font-bold text-indigo-300">Giải Pháp $S_1$ #${solIdx + 1}</span>
+                  <span class="font-bold text-indigo-300">Giải Pháp S₁ #${solIdx + 1}</span>
                   <button onclick="removeBlockS1Solution('${block.id}', '${sol.id}')" class="text-rose-400 font-bold text-xs">Xóa</button>
                 </div>
 
@@ -1545,21 +2067,21 @@
                   <div class="grid grid-cols-2 gap-2 text-xs">
                     <div class="bg-emerald-950/30 p-2 rounded-lg border border-emerald-900/40">
                       <span class="text-emerald-400 font-bold block">Lợi:</span>
-                      ${sol.filterImpactsPostS1.loi.tier1.map(i => `<div>• ${i}</div>`).join('')}
+                      ${(sol.filterImpactsPostS1.loi.tier1 || []).map(i => `<div>• ${i}</div>`).join('')}
                     </div>
                     <div class="bg-rose-950/30 p-2 rounded-lg border border-rose-900/40">
                       <span class="text-rose-400 font-bold block">Hại:</span>
-                      ${sol.filterImpactsPostS1.hai.tier1.map(i => `<div>• ${i}</div>`).join('')}
+                      ${(sol.filterImpactsPostS1.hai.tier1 || []).map(i => `<div>• ${i}</div>`).join('')}
                     </div>
                   </div>
                 </div>
 
                 <button onclick="toggleBlockS2Loop('${block.id}', '${sol.id}')" class="w-full bg-gradient-to-r from-indigo-600 to-emerald-600 text-white font-bold py-1.5 rounded-lg text-xs">
-                  🔄 KÍCH HOẠT VÒNG LẶP: CHUYỂN HẠI THÀNH LỢI (Tạo $S_2$)
+                  🔄 KÍCH HOẠT VÒNG LẶP: CHUYỂN HẠI THÀNH LỢI (Tạo S₂)
                 </button>
 
                 <div class="${sol.activeS2 ? '' : 'hidden'} bg-emerald-950/40 border border-emerald-800/80 p-2.5 rounded-lg space-y-1.5">
-                  <span class="font-bold text-emerald-300 text-xs block">🟢 Giải Pháp Cải Tiến $S_2$:</span>
+                  <span class="font-bold text-emerald-300 text-xs block">🟢 Giải Pháp Cải Tiến S₂:</span>
                   <textarea rows="2" oninput="updateBlockS1Field('${block.id}', '${sol.id}', 's2Desc', this.value)" placeholder="Giải pháp S2 khắc phục điểm hại..." class="w-full bg-slate-900 border border-emerald-700 text-emerald-100 rounded-lg p-2 text-xs">${sol.s2Desc}</textarea>
                 </div>
               </div>
@@ -1591,52 +2113,8 @@
       `;
     }
 
-    function addSelectedStakeholdersBlock(blockId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
-      if (!block) return;
-      const checkboxes = document.querySelectorAll(`.who-checkbox-${blockId}:checked`);
-      const customInp = document.getElementById(`who-custom-${blockId}`);
-      const customName = customInp ? customInp.value.trim() : "";
-
-      checkboxes.forEach(cb => {
-        const name = customName ? `${cb.value} (${customName})` : cb.value;
-        if (!block.colA.stakeholders.some(s => s.name === name)) {
-          const chipObj = createChipObj(`👤 ${name}`, 'WHO');
-          block.colA.stakeholders.push({ name: name, quadrant: 'Manage Closely', background: '', chipObj: chipObj });
-        }
-        cb.checked = false;
-      });
-
-      if (checkboxes.length === 0 && customName) {
-        const chipObj = createChipObj(`👤 ${customName}`, 'WHO');
-        block.colA.stakeholders.push({ name: customName, quadrant: 'Manage Closely', background: '', chipObj: chipObj });
-      }
-
-      if (customInp) customInp.value = "";
-      syncBlockPipeline(blockId);
-      renderWorkspace();
-      showToast("Đã thêm đối tượng thành công!", "success");
-    }
-
-    function removeStakeholderBlock(blockId, stkName) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
-      if (block) {
-        block.colA.stakeholders = block.colA.stakeholders.filter(s => s.name !== stkName);
-        syncBlockPipeline(blockId);
-        renderWorkspace();
-      }
-    }
-
-    function updateBlockStkBg(blockId, stkName, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
-      if (block) {
-        const stk = block.colA.stakeholders.find(s => s.name === stkName);
-        if (stk) stk.background = val;
-      }
-    }
-
     function addBlockChip(blockId, category, inputId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       const inp = document.getElementById(inputId);
       const val = inp ? inp.value.trim() : "";
       if (!block || !val) return;
@@ -1654,11 +2132,11 @@
       if (inp) inp.value = "";
       syncBlockPipeline(blockId);
       renderWorkspace();
-      showToast(`Đã thêm Glow Chip [${category}]!`, "success");
+      showToast('Đã thêm Glow Chip [' + category + ']!', "success");
     }
 
     function removeBlockChip(blockId, category, index) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
 
       if (['WHAT', 'WHY', 'WHERE', 'WHEN', 'HOW'].includes(category)) {
@@ -1674,22 +2152,22 @@
     }
 
     function syncBlockPipeline(blockId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
       const allChips = [];
 
       if (block.sentenceChip) allChips.push(block.sentenceChip);
 
-      Object.keys(block.colA.chips5w1h).forEach(k => {
-        block.colA.chips5w1h[k].forEach(cObj => allChips.push(cObj));
+      Object.keys(block.colA.chips5w1h).forEach(function(k) {
+        block.colA.chips5w1h[k].forEach(function(cObj) { allChips.push(cObj); });
       });
-      STEEPLED_KEYS.forEach(k => {
-        block.colA.chipsSteepled[k].forEach(cObj => allChips.push(cObj));
+      STEEPLED_KEYS.forEach(function(k) {
+        block.colA.chipsSteepled[k].forEach(function(cObj) { allChips.push(cObj); });
       });
-      ESG_KEYS.forEach(k => {
-        block.colA.chipsESG[k].forEach(cObj => allChips.push(cObj));
+      ESG_KEYS.forEach(function(k) {
+        block.colA.chipsESG[k].forEach(function(cObj) { allChips.push(cObj); });
       });
-      block.colA.stakeholders.forEach(s => {
+      block.colA.stakeholders.forEach(function(s) {
         if (s.chipObj) allChips.push(s.chipObj);
       });
 
@@ -1698,16 +2176,16 @@
     }
 
     function autoTransferBlockGlowChips(blockId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block || block.glowChipsPipeline.length === 0) {
         showToast("Pipeline đang trống!", "error");
         return;
       }
 
       const branches = Object.keys(block.colB.fishboneSubcauses);
-      block.glowChipsPipeline.forEach((chip, i) => {
+      block.glowChipsPipeline.forEach(function(chip, i) {
         const branchKey = branches[i % branches.length];
-        const causeStr = `[Từ ${chip.category}]: ${chip.text}`;
+        const causeStr = "[Từ " + chip.category + "]: " + chip.text;
         if (!block.colB.fishboneSubcauses[branchKey].includes(causeStr)) {
           block.colB.fishboneSubcauses[branchKey].push(causeStr);
         }
@@ -1719,15 +2197,15 @@
     }
 
     function addSingleChipImpact(blockId, chipId, type, tier, inputId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
       const inp = document.getElementById(inputId);
       const val = inp ? inp.value.trim() : "";
       if (!val) return;
 
-      const chipObj = block.glowChipsPipeline.find(c => c.id === chipId);
+      const chipObj = block.glowChipsPipeline.find(function(c) { return c.id === chipId; });
       if (chipObj) {
-        chipObj[type][`tier${tier}`].push(val);
+        chipObj[type]['tier' + tier].push(val);
         if (inp) inp.value = "";
         renderWorkspace();
         syncLiveTree();
@@ -1735,11 +2213,11 @@
     }
 
     function removeSingleChipImpact(blockId, chipId, type, tier, index) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const chipObj = block.glowChipsPipeline.find(c => c.id === chipId);
+      const chipObj = block.glowChipsPipeline.find(function(c) { return c.id === chipId; });
       if (chipObj) {
-        chipObj[type][`tier${tier}`].splice(index, 1);
+        chipObj[type]['tier' + tier].splice(index, 1);
         renderWorkspace();
         syncLiveTree();
       }
@@ -1750,16 +2228,16 @@
         showToast("Vui lòng nhập Gemini API Key ở Header trước!", "error");
         return;
       }
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const chipObj = block.glowChipsPipeline.find(c => c.id === chipId);
+      const chipObj = block.glowChipsPipeline.find(function(c) { return c.id === chipId; });
       if (!chipObj) return;
 
-      showToast(`AI đang dự báo tác động Lợi & Hại cho chip [${chipObj.text}]...`, "info");
-      const promptText = `Dựa trên yếu tố: "${chipObj.text}" (Loại: ${chipObj.category}), hãy dự báo 1-2 điểm LỢI và 1-2 điểm HẠI (Bậc 1, 2, 3). Trả về JSON: {"loi_1": ["..."], "loi_2": ["..."], "hai_1": ["..."], "hai_2": ["..."]}`;
+      showToast('AI đang dự báo tác động Lợi & Hại cho chip [' + chipObj.text + ']...', "info");
+      const promptText = 'Dựa trên yếu tố: "' + chipObj.text + '" (Loại: ' + chipObj.category + '), hãy dự báo 1-2 điểm LỢI và 1-2 điểm HẠI (Bậc 1, 2, 3). Trả về JSON: {"loi_1": ["..."], "loi_2": ["..."], "hai_1": ["..."], "hai_2": ["..."]}';
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${geminiApiKey}`, {
+        const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + geminiApiKey, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -1768,13 +2246,13 @@
           })
         });
         const data = await response.json();
-        const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        const jsonText = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : null;
         if (jsonText) {
           const parsed = JSON.parse(jsonText);
-          if (parsed.loi_1) chipObj.loi.tier1.push(...parsed.loi_1);
-          if (parsed.loi_2) chipObj.loi.tier2.push(...parsed.loi_2);
-          if (parsed.hai_1) chipObj.hai.tier1.push(...parsed.hai_1);
-          if (parsed.hai_2) chipObj.hai.tier2.push(...parsed.hai_2);
+          if (parsed.loi_1) chipObj.loi.tier1.push.apply(chipObj.loi.tier1, parsed.loi_1);
+          if (parsed.loi_2) chipObj.loi.tier2.push.apply(chipObj.loi.tier2, parsed.loi_2);
+          if (parsed.hai_1) chipObj.hai.tier1.push.apply(chipObj.hai.tier1, parsed.hai_1);
+          if (parsed.hai_2) chipObj.hai.tier2.push.apply(chipObj.hai.tier2, parsed.hai_2);
 
           renderWorkspace();
           syncLiveTree();
@@ -1787,22 +2265,22 @@
 
     function collectAllLoiImpacts(block) {
       const loiItems = [];
-      block.glowChipsPipeline.forEach(c => {
-        loiItems.push(...c.loi.tier1, ...c.loi.tier2, ...c.loi.tier3);
+      block.glowChipsPipeline.forEach(function(c) {
+        loiItems.push.apply(loiItems, c.loi.tier1.concat(c.loi.tier2, c.loi.tier3));
       });
       return loiItems;
     }
 
     function collectAllHaiImpacts(block) {
       const haiItems = [];
-      block.glowChipsPipeline.forEach(c => {
-        haiItems.push(...c.hai.tier1, ...c.hai.tier2, ...c.hai.tier3);
+      block.glowChipsPipeline.forEach(function(c) {
+        haiItems.push.apply(haiItems, c.hai.tier1.concat(c.hai.tier2, c.hai.tier3));
       });
       return haiItems;
     }
 
     function deleteBlockFishboneSubcause(blockId, branchKey, index) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) {
         block.colB.fishboneSubcauses[branchKey].splice(index, 1);
         renderWorkspace();
@@ -1811,8 +2289,8 @@
     }
 
     function addBlockFishboneSubcause(blockId, branchKey) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
-      const input = prompt(`Nhập nguyên nhân mới cho [${branchKey}]:`);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
+      const input = prompt('Nhập nguyên nhân mới cho [' + branchKey + ']:');
       if (block && input && input.trim()) {
         block.colB.fishboneSubcauses[branchKey].push(input.trim());
         renderWorkspace();
@@ -1821,20 +2299,20 @@
     }
 
     function selectSubcauseForWhy(blockId, subName) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) {
         block.colB.selectedSubcause = subName;
-        const lbl = document.getElementById(`block-subcause-label-${blockId}`);
+        const lbl = document.getElementById("block-subcause-label-" + blockId);
         if (lbl) lbl.innerText = subName;
-        showToast(`Đã chọn: "${subName}" để đào sâu 5-WHYs`, "info");
+        showToast('Đã chọn: "' + subName + '" để đào sâu 5-WHYs', "info");
       }
     }
 
     function switchBlockStudioTab(blockId, tab) {
-      const content5w = document.getElementById(`block-content-5whys-${blockId}`);
-      const contentFp = document.getElementById(`block-content-firstp-${blockId}`);
-      const btn5w = document.getElementById(`block-tab-5whys-${blockId}`);
-      const btnFp = document.getElementById(`block-tab-firstp-${blockId}`);
+      const content5w = document.getElementById("block-content-5whys-" + blockId);
+      const contentFp = document.getElementById("block-content-firstp-" + blockId);
+      const btn5w = document.getElementById("block-tab-5whys-" + blockId);
+      const btnFp = document.getElementById("block-tab-firstp-" + blockId);
 
       if (tab === '5whys') {
         if (content5w) content5w.classList.remove('hidden');
@@ -1850,15 +2328,15 @@
     }
 
     function updateBlockWhy(blockId, num, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) { block.colB.whys[num] = val; syncLiveTree(); }
     }
 
     function toggleEliminateWhy(blockId, num) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
       if (block.colB.eliminatedWhys.includes(num)) {
-        block.colB.eliminatedWhys = block.colB.eliminatedWhys.filter(w => w !== num);
+        block.colB.eliminatedWhys = block.colB.eliminatedWhys.filter(function(w) { return w !== num; });
       } else {
         block.colB.eliminatedWhys.push(num);
       }
@@ -1866,7 +2344,7 @@
     }
 
     function updateBlockFirstP(blockId, field, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) { block.colB.firstP[field] = val; syncLiveTree(); }
     }
 
@@ -1875,33 +2353,35 @@
         showToast("Vui lòng nhập Gemini API Key ở Header trước!", "error");
         return;
       }
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
 
       showToast("AI đang quét ngụy biện logic...", "info");
-      const promptText = `Hãy quét ngụy biện logic cho chuỗi 5-WHYs sau: ${JSON.stringify(block.colB.whys)}. Nhận xét ngắn gọn 2 câu tiếng Việt.`;
+      const promptText = "Hãy quét ngụy biện logic cho chuỗi 5-WHYs sau: " + JSON.stringify(block.colB.whys) + ". Nhận xét ngắn gọn 2 câu tiếng Việt.";
 
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${geminiApiKey}`, {
+        const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + geminiApiKey, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
         });
         const data = await response.json();
-        const resText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Không phát hiện lỗi ngụy biện nghiêm trọng.";
-        alert(`🤖 Kết quả AI Fallacy Detector:\n\n${resText}`);
+        const resText = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) 
+          ? data.candidates[0].content.parts[0].text 
+          : "Không phát hiện lỗi ngụy biện nghiêm trọng.";
+        alert("🤖 Kết quả AI Fallacy Detector:\n\n" + resText);
       } catch (err) {
         showToast("Không thể gọi API Gemini!", "error");
       }
     }
 
     function updateBlockStrategy(blockId, strat, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) { block.colB.strategies[strat] = val; syncLiveTree(); }
     }
 
     function addBlockS1Solution(blockId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) {
         block.colB.s1Solutions.push({
           id: 's1_' + Date.now(),
@@ -1914,26 +2394,26 @@
     }
 
     function removeBlockS1Solution(blockId, solId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) {
-        block.colB.s1Solutions = block.colB.s1Solutions.filter(s => s.id !== solId);
+        block.colB.s1Solutions = block.colB.s1Solutions.filter(function(s) { return s.id !== solId; });
         renderWorkspace();
         syncLiveTree();
       }
     }
 
     function updateBlockS1Field(blockId, solId, field, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) {
-        const sol = block.colB.s1Solutions.find(s => s.id === solId);
+        const sol = block.colB.s1Solutions.find(function(s) { return s.id === solId; });
         if (sol) { sol[field] = val; syncLiveTree(); }
       }
     }
 
     function toggleBlockS2Loop(blockId, solId) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) {
-        const sol = block.colB.s1Solutions.find(s => s.id === solId);
+        const sol = block.colB.s1Solutions.find(function(s) { return s.id === solId; });
         if (sol) { sol.activeS2 = !sol.activeS2; renderWorkspace(); syncLiveTree(); }
       }
     }
@@ -1943,35 +2423,38 @@
         showToast("Vui lòng nhập Gemini API Key ở Header trước!", "error");
         return;
       }
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (!block) return;
-      const sol = block.colB.s1Solutions.find(s => s.id === solId);
+      const sol = block.colB.s1Solutions.find(function(s) { return s.id === solId; });
       if (!sol) return;
 
       showToast("AI đang đánh giá tác động sau S1...", "info");
       try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${geminiApiKey}`, {
+        const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + geminiApiKey, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: `Đánh giá giải pháp S1: "${sol.title} - ${sol.desc}". Trả về JSON: {"loi": ["..."], "hai": ["..."]}` }] }],
+            contents: [{ parts: [{ text: 'Đánh giá giải pháp S1: "' + sol.title + ' - ' + sol.desc + '". Trả về JSON: {"loi": ["..."], "hai": ["..."]}' }] }],
             generationConfig: { responseMimeType: "application/json" }
           })
         });
         const data = await response.json();
-        const parsed = JSON.parse(data.candidates?.[0]?.content?.parts?.[0]?.text);
-        if (parsed.loi) sol.filterImpactsPostS1.loi.tier1.push(...parsed.loi);
-        if (parsed.hai) sol.filterImpactsPostS1.hai.tier1.push(...parsed.hai);
-        renderWorkspace();
-        syncLiveTree();
-        showToast("AI đã hoàn tất đánh giá sau S1!", "success");
+        const text = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text : null;
+        if (text) {
+          const parsed = JSON.parse(text);
+          if (parsed.loi) sol.filterImpactsPostS1.loi.tier1.push.apply(sol.filterImpactsPostS1.loi.tier1, parsed.loi);
+          if (parsed.hai) sol.filterImpactsPostS1.hai.tier1.push.apply(sol.filterImpactsPostS1.hai.tier1, parsed.hai);
+          renderWorkspace();
+          syncLiveTree();
+          showToast("AI đã hoàn tất đánh giá sau S1!", "success");
+        }
       } catch (err) {
         showToast("Lỗi khi kết nối Gemini API!", "error");
       }
     }
 
     function updateBlockWhatIf(blockId, field, val) {
-      const block = practiceState.mainIdeaBlocks.find(b => b.id === blockId);
+      const block = practiceState.mainIdeaBlocks.find(function(b) { return b.id === blockId; });
       if (block) { block.colB.whatIf[field] = val; syncLiveTree(); }
     }
 
@@ -1980,18 +2463,18 @@
       if (!treeBody) return;
 
       let html = "";
-      html += `<div class="text-indigo-400 font-bold">🌳 [SỰ CỐ CHÍNH]:</div>`;
-      html += `<div class="pl-3 text-slate-200">"${practiceState.topProblem || '(Chưa nhập)'}"</div>`;
+      html += '<div class="text-indigo-400 font-bold">🌳 [SỰ CỐ CHÍNH]:</div>';
+      html += '<div class="pl-3 text-slate-200">"' + (practiceState.topProblem || '(Chưa nhập)') + '"</div>';
 
-      practiceState.mainIdeaBlocks.forEach((block) => {
-        html += `<div class="text-emerald-400 font-bold mt-3">📂 [${block.title}]: "${block.sentence || 'Chưa mô tả câu ý chính'}"</div>`;
-        html += `<div class="pl-3 text-slate-400 space-y-0.5">`;
-        html += `  <div>👤 Stakeholders: ${block.colA.stakeholders.map(s => s.name).join(', ') || 'Chưa có'}</div>`;
-        html += `  <div>✨ Glow Chips Pipeline: ${block.glowChipsPipeline.length} chips</div>`;
-        html += `  <div>🐟 Fishbone subcauses (14 nhánh 6M/8P): ${Object.values(block.colB.fishboneSubcauses).flat().length} items</div>`;
-        html += `  <div>❓ Root Cause First Principles: <span class="text-amber-300">${block.colB.firstP.rootCause || 'Chưa chốt'}</span></div>`;
-        html += `  <div>🛠️ Solutions S1: ${block.colB.s1Solutions.map(s => s.title).join(', ') || 'Chưa có'}</div>`;
-        html += `</div>`;
+      practiceState.mainIdeaBlocks.forEach(function(block) {
+        html += '<div class="text-emerald-400 font-bold mt-3">📂 [' + block.title + ']: "' + (block.sentence || 'Chưa mô tả câu ý chính') + '"</div>';
+        html += '<div class="pl-3 text-slate-400 space-y-0.5">';
+        html += '  <div>👤 Stakeholders: ' + (block.colA.stakeholders.map(function(s) { return s.name; }).join(', ') || 'Chưa có') + '</div>';
+        html += '  <div>✨ Glow Chips Pipeline: ' + block.glowChipsPipeline.length + ' chips</div>';
+        html += '  <div>🐟 Fishbone subcauses (14 nhánh 6M/8P): ' + Object.values(block.colB.fishboneSubcauses).flat().length + ' items</div>';
+        html += '  <div>❓ Root Cause First Principles: <span class="text-amber-300">' + (block.colB.firstP.rootCause || 'Chưa chốt') + '</span></div>';
+        html += '  <div>🛠️ Solutions S1: ' + (block.colB.s1Solutions.map(function(s) { return s.title; }).join(', ') || 'Chưa có') + '</div>';
+        html += '</div>';
       });
 
       treeBody.innerHTML = html;
@@ -2002,20 +2485,20 @@
       if (!box) return;
 
       const keywords = (practiceState.topProblem || "").toLowerCase();
-      const allItems = [...(db.methods || []), ...(db.rules || [])];
+      const allItems = (db.methods || []).concat(db.rules || []);
       
-      const matches = allItems.filter(item => {
+      const matches = allItems.filter(function(item) {
         const cond = (item['Từ khóa điều kiện'] || '').toLowerCase();
         return cond && keywords.includes(cond);
       });
 
       if (matches.length === 0) {
-        box.innerHTML = `<div class="p-6 text-center text-xs text-slate-500">Chưa đối sánh được từ khóa hoặc chưa import dữ liệu Excel ở Tab Nhập Dữ Liệu.</div>`;
+        box.innerHTML = '<div class="p-6 text-center text-xs text-slate-500">Chưa đối sánh được từ khóa hoặc chưa import dữ liệu Excel ở Tab Nhập Dữ Liệu.</div>';
         return;
       }
 
       box.innerHTML = "";
-      matches.forEach(m => {
+      matches.forEach(function(m) {
         const title = m['Tên phương pháp'] || m['Tên quy luật'] || 'Giải pháp';
         const card = document.createElement('div');
         card.className = "bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1 text-xs";
@@ -2049,7 +2532,7 @@
         renderWorkspace();
       }
       switchPracticeSubTab('workflow');
-      showToast(`Đã đưa "${title}" vào Khung Giải Pháp ở Tab 1!`, "success");
+      showToast('Đã đưa "' + title + '" vào Khung Giải Pháp ở Tab 1!', "success");
     }
 
     function renderQuickLook() {
@@ -2062,11 +2545,11 @@
       const pool = type === 'methods' ? db.methods : db.rules;
 
       if (!pool || pool.length === 0) {
-        container.innerHTML = `<span class="text-xs text-slate-500">Chưa có dữ liệu Excel import.</span>`;
+        container.innerHTML = '<span class="text-xs text-slate-500">Chưa có dữ liệu Excel import.</span>';
         return;
       }
 
-      pool.forEach(item => {
+      pool.forEach(function(item) {
         const card = document.createElement('div');
         card.className = "bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs mb-2 space-y-1";
         card.innerHTML = `
@@ -2078,44 +2561,19 @@
       });
     }
 
-    function handleExcelImport(ev, targetKey) {
-      const file = ev.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const rawJson = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-        db[targetKey] = rawJson;
-        saveDbToLocal();
-        showToast(`Import thành công ${rawJson.length} dòng cho ${targetKey}!`, "success");
-      };
-      reader.readAsArrayBuffer(file);
-    }
-
-    function clearAllData() {
-      db = { situations: [], methods: [], rules: [] };
-      saveDbToLocal();
-      showToast("Đã xóa hết dữ liệu import!", "error");
-    }
-
-    function startQuiz() {
-      showToast("Bắt đầu bài tập phản xạ!", "info");
-    }
-
     function exportComprehensiveStrategyMap() {
       const modal = document.getElementById('strategy-map-modal');
       const content = document.getElementById('strategy-map-modal-content');
       if (!modal || !content) return;
 
       let blocksSummary = "";
-      practiceState.mainIdeaBlocks.forEach((block) => {
+      practiceState.mainIdeaBlocks.forEach(function(block) {
         blocksSummary += `
           <div class="border-t border-slate-800 pt-3 mt-3">
             <h3 class="font-bold text-emerald-400 text-sm">${block.title}: "${block.sentence || 'Chưa mô tả'}"</h3>
             <p><strong>First Principles Root Cause:</strong> ${block.colB.firstP.rootCause || 'Chưa chốt'}</p>
             <p><strong>Chiến lược SWOT SO:</strong> ${block.colB.strategies.so || 'N/A'}</p>
-            <p><strong>Giải pháp S1:</strong> ${block.colB.s1Solutions.map(s => s.title).join(', ') || 'N/A'}</p>
+            <p><strong>Giải pháp S1:</strong> ${block.colB.s1Solutions.map(function(s) { return s.title; }).join(', ') || 'N/A'}</p>
           </div>
         `;
       });
