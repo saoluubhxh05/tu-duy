@@ -154,7 +154,7 @@
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900 p-5 rounded-2xl border border-slate-800 shadow-md">
         <div>
           <h2 class="text-base sm:text-lg font-black tracking-tight text-slate-100">Nhập & Quản Lý Tri Thức Excel</h2>
-          <p class="text-slate-400 text-xs mt-0.5">Nạp dữ liệu Tình huống, Bảng Phương Pháp và Quy Luật với đầy đủ cột quy định.</p>
+          <p class="text-slate-400 text-xs mt-0.5">Nạp dữ liệu Tình huống, Bảng Phương Pháp, Quy Luật và Bài Tập Cơ Bản với đầy đủ cột quy định.</p>
         </div>
         <div class="flex gap-2">
           <button onclick="clearAllData()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-rose-600/20">
@@ -163,8 +163,8 @@
         </div>
       </div>
 
-      <!-- Excel File Cards -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Excel File Cards (Updated to 4 Cards Grid) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- File 1: Situations Card -->
         <div class="bg-slate-900 rounded-2xl p-4 border border-slate-800 shadow-md flex flex-col justify-between">
           <div>
@@ -215,9 +215,26 @@
             <input type="file" class="hidden" accept=".xlsx, .xls" onchange="previewExcelFile(event, 'rules')">
           </label>
         </div>
+
+        <!-- File 4: Basic Exercises Card (NEW) -->
+        <div class="bg-slate-900 rounded-2xl p-4 border border-indigo-900/60 shadow-md flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-black text-indigo-400 uppercase">File 4</span>
+              <span class="bg-indigo-950 text-indigo-300 border border-indigo-800/50 px-2 py-0.5 rounded-full text-[10px] font-bold" id="badge-exercises-count">0 mục</span>
+            </div>
+            <h3 class="font-bold text-sm text-indigo-200 mb-1">Bài Tập Cơ Bản</h3>
+            <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">Cột: <code class="text-indigo-300 font-mono">Nhóm cấp độ</code>, <code class="text-indigo-300 font-mono">Cấp độ</code>, <code class="text-indigo-300 font-mono">Bài số</code>, <code class="text-indigo-300 font-mono">Tên bài tập</code>, <code class="text-indigo-300 font-mono">Nội dung / Đối tượng yêu cầu</code>, <code class="text-indigo-300 font-mono">Kỹ năng rèn luyện</code></p>
+          </div>
+          <label class="flex flex-col items-center justify-center border-2 border-dashed border-indigo-800/80 rounded-xl py-4 cursor-pointer hover:border-indigo-500 transition-all bg-indigo-950/20">
+            <i data-lucide="upload-cloud" class="w-6 h-6 text-indigo-400 mb-1"></i>
+            <span class="text-xs font-bold text-indigo-200">Tải file Bài Tập (.xlsx)</span>
+            <input type="file" class="hidden" accept=".xlsx, .xls" onchange="previewExcelFile(event, 'exercises')">
+          </label>
+        </div>
       </div>
 
-      <!-- PREVIEW MODAL / CONTAINER (Tạo bảng Preview để kiểm tra lỗi) -->
+      <!-- PREVIEW MODAL / CONTAINER -->
       <div id="import-preview-section" class="hidden bg-slate-900 rounded-2xl p-4 border border-indigo-600 shadow-2xl space-y-3">
         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
           <div class="flex items-center gap-2">
@@ -259,6 +276,7 @@
               <button onclick="switchDbViewer('methods')" id="btn-view-methods" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 text-white">Bảng Phương Pháp</button>
               <button onclick="switchDbViewer('rules')" id="btn-view-rules" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white">Bảng Quy Luật</button>
               <button onclick="switchDbViewer('situations')" id="btn-view-situations" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white">Bảng Tình Huống</button>
+              <button onclick="switchDbViewer('exercises')" id="btn-view-exercises" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white">Bài Tập Cơ Bản</button>
             </div>
             
             <button onclick="clearCurrentViewerTable()" class="bg-rose-950 text-rose-400 border border-rose-800/80 hover:bg-rose-900 px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1">
@@ -289,7 +307,6 @@
         <!-- BỘ LỌC CẤU HÌNH BÀI LUYỆN TẬP -->
         <div class="bg-slate-950 p-3 sm:p-4 rounded-xl border border-slate-800 space-y-3">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs">
-            <!-- 1. Chọn Đối tượng -->
             <div class="space-y-1">
               <label class="font-bold text-indigo-300 block">1. Chọn Đối Tượng Luyện Tập:</label>
               <select id="quiz-target-type" onchange="onQuizTargetTypeChange()" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-100 p-2 rounded-xl font-bold focus:outline-none focus:border-indigo-500">
@@ -298,7 +315,6 @@
               </select>
             </div>
 
-            <!-- 2. Chọn Loại cụ thể -->
             <div class="space-y-1">
               <label class="font-bold text-indigo-300 block">2. Chọn Loại Phương Pháp / Quy Luật:</label>
               <select id="quiz-category-select" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-100 p-2 rounded-xl font-semibold focus:outline-none focus:border-indigo-500">
@@ -306,7 +322,6 @@
               </select>
             </div>
 
-            <!-- 3. Trình tự câu hỏi -->
             <div class="space-y-1">
               <label class="font-bold text-indigo-300 block">3. Trình Tự Câu Hỏi:</label>
               <select id="quiz-order-mode" class="w-full bg-slate-900 border border-slate-700 text-xs text-slate-100 p-2 rounded-xl font-semibold focus:outline-none focus:border-indigo-500">
@@ -316,13 +331,11 @@
             </div>
           </div>
 
-          <!-- THANH ĐIỀU KHIỂN & ĐỌC GIỌNG NÓI (LÀM GỌN KẾ NÚT BẮT ĐẦU) -->
           <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-800">
             <button onclick="startQuiz()" class="bg-gradient-to-r from-indigo-600 to-emerald-600 hover:from-indigo-500 hover:to-emerald-500 text-white text-xs font-black px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-1.5 transition-all">
               <i data-lucide="play" class="w-4 h-4"></i> Bắt Đầu Luyện Tập
             </button>
 
-            <!-- Ô Đọc To Phương Án Đúng Để Trả Lời (Làm gọn kế nút Bắt Đầu) -->
             <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-700 text-xs">
               <button id="btn-toggle-speech" onclick="toggleSpeechRecognition()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 text-xs transition-all">
                 <i data-lucide="mic" class="w-3.5 h-3.5 text-indigo-400" id="speech-mic-icon"></i>
@@ -337,20 +350,17 @@
           </div>
         </div>
 
-        <!-- TRẬN ĐẤU TRẮC NGHIỆM (QUIZ ARENA) -->
         <div id="quiz-arena" class="hidden space-y-4 bg-slate-950 p-4 sm:p-5 rounded-2xl border border-indigo-900/80 shadow-2xl">
           <div class="flex justify-between items-center text-xs text-slate-400 border-b border-slate-800 pb-2">
             <span class="font-bold text-indigo-400" id="quiz-progress-text">Câu hỏi 1 / 10</span>
             <span class="bg-indigo-950 border border-indigo-800 text-indigo-300 px-2 py-0.5 rounded-full font-mono text-[10px]" id="quiz-current-category">Loại: ...</span>
           </div>
 
-          <!-- Tên phương pháp / quy luật câu hỏi -->
           <div class="space-y-1">
             <span class="text-xs text-slate-400 font-medium">Nêu Nội dung của:</span>
             <h3 class="font-black text-base sm:text-lg text-indigo-200 leading-snug" id="quiz-question-title"></h3>
           </div>
 
-          <!-- 4 Phương án lựa chọn (Có tô đậm từ khóa keywords) -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2" id="quiz-options-container"></div>
         </div>
       </div>
@@ -378,26 +388,37 @@
           </button>
         </div>
 
-        <!-- KHU VỰC NỘI DUNG TÌNH HUỐNG (FIXED TOP) -->
+        <!-- KHU VỰC NỘI DUNG TÌNH HUỐNG / BÀI TẬP (FIXED TOP) -->
         <div class="space-y-1.5">
           <div class="flex items-center justify-between gap-2 flex-wrap">
             <span class="text-[10px] font-black uppercase text-indigo-400 flex items-center gap-1">
-              <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> KHU VỰC NỘI DUNG TÌNH HUỐNG / HIỆN TRẠNG SỰ CỐ
+              <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> KHU VỰC NỘI DUNG TÌNH HUỐNG / BÀI TẬP THỰC HÀNH
             </span>
 
-            <!-- Compact Quick Excel Picker Button & Selector -->
-            <div class="flex items-center gap-1.5">
-              <span class="text-[10px] text-slate-400 font-bold hidden sm:inline">📂 Chọn Tình Huống Nhanh từ Thư Viện Excel Import:</span>
-              <select id="p-top-situation-select" onchange="selectSituationFromImport(this.value)" class="bg-slate-800 text-slate-200 border border-indigo-700/60 rounded-lg p-1 text-[11px] font-semibold focus:outline-none max-w-[220px] sm:max-w-[320px]">
-                <option value="">-- Chọn tình huống Excel --</option>
-              </select>
+            <!-- Compact Quick Selectors for Excel Situations and Basic Exercises -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <!-- Select 1: Tình huống bài học -->
+              <div class="flex items-center gap-1">
+                <span class="text-[10px] text-slate-400 font-bold hidden sm:inline">📂 Tình Huống:</span>
+                <select id="p-top-situation-select" onchange="selectSituationFromImport(this.value)" class="bg-slate-800 text-slate-200 border border-indigo-700/60 rounded-lg p-1 text-[11px] font-semibold focus:outline-none max-w-[180px] sm:max-w-[220px]">
+                  <option value="">-- Chọn tình huống --</option>
+                </select>
+              </div>
+
+              <!-- Select 2: Bài tập cơ bản (NEW) -->
+              <div class="flex items-center gap-1">
+                <span class="text-[10px] text-indigo-300 font-bold hidden sm:inline">🎯 Bài Tập Cơ Bản:</span>
+                <select id="p-top-exercise-select" onchange="selectExerciseFromImport(this.value)" class="bg-indigo-950/80 text-indigo-200 border border-indigo-600 rounded-lg p-1 text-[11px] font-semibold focus:outline-none max-w-[200px] sm:max-w-[260px]">
+                  <option value="">-- Chọn bài tập cơ bản --</option>
+                </select>
+              </div>
             </div>
           </div>
 
           <!-- Ô Nhập Nội Dung Tình Huống & Nút Tạo Khung Ý Chính -->
           <div class="flex gap-2 items-stretch">
             <textarea id="p-top-problem-text" oninput="onTopProblemChange()" rows="2" 
-              placeholder="Mô tả sự cố hoặc hiện trạng tiêu cực đang diễn ra bằng số liệu / thực tế khách quan..." 
+              placeholder="Mô tả sự cố hoặc nội dung bài tập thực hành..." 
               class="flex-grow bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:outline-none leading-relaxed font-medium placeholder-slate-500"></textarea>
             
             <button onclick="addMainIdeaBlock()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs px-3.5 py-2 rounded-xl flex items-center gap-1.5 shrink-0 shadow-lg shadow-indigo-600/30 transition-all">
@@ -409,7 +430,7 @@
 
       </div>
 
-      <!-- ================= SUB-TAB 1: QUY TRÌNH TỪ TRÊN XUỐNG (TREE SIDEBAR LAYOUT) ================= -->
+      <!-- ================= SUB-TAB 1: QUY TRÌNH TỪ TRÊN XUỐNG ================= -->
       <div id="practice-subtab-workflow-content" class="flex-grow flex flex-col overflow-hidden pr-1">
         
         <!-- BLOCK SELECTOR BAR -->
@@ -424,10 +445,10 @@
           </div>
         </div>
 
-        <!-- MAIN SPLIT WORKSPACE: CỘT A (20% WIDTH TREE) & CỘT B (80% WIDTH DETAILS) -->
+        <!-- MAIN SPLIT WORKSPACE: CỘT A & CỘT B -->
         <div class="grid grid-cols-1 lg:grid-cols-10 gap-3 flex-grow overflow-hidden">
           
-          <!-- CỘT A (20% Width - 2 cols): CÂY THƯ MỤC MENU -->
+          <!-- CỘT A (20% Width): DANH MỤC -->
           <div class="lg:col-span-2 bg-slate-900 p-2.5 rounded-2xl border border-slate-800 shadow-xl flex flex-col overflow-y-auto custom-scroll space-y-1.5">
             <div class="border-b border-slate-800 pb-2 mb-1 flex items-center justify-between shrink-0">
               <span class="text-[11px] font-black text-indigo-400 uppercase tracking-tight flex items-center gap-1">
@@ -436,22 +457,18 @@
             </div>
 
             <nav class="space-y-1 text-xs font-semibold" id="tree-menu-container">
-              <!-- Item 1: 5W1H - WHO -->
               <button onclick="selectMenuSection('who')" id="menu-btn-who" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="users" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 1. 5W1H - WHO
               </button>
 
-              <!-- Item 2: HOW, WHAT, WHEN, WHERE -->
               <button onclick="selectMenuSection('what_where_when_how')" id="menu-btn-what_where_when_how" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="help-circle" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 2. HOW, WHAT, WHEN, WHERE
               </button>
 
-              <!-- Item 3: WHY (DIAGNOSTIC ENGINE) -->
               <button onclick="selectMenuSection('why')" id="menu-btn-why" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="fish" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 3. WHY (DIAGNOSTIC ENGINE)
               </button>
 
-              <!-- Item 4: BỐI CẢNH VĨ MÔ (STEEPLED & ESG) nested tree -->
               <div class="space-y-0.5">
                 <button onclick="selectMenuSection('macro')" id="menu-btn-macro" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                   <i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 4. BỐI CẢNH VĨ MÔ
@@ -466,36 +483,30 @@
                 </div>
               </div>
 
-              <!-- Item 5: GLOW CHIPS PIPELINE -->
               <button onclick="selectMenuSection('pipeline')" id="menu-btn-pipeline" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 5. GLOW CHIPS PIPELINE
               </button>
 
-              <!-- Item 6: BỘ LỌC KIỂM TRA 4 LỚP -->
               <button onclick="selectMenuSection('filter4layers')" id="menu-btn-filter4layers" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-400 shrink-0"></i> 6. BỘ LỌC KIỂM TRA 4 LỚP
               </button>
 
-              <!-- Item 7: MA TRẬN SWOT & ACTION PLAN -->
               <button onclick="selectMenuSection('swot')" id="menu-btn-swot" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="grid" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 7. MA TRẬN SWOT & ACTION PLAN
               </button>
 
-              <!-- Item 8: SÁNG TẠO GIẢI PHÁP S1 & S2 -->
               <button onclick="selectMenuSection('solutions')" id="menu-btn-solutions" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-indigo-400 shrink-0"></i> 8. GIẢI PHÁP S₁ & OPTIMIZATION S₂
               </button>
 
-              <!-- Item 9: COUNTERFACTUAL SIMULATOR & EXPORT -->
               <button onclick="selectMenuSection('counterfactual')" id="menu-btn-counterfactual" class="tree-menu-item w-full text-left p-2 rounded-xl transition-all flex items-center gap-2 text-slate-300 hover:bg-slate-800">
                 <i data-lucide="file-text" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i> 9. SIMULATOR & XUẤT BÁO CÁO
               </button>
             </nav>
           </div>
 
-          <!-- CỘT B (80% Width - 8 cols): KHUNG CHI TIẾT THỰC HÀNH TƯƠNG ỨNG MỤC ĐƯỢC CHỌN -->
+          <!-- CỘT B (80% Width): KHUNG CHI TIẾT THỰC HÀNH -->
           <div class="lg:col-span-8 bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-xl flex flex-col overflow-y-auto custom-scroll max-h-[720px]" id="column-b-workspace">
-            <!-- Dynamic workplace content based on selected section from Column A -->
           </div>
 
         </div>
@@ -555,6 +566,7 @@
               <select id="quick-look-type" onchange="renderQuickLook()" class="bg-slate-900 text-slate-100 border border-slate-700 rounded text-xs px-2 py-1 font-bold">
                 <option value="methods">Bảng Phương Pháp</option>
                 <option value="rules">Bảng Quy Luật</option>
+                <option value="exercises">Bài Tập Cơ Bản</option>
               </select>
             </div>
           </div>
@@ -588,10 +600,12 @@
   <script>
     let geminiApiKey = "";
 
+    // Expanded DB object with exercises
     let db = {
       situations: [],
       methods: [],
-      rules: []
+      rules: [],
+      exercises: []
     };
 
     let activeTab = 'home';
@@ -623,11 +637,9 @@
       mainIdeaBlocks: []
     };
 
-    // Temporary Import State for Preview
     let tempImportData = null;
     let activeDbViewerKey = 'methods';
 
-    // Quiz / Memorization State
     let quizState = {
       targetType: 'methods',
       category: 'all',
@@ -699,9 +711,12 @@
       const sitBadge = document.getElementById('badge-situations-count');
       const methBadge = document.getElementById('badge-methods-count');
       const ruleBadge = document.getElementById('badge-rules-count');
+      const exBadge = document.getElementById('badge-exercises-count');
+
       if (sitBadge) sitBadge.innerText = (db.situations ? db.situations.length : 0) + " mục";
       if (methBadge) methBadge.innerText = (db.methods ? db.methods.length : 0) + " mục";
       if (ruleBadge) ruleBadge.innerText = (db.rules ? db.rules.length : 0) + " mục";
+      if (exBadge) exBadge.innerText = (db.exercises ? db.exercises.length : 0) + " mục";
     }
 
     function saveGeminiKey() {
@@ -715,6 +730,7 @@
       localStorage.setItem('mindgym_shdf_db', JSON.stringify(db));
       updateStats();
       populateSituationDropdown();
+      populateExerciseDropdown();
       renderDbViewerTable();
     }
 
@@ -753,6 +769,7 @@
         onQuizTargetTypeChange();
       } else if (tabId === 'practice') {
         populateSituationDropdown();
+        populateExerciseDropdown();
         renderWorkspace();
         syncLiveTree();
       }
@@ -834,11 +851,12 @@
         requiredCols = ['Loại phương pháp', 'STT', 'Tên phương pháp', 'Nội dung', 'Điều kiện', 'keywords', 'Từ khóa điều kiện'];
       } else if (targetKey === 'rules') {
         requiredCols = ['Loại quy luật', 'STT', 'Tên quy luật', 'Nội dung', 'Nếu', 'Thì', 'keywords', 'Từ khóa điều kiện'];
+      } else if (targetKey === 'exercises') {
+        requiredCols = ['Nhóm cấp độ', 'Cấp độ', 'Bài số', 'Tên bài tập', 'Nội dung / Đối tượng yêu cầu', 'Kỹ năng rèn luyện'];
       }
 
       titleEl.innerText = `BẢNG PREVIEW FILE: ${tempImportData.fileName} (${tempImportData.rows.length} DÒNG)`;
 
-      // Column Validation Check
       const firstRowKeys = Object.keys(tempImportData.rows[0] || {});
       const missingCols = requiredCols.filter(col => !firstRowKeys.includes(col));
 
@@ -850,7 +868,6 @@
         msgEl.innerHTML = `<i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> File khớp đầy đủ cột quy định! Bạn có thể nhấn "Xác Nhận Import".`;
       }
 
-      // Render Headers
       headerRow.innerHTML = "";
       const displayCols = firstRowKeys.length > 0 ? firstRowKeys : requiredCols;
       displayCols.forEach(col => {
@@ -860,7 +877,6 @@
         headerRow.appendChild(th);
       });
 
-      // Render Preview Rows (max 15 rows for preview speed)
       bodyRow.innerHTML = "";
       const previewRows = tempImportData.rows.slice(0, 15);
       previewRows.forEach((row, rIdx) => {
@@ -896,7 +912,7 @@
 
     function switchDbViewer(key) {
       activeDbViewerKey = key;
-      ['methods', 'rules', 'situations'].forEach(k => {
+      ['methods', 'rules', 'situations', 'exercises'].forEach(k => {
         const btn = document.getElementById(`btn-view-${k}`);
         if (btn) {
           btn.className = (k === key)
@@ -949,7 +965,7 @@
     }
 
     function clearAllData() {
-      db = { situations: [], methods: [], rules: [] };
+      db = { situations: [], methods: [], rules: [], exercises: [] };
       saveDbToLocal();
       showToast("Đã xóa tất cả dữ liệu import!", "error");
     }
@@ -1040,7 +1056,6 @@
       if (catBadgeEl) catBadgeEl.innerText = `Loại: ${currentItem[catKey] || 'Tất cả'}`;
       if (qTitleEl) qTitleEl.innerText = `"${currentItem[titleKey] || 'Phương pháp / Quy luật'}"`;
 
-      // Build 4 Options (1 correct + 3 distractors)
       const correctAnswer = currentItem['Nội dung'];
       const allPool = db[targetType] || [];
       const otherAnswers = Array.from(new Set(allPool.map(i => i['Nội dung']).filter(ans => ans && ans !== correctAnswer)));
@@ -1048,13 +1063,11 @@
       const shuffledDistractors = [...otherAnswers].sort(() => Math.random() - 0.5).slice(0, 3);
       const fourOptions = [correctAnswer, ...shuffledDistractors].sort(() => Math.random() - 0.5);
 
-      // Extract Keywords for Highlighting across ALL 4 options
       const rawKeywords = currentItem['keywords'] || currentItem['Từ khóa điều kiện'] || "";
       const keywordList = rawKeywords.split(/[,;\/\s]+/).map(k => k.trim()).filter(k => k.length > 1);
 
       optionsContainer.innerHTML = "";
       fourOptions.forEach((optText, idx) => {
-        // Highlight keywords in text
         let highlightedText = optText;
         if (keywordList.length > 0) {
           keywordList.forEach(kw => {
@@ -1070,7 +1083,6 @@
         optionsContainer.appendChild(btn);
       });
 
-      // Restart Speech Recognition listener if active
       if (quizState.speechActive && quizState.recognition) {
         try { quizState.recognition.start(); } catch (e) {}
       }
@@ -1096,14 +1108,12 @@
         showToast("Rất tiếc! Đáp án chưa chính xác.", "error");
       }
 
-      // Auto advance to next question after short delay
       setTimeout(function() {
         quizState.currentIndex++;
         renderQuizQuestion();
       }, 1000);
     }
 
-    // Speech Recognition Integration for Answering by Voice
     function toggleSpeechRecognition() {
       const btnLabel = document.getElementById('speech-btn-label');
       const micIcon = document.getElementById('speech-mic-icon');
@@ -1165,7 +1175,6 @@
       }
     }
 
-    // String Similarity Function (Word Overlap & Levenshtein fallback)
     function calculateStringSimilarity(str1, str2) {
       const words1 = str1.split(/\s+/).filter(Boolean);
       const words2 = str2.split(/\s+/).filter(Boolean);
@@ -1179,18 +1188,40 @@
       return matches / Math.max(words1.length, words2.length);
     }
 
-    // Populate Situation Dropdown for Tab 4 Practice
+    // Populate Situation Dropdown for Tab Practice
     function populateSituationDropdown() {
       const select = document.getElementById('p-top-situation-select');
       if (!select) return;
-      select.innerHTML = '<option value="">-- Chọn tình huống Excel (' + (db.situations ? db.situations.length : 0) + ') --</option>';
+      select.innerHTML = '<option value="">-- Chọn tình huống (' + (db.situations ? db.situations.length : 0) + ') --</option>';
       
       if (db.situations) {
         db.situations.forEach(function(sit) {
           const opt = document.createElement('option');
           const sitText = sit['tình huống'] || sit['Tình huống'] || '';
           opt.value = sitText;
-          opt.innerText = "[STT " + (sit['STT'] || '?') + "] " + sitText.substring(0, 50) + "...";
+          opt.innerText = "[STT " + (sit['STT'] || '?') + "] " + sitText.substring(0, 40) + "...";
+          select.appendChild(opt);
+        });
+      }
+    }
+
+    // Populate Basic Exercises Dropdown for Tab Practice (NEW)
+    function populateExerciseDropdown() {
+      const select = document.getElementById('p-top-exercise-select');
+      if (!select) return;
+      select.innerHTML = '<option value="">-- Chọn bài tập cơ bản (' + (db.exercises ? db.exercises.length : 0) + ') --</option>';
+      
+      if (db.exercises) {
+        db.exercises.forEach(function(ex, idx) {
+          const opt = document.createElement('option');
+          const capDo = ex['Cấp độ'] || '';
+          const baiSo = ex['Bài số'] || '';
+          const tenBai = ex['Tên bài tập'] || '';
+          const reqText = ex['Nội dung / Đối tượng yêu cầu'] || '';
+          
+          const combinedVal = `[${capDo} - ${baiSo}: ${tenBai}]\nYêu cầu: ${reqText}\nKỹ năng: ${ex['Kỹ năng rèn luyện'] || ''}`;
+          opt.value = combinedVal;
+          opt.innerText = `${baiSo}: ${tenBai} (${capDo})`;
           select.appendChild(opt);
         });
       }
@@ -1203,6 +1234,15 @@
       practiceState.topProblem = sitText;
       syncLiveTree();
       showToast("Đã chọn tình huống thành công!", "success");
+    }
+
+    function selectExerciseFromImport(exText) {
+      if (!exText) return;
+      const topProblemInput = document.getElementById('p-top-problem-text');
+      if (topProblemInput) topProblemInput.value = exText;
+      practiceState.topProblem = exText;
+      syncLiveTree();
+      showToast("Đã tải nội dung bài tập cơ bản!", "success");
     }
 
     function onTopProblemChange() {
@@ -1221,7 +1261,17 @@
 
       const savedDb = localStorage.getItem('mindgym_shdf_db');
       if (savedDb) {
-        try { db = JSON.parse(savedDb); } catch (e) { db = { situations: [], methods: [], rules: [] }; }
+        try { 
+          const parsed = JSON.parse(savedDb);
+          db = {
+            situations: parsed.situations || [],
+            methods: parsed.methods || [],
+            rules: parsed.rules || [],
+            exercises: parsed.exercises || []
+          };
+        } catch (e) { 
+          db = { situations: [], methods: [], rules: [], exercises: [] }; 
+        }
       }
 
       if (practiceState.mainIdeaBlocks.length === 0) {
@@ -1231,6 +1281,7 @@
       lucide.createIcons();
       updateStats();
       populateSituationDropdown();
+      populateExerciseDropdown();
       renderWorkspace();
       syncLiveTree();
     });
@@ -1333,7 +1384,6 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <!-- Sub-frame LỢI (Bậc 1, 2, 3) -->
             <div class="bg-emerald-950/30 p-2 rounded-lg border border-emerald-900/50 space-y-1">
               <span class="font-black text-emerald-400 block">• Các Điểm [LỢI] Dự Báo:</span>
               ${[1, 2, 3].map(tier => `
@@ -1350,7 +1400,6 @@
               `).join('')}
             </div>
 
-            <!-- Sub-frame HẠI (Bậc 1, 2, 3) -->
             <div class="bg-rose-950/30 p-2 rounded-lg border border-rose-900/50 space-y-1">
               <span class="font-black text-rose-400 block">• Các Điểm [HẠI] Dự Báo:</span>
               ${[1, 2, 3].map(tier => `
@@ -1550,7 +1599,6 @@
             `).join('')}
           </div>
 
-          <!-- STAKEHOLDER MATRIX (DRAG & DROP) -->
           <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
             <span class="font-black text-slate-200 text-xs block">Stakeholder Matrix (Thả Đối Tượng Vào 4 Vùng):</span>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
@@ -2463,15 +2511,15 @@
       if (!treeBody) return;
 
       let html = "";
-      html += '<div class="text-indigo-400 font-bold">🌳 [SỰ CỐ CHÍNH]:</div>';
-      html += '<div class="pl-3 text-slate-200">"' + (practiceState.topProblem || '(Chưa nhập)') + '"</div>';
+      html += '<div class="text-indigo-400 font-bold">🌳 [SỰ CỐ / BÀI TẬP]:</div>';
+      html += '<div class="pl-3 text-slate-200">' + (practiceState.topProblem || '(Chưa nhập)').replace(/\n/g, '<br>') + '</div>';
 
       practiceState.mainIdeaBlocks.forEach(function(block) {
         html += '<div class="text-emerald-400 font-bold mt-3">📂 [' + block.title + ']: "' + (block.sentence || 'Chưa mô tả câu ý chính') + '"</div>';
         html += '<div class="pl-3 text-slate-400 space-y-0.5">';
         html += '  <div>👤 Stakeholders: ' + (block.colA.stakeholders.map(function(s) { return s.name; }).join(', ') || 'Chưa có') + '</div>';
         html += '  <div>✨ Glow Chips Pipeline: ' + block.glowChipsPipeline.length + ' chips</div>';
-        html += '  <div>🐟 Fishbone subcauses (14 nhánh 6M/8P): ' + Object.values(block.colB.fishboneSubcauses).flat().length + ' items</div>';
+        html += '  <div>🐟 Fishbone subcauses: ' + Object.values(block.colB.fishboneSubcauses).flat().length + ' items</div>';
         html += '  <div>❓ Root Cause First Principles: <span class="text-amber-300">' + (block.colB.firstP.rootCause || 'Chưa chốt') + '</span></div>';
         html += '  <div>🛠️ Solutions S1: ' + (block.colB.s1Solutions.map(function(s) { return s.title; }).join(', ') || 'Chưa có') + '</div>';
         html += '</div>';
@@ -2542,21 +2590,32 @@
       const container = document.getElementById('quick-look-content');
       if (!container) return;
       container.innerHTML = "";
-      const pool = type === 'methods' ? db.methods : db.rules;
+      const pool = db[type] || [];
 
       if (!pool || pool.length === 0) {
-        container.innerHTML = '<span class="text-xs text-slate-500">Chưa có dữ liệu Excel import.</span>';
+        container.innerHTML = '<span class="text-xs text-slate-500">Chưa có dữ liệu Excel import cho bảng này.</span>';
         return;
       }
 
       pool.forEach(function(item) {
         const card = document.createElement('div');
         card.className = "bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs mb-2 space-y-1";
-        card.innerHTML = `
-          <span class="font-bold text-indigo-400">${item['Tên phương pháp'] || item['Tên quy luật']}</span>
-          <p class="text-slate-300 text-[11px]">${item['Nội dung'] || ''}</p>
-          ${item['Từ khóa điều kiện'] ? `<span class="text-[9px] bg-slate-950 text-slate-400 px-1.5 py-0.5 rounded">Key: ${item['Từ khóa điều kiện']}</span>` : ''}
-        `;
+        if (type === 'exercises') {
+          card.innerHTML = `
+            <div class="flex justify-between items-center text-indigo-400 font-bold">
+              <span>🎯 [${item['Cấp độ'] || ''}] ${item['Bài số'] || ''}: ${item['Tên bài tập'] || ''}</span>
+              <span class="text-[10px] bg-indigo-950 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-800">${item['Nhóm cấp độ'] || ''}</span>
+            </div>
+            <p class="text-slate-300 text-[11px] whitespace-pre-line"><b>Yêu cầu:</b> ${item['Nội dung / Đối tượng yêu cầu'] || ''}</p>
+            <p class="text-emerald-400 text-[10px]"><b>Kỹ năng:</b> ${item['Kỹ năng rèn luyện'] || ''}</p>
+          `;
+        } else {
+          card.innerHTML = `
+            <span class="font-bold text-indigo-400">${item['Tên phương pháp'] || item['Tên quy luật']}</span>
+            <p class="text-slate-300 text-[11px]">${item['Nội dung'] || ''}</p>
+            ${item['Từ khóa điều kiện'] ? `<span class="text-[9px] bg-slate-950 text-slate-400 px-1.5 py-0.5 rounded">Key: ${item['Từ khóa điều kiện']}</span>` : ''}
+          `;
+        }
         container.appendChild(card);
       });
     }
@@ -2581,7 +2640,8 @@
       content.innerHTML = `
         <h1 class="text-lg font-black text-slate-100">BẢN ĐỒ CHIẾN LƯỢC TOÀN DIỆN (SHDF STRATEGY MAP REPORT)</h1>
         <hr class="border-slate-800 my-2">
-        <p><strong>Hiện trạng sự cố:</strong> ${practiceState.topProblem || 'Chưa nhập'}</p>
+        <p><strong>Hiện trạng sự cố / Bài tập:</strong></p>
+        <p class="p-2 bg-slate-950 rounded text-slate-300 whitespace-pre-line">${practiceState.topProblem || 'Chưa nhập'}</p>
         ${blocksSummary}
       `;
       modal.classList.remove('hidden');
